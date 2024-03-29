@@ -58,8 +58,6 @@ class payController extends Controller
         }
     }
 
-
-
     public function transactionCallback(Request $request)
     {
         try {

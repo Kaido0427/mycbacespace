@@ -28,7 +28,7 @@ Route::get('/mycbacespace/register', function () {
     return view('auth.register');
 })->name('auth.register');
 
-Route::get('/mycbasespace/logout', [LoginController::class, 'logout'])->name('auth.logout');
+Route::post('/mycbasespace/logout', [LoginController::class, 'logout'])->name('auth.logout');
 
 Auth::routes();
 

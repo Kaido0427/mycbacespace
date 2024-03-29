@@ -24,7 +24,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $admin = User::where('user_type', "admin")->first();
-        return view('dashboard',compact('admin'));
+        //J'affiche le tableau de bord a l'utilisateur en fonction de son type 
+        //apres sa connexion
+        if (auth()->user()->user_type == "admin") {
+            $clients = User::where('user_type', "client")->get();
+            $admin = User::where('user_type', "admin")->first();
+            return view('dashboard', compact('admin', 'clients'));
+        } else {
+
+            return view('dashboard');
+        }
     }
 }

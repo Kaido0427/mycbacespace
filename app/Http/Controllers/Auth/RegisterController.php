@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\avatar;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -67,6 +68,7 @@ class RegisterController extends Controller
             'numAssocies' => ['required', 'string', 'max:255'],
             'regime' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+
         ]);
 
         if ($validator->fails()) {
@@ -100,8 +102,28 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        Log::info('User created', ['user' => $user]);
+        // Chemin de l'image par défaut
+        $defaultImagePath = public_path('dist/user-default.png');
 
-        return $user;
+        // Vérifiez si le fichier existe
+        if (file_exists($defaultImagePath)) {
+            $imageName = time() . '_user-default.png';
+            $destinationPath = public_path('avatars/' . $imageName);
+            if (copy($defaultImagePath, $destinationPath)) {
+                // Créer l'entrée dans la base de données pour l'avatar
+                $avatar = Avatar::create([
+                    'user_id' => $user->id,
+                    'image' => $imageName
+                ]);
+            } else {
+                echo "L'image par défaut n'a pas été trouvée.";
+            }
+
+
+
+            Log::info('User created ', ['user' => $user]);
+
+            return $user;
+        }
     }
 }
