@@ -99,6 +99,7 @@ class RegisterController extends Controller
             'dateCreate' => $data['createDate'],
             'numAssocies' => $data['numAssocies'],
             'regime' => $data['regime'],
+            'user_type' => 'client',
             'password' => Hash::make($data['password']),
         ]);
 

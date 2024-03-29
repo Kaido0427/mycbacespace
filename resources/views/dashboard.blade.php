@@ -19,172 +19,17 @@
                 </div>
             </div>
             <ul class="sidebar-list">
-
-                <li class="sidebar-list-item active">
-                    <a href="#" data-target="clients">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-shopping-bag">
-                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                            <line x1="3" y1="6" x2="21" y2="6" />
-                            <path d="M16 10a4 4 0 0 1-8 0" />
-                        </svg>
-                        <span>Clients</span>
-                    </a>
-                </li>
-                <li class="sidebar-list-item">
-                    <a href="#" data-target="settings">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-pie-chart">
-                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
-                            <path d="M22 12A10 10 0 0 0 12 2v10z" />
-                        </svg>
-                        <span>Paramètres de compte</span>
-                    </a>
-                </li>
-                <li class="sidebar-list-item">
-                    <a href="{{ route('auth.logout') }}"
-                        onclick="event.preventDefault();
-                                  document.getElementById('logout-form').submit();">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
-                            <path fill-rule="evenodd"
-                                d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
-                        </svg>
-                        <span> {{ __('Logout') }}</span>
-                    </a>
-
-                    <form id="logout-form" action="{{ route('auth.logout') }}" method="post" class="d-none">
-                        @csrf
-                    </form>
-                </li>
-                @if (auth()->user()->user_type == 'client')
-                    <li class="sidebar-list-item">
-                        <a href="#" data-target="relances">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="feather feather-bell">
-                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                            </svg>
-                            <span>Relances</span>
-                        </a>
-                    </li>
-                @endif
-
+               @include('layouts.sidebar')
             </ul>
             <div class="account-info">
-
-                @if (auth()->user()->user_type == 'client')
-                    <div class="account-info-picture">
-                        @if (auth()->user()->avatar)
-                            <img src="{{ asset('avatars/' . auth()->user()->avatar->image) }}" alt="Account">
-                        @else
-                            <svg style="color: beige" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                                <path fill-rule="evenodd"
-                                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
-                            </svg>
-                        @endif
-
-                    </div>
-                    <div class="account-info-name">{{ auth()->user()->prenoms }} {{ auth()->user()->nom }}</div>
-                @else
-                    <div class="account-info-picture">
-                        <img src="{{ asset('avatars/' . auth()->user()->avatar->image) }}" alt="Account">
-                    </div>
-                    <div class="account-info-name">{{ auth()->user()->prenoms }} {{ auth()->user()->nom }}</div>
-                @endif
+                <div class="account-info-picture">
+                    <img src="{{ asset('avatars/' . auth()->user()->avatar->image) }}" alt="Account">
+                </div>
+                <div class="account-info-name">{{ auth()->user()->prenoms }} {{ auth()->user()->nom }}</div>
 
             </div>
         </div>
         <div class="app-content">
-            @if (auth()->user()->user_type == 'admin')
-                <div id="clients">
-                    @include('layouts.dashhead')
-                    <div class="products-area-wrapper tableView">
-                        <div class="products-header">
-                            <div class="product-cell image">
-                                Prénoms & Nom
-                                <button class="sort-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 512 512">
-                                        <path fill="currentColor"
-                                            d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="product-cell category">Type<button class="sort-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 512 512">
-                                        <path fill="currentColor"
-                                            d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" />
-                                    </svg>
-                                </button></div>
-                            <div class="product-cell status-cell">Status<button class="sort-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 512 512">
-                                        <path fill="currentColor"
-                                            d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" />
-                                    </svg>
-                                </button></div>
-
-                            <div class="product-cell stock">Détails<button class="sort-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 512 512">
-                                        <path fill="currentColor"
-                                            d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" />
-                                    </svg>
-                                </button></div>
-
-                        </div>
-                        @forelse ($clients as $client)
-                            <div class="products-row">
-                                <button class="cell-more-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-more-vertical">
-                                        <circle cx="12" cy="12" r="1" />
-                                        <circle cx="12" cy="5" r="1" />
-                                        <circle cx="12" cy="19" r="1" />
-                                    </svg>
-                                </button>
-                                <div class="product-cell image">
-                                    <img src="{{ asset('avatars/' . $client->avatar->image) }}"
-                                        alt="photo du client">
-                                    <span>{{ $client->prenoms }} {{ $client->nom }} </span>
-                                </div>
-                                <div class="product-cell category"><span class="cell-label">Category:</span>Kitchen
-                                </div>
-                                <div class="product-cell status-cell">
-                                    <span class="cell-label">Status:</span>
-                                    <span class="status disabled">Disabled</span>
-                                </div>
-                                <div class="product-cell sales">
-                                    <button class="btn btn-outline-danger">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
-                                            <path
-                                                d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-                            </div>
-                        @empty
-                            <div class="text-center" style="color:#fff;">
-                                INDISPONIBLE!
-                            </div>
-                        @endforelse
-                    </div>
-                </div>
-            @endif
 
             <div id="settings">
                 @include('layouts.dashhead')

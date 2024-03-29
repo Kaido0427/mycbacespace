@@ -26,12 +26,12 @@ class HomeController extends Controller
     {
         //J'affiche le tableau de bord a l'utilisateur en fonction de son type 
         //apres sa connexion
-        if (auth()->user()->user_type == "admin") {
-            $clients = User::where('user_type', "client")->get();
-            $admin = User::where('user_type', "admin")->first();
-            return view('dashboard', compact('admin', 'clients'));
-        } else {
+        $role = auth()->user()->user_type;
+        $clients = User::where('user_type', "client")->get();
 
+        if ($role == "admin") {
+            return view('admindash', compact('clients'));
+        } else {
             return view('dashboard');
         }
     }
