@@ -151,6 +151,16 @@ document.getElementById('confirmPasswordToggle').addEventListener('click', funct
 
 
 
+//la srolbar de app-content dans le dashbord
+window.onload = function () {
+    var header = document.querySelector('.app-head');
+    var headerHeight = header.offsetHeight;
+    var appContent = document.querySelector('.app-content');
+    appContent.style.height = 'calc(100vh - ' + headerHeight + 'px)';
+}
+
+
+
 
 
 

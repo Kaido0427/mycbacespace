@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>DASHBOARD | CBACE-CGA</title>
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss', 'resources/scss/notif.scss'])
 
 </head>
 
 <body>
-
     <div class="app-container">
         <div id="sidebar" class="sidebar">
             <div class="sidebar-header">
@@ -33,14 +32,89 @@
             <div class="app-head">
                 @include('layouts.dashhead')
             </div>
-            <div class="app-content">
+            <div class="app-content" style="overflow-y: auto; height: calc(100vh - );">
+                <div id="relances">
+                    <h3 style="color: #000" class="text-center">MES RAPPELS</h3>
+                    <hr style="color: #fff;">
+                    <section class="section-50">
+                        <div class="container">
+                            <div class="notification-ui_dd-content">
+                                <div class="notification-list notification-list--unread">
+                                    <div class="notification-list_content">
+                                        <div class="notification-list_img">
+                                            <img src="https://i.imgur.com/zYxDCQT.jpg" alt="user">
+                                        </div>
+                                        <div class="notification-list_detail">
+                                            <p><b>John Doe</b> reacted to your post</p>
+                                            <p class="text-muted">Lorem ipsum dolor sit amet consectetur, adipisicing
+                                                elit. Unde, dolorem.</p>
+                                            <p class="text-muted"><small>10 mins ago</small></p>
+                                        </div>
+                                    </div>
+                                    <div class="notification-list_feature-img">
+                                        <img src="https://i.imgur.com/AbZqFnR.jpg" alt="Feature image">
+                                    </div>
+                                </div>
+                                <div class="notification-list">
+                                    <div class="notification-list_content">
+                                        <div class="notification-list_img">
+                                            <img src="https://i.imgur.com/ltXdE4K.jpg" alt="user">
+                                        </div>
+                                        <div class="notification-list_detail">
+                                            <p><b>Brian Cumin</b> reacted to your post</p>
+                                            <p class="text-muted">Lorem ipsum dolor sit amet consectetur, adipisicing
+                                                elit. Unde, dolorem.</p>
+                                            <p class="text-muted"><small>10 mins ago</small></p>
+                                        </div>
+                                    </div>
+                                    <div class="notification-list_feature-img">
+                                        <img src="https://i.imgur.com/bpBpAlH.jpg" alt="Feature image">
+                                    </div>
+                                </div>
+                            
+                            </div>
+
+                        </div>
+                    </section>
+                </div>
                 <div id="settings">
                     <h3 style="color: #fff" class="text-center">PARAMETRES DE COMPTE</h3>
                     <hr style="color: #fff;">
                     <div class="container">
-                        <div class="row justify-content-between">
-                            <div class="col-auto mx-1">
-                                <div class="card" data-bs-toggle="modal" data-bs-target="#ModalPic">
+                        <div class="row justify-content-center">
+
+                            <div class="col-auto mx-1 mx-md-3">
+                                <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#Modalinfo">
+
+                                    <img src="{{ asset('dist/listT.jpg') }}" class="card-img-top" alt="...">
+
+                                    <div class="card-body">
+                                        <p class="card-text text-center">Mettre à jour mes informations standard</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto mx-1 mx-md-3">
+                                <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#Modaladh">
+
+                                    <img src="{{ asset('dist/list2T.jpg') }}" class="card-img-top" alt="...">
+
+                                    <div class="card-body">
+                                        <p class="card-text text-center">Mettre à jour mes informations d'adhesion</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto mx-1 mx-md-3">
+                                <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#ModalPass">
+
+                                    <img src="{{ asset('dist/lockT.jpg') }}" class="card-img-top" alt="...">
+
+                                    <div class="card-body">
+                                        <p class="card-text text-center">Mettre à jour mon mot de passe</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto mx-1 mx-md-3">
+                                <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#ModalPic">
                                     <img src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
                                         class="card-img-top" alt="...">
                                     <div class="card-body">
@@ -48,40 +122,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-auto mx-1">
-                                <div class="card" data-bs-toggle="modal" data-bs-target="#ModalPass">
 
-                                    <img src="{{ asset('dist/lock.png') }}" class="card-img-top" alt="...">
-
-                                    <div class="card-body">
-                                        <p class="card-text text-center">Mettre à jour mon mot de passe</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-auto mx-1">
-                                <div class="card" data-bs-toggle="modal" data-bs-target="#Modalinfo">
-
-                                    <img src="{{ asset('dist/list.png') }}" class="card-img-top" alt="...">
-
-                                    <div class="card-body">
-                                        <p class="card-text text-center">Mettre à jour mes informations standard</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-auto mx-1">
-                                <div class="card" data-bs-toggle="modal" data-bs-target="#Modalinfoé">
-
-                                    <img src="{{ asset('dist/list2.png') }}" class="card-img-top" alt="...">
-
-                                    <div class="card-body">
-                                        <p class="card-text text-center">Mettre à jour mes informations d'adhesion</p>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-
                         <!-- Modal photo de profil -->
-                        <div class="modal fade" id="ModalPic" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        <div class="modal fade" id="ModalPic" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -106,9 +150,8 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- Modal mot de passe -->
-                        <div class="modal fade" id="ModalPass" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        <div class="modal fade" id="ModalPass" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -186,8 +229,8 @@
                             </div>
                         </div>
 
-                        <!-- Modal mot de passe -->
-                        <div class="modal fade" id="Modalinfo" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        <!-- Modal info -->
+                        <div class="modal fade" id="Modalinfo" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -196,7 +239,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
-                                    <form id="passwordForm" action="" method="POST">
+                                    <form id="InfoForm" action="{{ route('user.update') }}" method="POST">
                                         @csrf
                                         @method('PATCH')
                                         <div class="modal-body">
@@ -204,7 +247,7 @@
                                                 <label for="nom" class="form-label">Nom</label>
                                                 <div class="input-group">
                                                     <input type="text" name="nom" class="form-control"
-                                                        id="nom" placeholder="{{auth()->user()->nom}}">
+                                                        id="nom" value="{{ auth()->user()->nom }}">
                                                 </div>
                                             </div>
                                             <div class="mb-3">
@@ -212,33 +255,33 @@
                                                 </label>
                                                 <div class="input-group">
                                                     <input type="text" name="prenoms" class="form-control"
-                                                        id="prenoms" placeholder="{{auth()->user()->prenoms}}">
+                                                        id="prenoms" value="{{ auth()->user()->prenoms }}">
                                                 </div>
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="adresse" class="form-label">Prénoms
+                                                <label for="adresse" class="form-label">Adresse
                                                 </label>
                                                 <div class="input-group">
                                                     <input type="text" name="adresse" class="form-control"
-                                                        id="adresse" placeholder="{{auth()->user()->adresse}}">
+                                                        id="adresse" value="{{ auth()->user()->adresse }}">
                                                 </div>
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="bp" class="form-label">Prénoms
+                                                <label for="bp" class="form-label">Boîte Postale
                                                 </label>
                                                 <div class="input-group">
                                                     <input type="text" name="bp" class="form-control"
-                                                        id="bp" placeholder="{{auth()->user()->bp}}">
+                                                        id="bp" value="{{ auth()->user()->bp }}">
                                                 </div>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="telephone" class="form-label">Prénoms
+                                                <label for="telephone" class="form-label">Numéro de télephone
                                                 </label>
                                                 <div class="input-group">
-                                                    <input type="text" name="telephone" class="form-control"
-                                                        id="telephone" placeholder="{{auth()->user()->telephone}}">
+                                                    <input type="number" name="telephone" class="form-control"
+                                                        id="telephone" value="{{ auth()->user()->telephone }}">
                                                 </div>
                                             </div>
 
@@ -255,8 +298,49 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Modal adhesion -->
+
+                        <div class="modal fade" id="Modaladh" tabindex="-1" aria-labelledby="ModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">MES INFORMATIONS
+                                            D'ADHESION</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <form id="passwordForm" action="" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="nom" class="form-label">Origine</label>
+                                                <div class="input-group">
+                                                    <input type="text" name="nom" class="form-control"
+                                                        id="nom" placeholder="{{ auth()->user()->origine }}">
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger"
+                                                    data-bs-dismiss="modal">Fermer</button>
+                                                <button type="submit"
+                                                    onclick="return confirm('Vous serez amener à vous reconnecter,êtes-vous sûr?');"
+                                                    class="btn btn-primary" id="saveChangesButton">Mettre à
+                                                    jour</button>
+
+                                            </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+                    <div id="modal-backdrop"></div>
                 </div>
+
+
             </div>
         </div>
 

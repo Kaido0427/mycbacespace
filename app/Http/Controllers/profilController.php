@@ -35,11 +35,23 @@ class profilController extends Controller
         return redirect()->route('login')->with('status', 'Password updated successfully');
     }
 
-
-
-    public function updateData()
+    public function updateUserData(Request $request)
     {
-        //Metttre a jour les informations que le client a  entreer lors de 'l'inscription
+        Log::info('Updating user data', ['data' => $request]);
+
+        $user = User::find(auth()->user()->id);
+
+        $user->update([
+            'nom' => $request['nom'],
+            'prenoms' => $request['prenoms'],
+            'adresse' => $request['adresse'],
+            'bp' => $request['bp'],
+            'telephone' => $request['telephone'],
+        ]);
+
+        Log::info('User data updated ', ['user' => $user]);
+
+        return redirect()->back()->with('success', 'Vos informations ont été mises à jour avec succès.');
     }
 
     public function storeOrUpdateImage(Request $request)
@@ -97,12 +109,5 @@ class profilController extends Controller
             // Retourner une réponse d'erreur
             return redirect()->route('home')->with('error', 'Une erreur est survenue lors de la mise à jour de la photo de profil. Veuillez réessayer.');
         }
-    }
-
-
-
-    public function addPicture()
-    {
-        return view('profil.addPhoto');
     }
 }

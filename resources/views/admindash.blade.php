@@ -39,7 +39,7 @@
                 <div class="account-info-picture">
                     <img src="{{ asset('avatars/' . auth()->user()->avatar->image) }}" alt="Account">
                 </div>
-                <div class="account-info-name">{{ auth()->user()->prenoms }} {{ auth()->user()->nom }}</div>
+                <div class="account-info-name">{{ auth()->user()->prenoms }}</div>
             </div>
         </div>
         <div class="main-container">
@@ -47,6 +47,10 @@
                 @include('layouts.dashhead')
             </div>
             <div class="app-content">
+                <div id="relances">
+                    <h3 style="color: #fff" class="text-center">RELANCES DES CLIENTS</h3>
+                    <hr style="color: #fff;">
+                </div>
                 <div id="clients">
                     <div class="products-area-wrapper tableView">
                         <div class="products-header">
@@ -130,9 +134,20 @@
                     <h3 style="color: #fff" class="text-center">PARAMETRES DE COMPTE</h3>
                     <hr style="color: #fff;">
                     <div class="container">
-                        <div class="row justify-content-between">
-                            <div class="col-auto mx-1">
-                                <div class="card" data-bs-toggle="modal" data-bs-target="#ModalPic">
+                        <div class="row justify-content-center">
+
+                            <div class="col-auto mx-1 mx-md-3">
+                                <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#ModalPass">
+
+                                    <img src="{{ asset('dist/lockT.jpg') }}" class="card-img-top" alt="...">
+
+                                    <div class="card-body">
+                                        <p class="card-text text-center">Mettre à jour mon mot de passe</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto mx-1 mx-md-3">
+                                <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#ModalPic">
                                     <img src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
                                         class="card-img-top" alt="...">
                                     <div class="card-body">
@@ -140,20 +155,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-auto mx-1">
-                                <div class="card" data-bs-toggle="modal" data-bs-target="#ModalPass">
 
-                                    <img src="{{ asset('dist/lock.png') }}" class="card-img-top" alt="...">
-
-                                    <div class="card-body">
-                                        <p class="card-text text-center">Mettre à jour mon mot de passe</p>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-
                         <!-- Modal photo de profil -->
-                        <div class="modal fade" id="ModalPic" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        <div class="modal fade" id="ModalPic" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -178,9 +183,8 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- Modal mot de passe -->
-                        <div class="modal fade" id="ModalPass" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        <div class="modal fade" id="ModalPass" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -257,10 +261,12 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- Modal adhesion -->
+                        <div id="modal-backdrop"></div>
 
                     </div>
                 </div>
+              
             </div>
         </div>
 

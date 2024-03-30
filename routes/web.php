@@ -37,6 +37,6 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::post('/update-password', [profilController::class, 'updatePassword'])->name('password.update');
 
 Route::post('/uploadingPhoto', [profilController::class, 'storeOrUpdateImage'])->name('image.store');
-Route::get('/addProfil', [profilController::class, 'addPicture'])->name('image.index');
+Route::patch('/updateUserInfo', [profilController::class, 'updateUserData'])->name('user.update');
 Route::post('/pay', [payController::class, 'paySign'])->name('pay');
 Route::get('/successTrans', [payController::class, 'transactionCallback'])->name('payment.success');
