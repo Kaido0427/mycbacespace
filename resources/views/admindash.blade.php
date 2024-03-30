@@ -187,19 +187,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <style>
-                        .card:hover {
-                            transform: scale(1.05);
-                            transition: transform 1s ease-in-out;
-                        }
-
-                        .card:not(:hover) {
-                            transition: transform 1s ease-in-out;
-                        }
-                    </style>
-
-
                 </div>
             </div>
         </div>
