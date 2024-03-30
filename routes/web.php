@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('auth.login');
 })->name('auth.login');
- 
+
 Route::get('/mycbacespace/register', function () {
     return view('auth.register');
 })->name('auth.register');
@@ -34,6 +34,7 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+Route::post('/update-password', [profilController::class, 'updatePassword'])->name('password.update');
 
 Route::post('/uploadingPhoto', [profilController::class, 'storeOrUpdateImage'])->name('image.store');
 Route::get('/addProfil', [profilController::class, 'addPicture'])->name('image.index');

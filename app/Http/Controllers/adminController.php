@@ -9,10 +9,7 @@ class adminController extends Controller
 
     //======================================SECTION ADMINISTRATEUR===============================
 
-    public function updatePassword()
-    {
-        //Personaliser son mot de passe administrateur
-    }
+   
 
     //============================================SECTION CLIENT=================================
     public function addCustomer()

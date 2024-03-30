@@ -3,18 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\avatar;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class profilController extends Controller
 {
 
 
-    public function updatePassword()
+    public function updatePassword(Request $request)
     {
-        //mettre a jour sa photo de profil 
+        $request->validate([
+            'oldPass' => 'required',
+            'newPass' => 'required',
+            'verifyPass' => 'required|same:newPass',
+        ]);
+        $user = Auth::user();
+
+        if (!$user) {
+            // L'utilisateur n'est pas connecté
+            return redirect()->route('login')->withErrors(['error' => 'Unauthorized']);
+        }
+
+        if (!Hash::check($request->oldPass, $user->password)) {
+            // Le mot de passe actuel est incorrect
+            return redirect()->back()->withErrors(['error' => 'Current password is incorrect']);
+        }
+
+        User::find(auth()->user()->id)->update(['password' => Hash::make($request->newPass)]);
+
+        return redirect()->route('auth.login')->with('status', 'Password updated successfully');
     }
+
 
     public function updateData()
     {
