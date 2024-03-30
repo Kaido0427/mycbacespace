@@ -9,6 +9,7 @@
         "bmatovu/laravel-mtn-momo": "^4.3",
         "fedapay/fedapay-php": "^0.4.2",
         "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "^3.5",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",

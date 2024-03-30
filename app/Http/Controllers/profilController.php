@@ -20,7 +20,7 @@ class profilController extends Controller
     {
         //Metttre a jour les informations que le client a  entreer lors de 'l'inscription
     }
-    
+
     public function storeOrUpdateImage(Request $request)
     {
         // Valider les données de la requête
@@ -43,6 +43,13 @@ class profilController extends Controller
                 if ($user->avatar) {
                     // Mettre à jour l'avatar existant
                     $avatar = $user->avatar;
+
+                    // Supprimer l'ancienne photo de profil du dossier avatars
+                    if (file_exists(public_path('avatars/' . $avatar->image))) {
+                        unlink(public_path('avatars/' . $avatar->image));
+                    }
+
+                    // Mettre à jour l'avatar avec la nouvelle photo
                     $avatar->image = $imageName;
                     $avatar->save();
                 } else {
@@ -70,6 +77,7 @@ class profilController extends Controller
             return redirect()->route('home')->with('error', 'Une erreur est survenue lors de la mise à jour de la photo de profil. Veuillez réessayer.');
         }
     }
+
 
 
     public function addPicture()

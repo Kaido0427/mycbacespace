@@ -35,9 +35,9 @@
     --filter-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
-$font-small: 14px;
-$font-medium: 16px;
-$font-large: 24px;
+$font-small: 12px;
+$font-medium: 13px;
+$font-large: 15px;
 
 body,
 html {
@@ -66,6 +66,16 @@ body {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     max-width: 2000px;
     margin: 0 auto;
+    flex-direction: row;
+}
+
+.app-head {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px; // ou une autre hauteur fixe
+    padding: 0 16px;
 }
 
 .sidebar {
@@ -75,6 +85,19 @@ body {
     background-color: var(--sidebar);
     display: flex;
     flex-direction: column;
+
+    @media screen and (max-width: 768px) {
+        .sidebar {
+            flex-basis: 150px;
+            max-width: 150px;
+        }
+    }
+
+    @media screen and (max-width: 1024px) {
+        .sidebar {
+            display: none;
+        }
+    }
 
     &-header {
         display: flex;
@@ -124,13 +147,10 @@ body {
             }
         }
     }
-
-    @media screen and (max-width: 1024px) {
-        & {
-            display: none;
-        }
-    }
 }
+
+
+
 
 .mode-switch {
     background-color: transparent;
@@ -201,16 +221,31 @@ body {
     }
 }
 
+.card-img-top {
+    width: 100%;
+    height: 200px;
+    /* ou toute autre valeur de hauteur fixe que vous souhaitez */
+    object-fit: cover;
+}
+
+.main-container {
+    display: block;
+    flex-direction: column;
+    flex-wrap: wrap;
+    flex-grow: 1;
+
+}
+
 .app-content {
     padding: 16px;
     background-color: var(--app-bg);
-    height: 100%;
     flex: 1;
-    max-height: 100%;
     display: flex;
     flex-direction: column;
 
+
     &-header {
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -241,7 +276,13 @@ body {
         }
     }
 
+    .card {
+        width: 28rem;
+
+    }
+
     &-actions {
+        width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -260,6 +301,11 @@ body {
                 .search-bar {
                     max-width: 100%;
                     order: 2;
+                }
+
+                .card {
+                    width: 100%;
+                    /* Réduire la largeur des cartes à 100% sur les écrans plus petits */
                 }
 
                 .app-content-actions-wrapper {
@@ -719,6 +765,8 @@ body {
     .menu-toggle {
         display: block;
     }
+
+
 }
 
 /* Afficher la sidebar lorsque le bouton de menu hamburger est cliqué */
