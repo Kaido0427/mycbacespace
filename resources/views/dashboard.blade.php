@@ -58,6 +58,26 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-auto mx-1">
+                                <div class="card" data-bs-toggle="modal" data-bs-target="#Modalinfo">
+
+                                    <img src="{{ asset('dist/list.png') }}" class="card-img-top" alt="...">
+
+                                    <div class="card-body">
+                                        <p class="card-text text-center">Mettre à jour mes informations standard</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto mx-1">
+                                <div class="card" data-bs-toggle="modal" data-bs-target="#Modalinfoé">
+
+                                    <img src="{{ asset('dist/list2.png') }}" class="card-img-top" alt="...">
+
+                                    <div class="card-body">
+                                        <p class="card-text text-center">Mettre à jour mes informations d'adhesion</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Modal photo de profil -->
@@ -166,7 +186,75 @@
                             </div>
                         </div>
 
+                        <!-- Modal mot de passe -->
+                        <div class="modal fade" id="Modalinfo" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">MES INFORMATIONS</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <form id="passwordForm" action="" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="nom" class="form-label">Nom</label>
+                                                <div class="input-group">
+                                                    <input type="text" name="nom" class="form-control"
+                                                        id="nom" placeholder="{{auth()->user()->nom}}">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="prenoms" class="form-label">Prénoms
+                                                </label>
+                                                <div class="input-group">
+                                                    <input type="text" name="prenoms" class="form-control"
+                                                        id="prenoms" placeholder="{{auth()->user()->prenoms}}">
+                                                </div>
+                                            </div>
 
+                                            <div class="mb-3">
+                                                <label for="adresse" class="form-label">Prénoms
+                                                </label>
+                                                <div class="input-group">
+                                                    <input type="text" name="adresse" class="form-control"
+                                                        id="adresse" placeholder="{{auth()->user()->adresse}}">
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="bp" class="form-label">Prénoms
+                                                </label>
+                                                <div class="input-group">
+                                                    <input type="text" name="bp" class="form-control"
+                                                        id="bp" placeholder="{{auth()->user()->bp}}">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="telephone" class="form-label">Prénoms
+                                                </label>
+                                                <div class="input-group">
+                                                    <input type="text" name="telephone" class="form-control"
+                                                        id="telephone" placeholder="{{auth()->user()->telephone}}">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger"
+                                                data-bs-dismiss="modal">Fermer</button>
+                                            <button type="submit"
+                                                onclick="return confirm('Vous serez amener à vous reconnecter,êtes-vous sûr?');"
+                                                class="btn btn-primary" id="saveChangesButton">Mettre à jour</button>
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
