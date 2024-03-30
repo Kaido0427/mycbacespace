@@ -20,22 +20,21 @@ class profilController extends Controller
             'newPass' => 'required',
             'verifyPass' => 'required|same:newPass',
         ]);
-        $user = Auth::user();
-
-        if (!$user) {
-            // L'utilisateur n'est pas connecté
-            return redirect()->route('login')->withErrors(['error' => 'Unauthorized']);
-        }
-
-        if (!Hash::check($request->oldPass, $user->password)) {
-            // Le mot de passe actuel est incorrect
-            return redirect()->back()->withErrors(['error' => 'Current password is incorrect']);
-        }
 
         User::find(auth()->user()->id)->update(['password' => Hash::make($request->newPass)]);
 
-        return redirect()->route('auth.login')->with('status', 'Password updated successfully');
+        // Déconnecter l'utilisateur
+        Auth::logout();
+
+        // Invalider la session
+        $request->session()->invalidate();
+
+        // Regénérer le token CSRF
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('status', 'Password updated successfully');
     }
+
 
 
     public function updateData()
