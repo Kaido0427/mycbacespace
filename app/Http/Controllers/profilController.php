@@ -35,6 +35,16 @@ class profilController extends Controller
         return redirect()->route('login')->with('status', 'Password updated successfully');
     }
 
+    public function checkPassword(Request $request)
+    {
+        if (!Hash::check($request->password, auth()->user()->password)) {
+            return response()->json(['status' => 'error', 'message' => 'Le mot de passe actuel est incorrect']);
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+
     public function updateUserData(Request $request)
     {
         Log::info('Updating user data', ['data' => $request]);
@@ -93,21 +103,20 @@ class profilController extends Controller
                     $avatar->save();
                 }
 
-                // Enregistrement d'un log pour la mise à jour réussie de la photo de profil
                 Log::info('Photo de profil mise à jour avec succès pour l\'utilisateur: ' . $user->id);
 
-                // Retourner une réponse réussie
-                return redirect()->route('home')->with('success', 'Photo de profil mise à jour avec succès');
+                // Retourner une réponse JSON réussie
+                return response()->json(['success' => true, 'message' => 'Photo de profil mise à jour avec succès', 'imageName' => $imageName]);
             } else {
-                // Retourner une réponse d'erreur si aucun fichier n'a été téléchargé
-                return redirect()->route('home')->with('error', 'Aucune image n\'a été téléchargée.');
+                // Retourner une réponse JSON d'erreur si aucun fichier n'a été téléchargé
+                return response()->json(['success' => false, 'message' => 'Aucune image n\'a été téléchargée.']);
             }
         } catch (\Exception $e) {
             // En cas d'erreur, enregistrer un log d'erreur
             Log::error('Erreur lors de la mise à jour de la photo de profil pour l\'utilisateur: ' . $user->id . '. Message d\'erreur: ' . $e->getMessage());
 
-            // Retourner une réponse d'erreur
-            return redirect()->route('home')->with('error', 'Une erreur est survenue lors de la mise à jour de la photo de profil. Veuillez réessayer.');
+            // Retourner une réponse JSON d'erreur
+            return response()->json(['success' => false, 'message' => 'Une erreur est survenue lors de la mise à jour de la photo de profil. Veuillez réessayer.']);
         }
     }
 }

@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>DASHBOARD | CBACE-CGA</title>
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss', 'resources/scss/notif.scss'])
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 
@@ -23,7 +24,7 @@
             </ul>
             <div class="account-info">
                 <div class="account-info-picture">
-                    <img src="{{ asset('avatars/' . auth()->user()->avatar->image) }}" alt="Account">
+                    <img id="sidebar-pic" src="{{ asset('avatars/' . auth()->user()->avatar->image) }}" alt="Account">
                 </div>
                 <div class="account-info-name">{{ auth()->user()->prenoms }} {{ auth()->user()->nom }}</div>
             </div>
@@ -71,7 +72,7 @@
                                         <img src="https://i.imgur.com/bpBpAlH.jpg" alt="Feature image">
                                     </div>
                                 </div>
-                            
+
                             </div>
 
                         </div>
@@ -115,7 +116,7 @@
                             </div>
                             <div class="col-auto mx-1 mx-md-3">
                                 <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#ModalPic">
-                                    <img src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
+                                    <img id="profile-pic" src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
                                         class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <p class="card-text text-center">Mettre à jour ma photo de profil</p>
@@ -124,6 +125,7 @@
                             </div>
 
                         </div>
+
                         <!-- Modal photo de profil -->
                         <div class="modal fade" id="ModalPic" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
@@ -134,22 +136,25 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
-                                    <form action="{{ route('image.store') }}" method="post"
+                                    <form id="image-form" action="{{ route('image.store') }}" method="post"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="modal-body">
-                                            <input type="file" name="image" class="form-control" id="photo"
-                                                name="photo">
+                                            <input type="file" name="image" class="form-control"
+                                                id="photo">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger"
                                                 data-bs-dismiss="modal">Fermer</button>
-                                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                            <button type="submit" id="submit-button"
+                                                class="btn btn-primary">Enregistrer</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
+
                         </div>
+
                         <!-- Modal mot de passe -->
                         <div class="modal fade" id="ModalPass" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
@@ -165,11 +170,11 @@
                                         <div class="modal-body">
 
                                             <div class="mb-3">
-                                                <label for="currentPassword" class="form-label">Current
-                                                    Password</label>
+                                                <label for="currentPassword" class="form-label">Mot de passe
+                                                    actuel</label>
                                                 <div class="input-group">
                                                     <input type="password" name="oldPass" class="form-control"
-                                                        id="currentPassword">
+                                                        id="currentPassword" oninput="checkCurrentPassword()">
                                                     <span class="input-group-text" id="currentPasswordToggle">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                             height="16" fill="currentColor" class="bi bi-eye-fill"
@@ -180,9 +185,11 @@
                                                         </svg>
                                                     </span>
                                                 </div>
+                                                <span class="error-message" id="currentPasswordError"></span>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="newPassword" class="form-label">New Password</label>
+                                                <label for="newPassword" class="form-label">Nouveau Mot de
+                                                    Passe</label>
                                                 <div class="input-group">
                                                     <input type="password" name="newPass" class="form-control"
                                                         id="newPassword">
@@ -196,13 +203,15 @@
                                                         </svg>
                                                     </span>
                                                 </div>
+                                                <span class="error-message" id="newPasswordError"></span>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="confirmPassword" class="form-label">Confirm New
-                                                    Password</label>
+                                                <label for="confirmPassword" class="form-label">Confirmez le nouveau
+                                                    mot de passe
+                                                </label>
                                                 <div class="input-group">
                                                     <input type="password" name="verifyPass" class="form-control"
-                                                        id="confirmPassword">
+                                                        id="confirmPassword" oninput="checkPasswordMatch()">
                                                     <span class="input-group-text" id="confirmPasswordToggle">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                             height="16" fill="currentColor" class="bi bi-eye-fill"
@@ -213,22 +222,22 @@
                                                         </svg>
                                                     </span>
                                                 </div>
+                                                <span class="error-message" id="confirmPasswordError"></span>
                                             </div>
 
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
+                                                data-bs-dismiss="modal">Fermer</button>
                                             <button type="submit"
                                                 onclick="return confirm('Vous serez amener à vous reconnecter,êtes-vous sûr?');"
-                                                class="btn btn-primary" id="saveChangesButton">Save changes</button>
+                                                class="btn btn-primary" id="saveChangesButton">Enregistrer</button>
 
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
-
                         <!-- Modal info -->
                         <div class="modal fade" id="Modalinfo" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
@@ -290,8 +299,8 @@
                                             <button type="button" class="btn btn-danger"
                                                 data-bs-dismiss="modal">Fermer</button>
                                             <button type="submit"
-                                                onclick="return confirm('Vous serez amener à vous reconnecter,êtes-vous sûr?');"
-                                                class="btn btn-primary" id="saveChangesButton">Mettre à jour</button>
+                                                onclick="return confirm('Vous êtes sur le point de mettre à jour vos information standards,êtes-vous sûr?');"
+                                                class="btn btn-primary" id="infoButton">Mettre à jour</button>
 
                                         </div>
                                     </form>
@@ -310,15 +319,15 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
-                                    <form id="passwordForm" action="" method="POST">
+                                    <form id="adhForm" action="" method="POST">
                                         @csrf
                                         @method('PATCH')
                                         <div class="modal-body">
                                             <div class="mb-3">
                                                 <label for="nom" class="form-label">Origine</label>
                                                 <div class="input-group">
-                                                    <input type="text" name="nom" class="form-control"
-                                                        id="nom" placeholder="{{ auth()->user()->origine }}">
+                                                    <input type="text" name="origine" class="form-control"
+                                                        id="origine" placeholder="{{ auth()->user()->origine }}">
                                                 </div>
 
                                             </div>
@@ -327,7 +336,7 @@
                                                     data-bs-dismiss="modal">Fermer</button>
                                                 <button type="submit"
                                                     onclick="return confirm('Vous serez amener à vous reconnecter,êtes-vous sûr?');"
-                                                    class="btn btn-primary" id="saveChangesButton">Mettre à
+                                                    class="btn btn-primary" id="adhButton">Mettre à
                                                     jour</button>
 
                                             </div>
@@ -345,6 +354,62 @@
         </div>
 
     </div>
+    <script>
+        function checkCurrentPassword() {
+            var currentPassword = document.getElementById("currentPassword");
+            var currentPasswordError = document.getElementById("currentPasswordError");
+
+            // Vérifier si l'utilisateur a fini de saisir le mot de passe actuel
+            if (currentPassword.value.length === 0) {
+                currentPasswordError.textContent = "";
+                return;
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "{{ route('check.password') }}", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader("X-CSRF-TOKEN", "{{ csrf_token() }}");
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status == 'error') {
+                        currentPasswordError.textContent = response.message;
+                        currentPasswordError.style.color = "red";
+                        currentPasswordError.style.fontSize = "12px";
+                    } else {
+                        currentPasswordError.textContent = "";
+                    }
+                }
+            };
+
+            xhr.send(JSON.stringify({
+                password: currentPassword.value
+            }));
+        }
+
+        function checkPasswordMatch() {
+            var newPassword = document.getElementById("newPassword");
+            var confirmPassword = document.getElementById("confirmPassword");
+            var newPasswordError = document.getElementById("newPasswordError");
+            var confirmPasswordError = document.getElementById("confirmPasswordError");
+
+            if (confirmPassword.value !== '') {
+                if (newPassword.value !== confirmPassword.value) {
+                    newPasswordError.textContent = "Les mots de passe ne correspondent pas";
+                    newPasswordError.style.color = "red";
+                    newPasswordError.style.fontSize = "12px";
+                    confirmPasswordError.textContent = "Les mots de passe ne correspondent pas";
+                    confirmPasswordError.style.color = "red";
+                    confirmPasswordError.style.fontSize = "12px";
+                } else {
+                    newPasswordError.textContent = "";
+                    confirmPasswordError.textContent = "";
+                }
+            }
+        }
+      
+    </script>
 </body>
 
 </html>

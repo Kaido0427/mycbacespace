@@ -160,6 +160,81 @@ window.onload = function () {
 }
 
 
+//photo de profil
+document.addEventListener('DOMContentLoaded', () => {
+    const submitButton = document.getElementById('submit-button');
+    const form = document.getElementById('image-form');
+    const imageInput = document.getElementById('photo');
+
+    submitButton.addEventListener('click', (e) => {
+        e.preventDefault(); // Empêcher la soumission normale du formulaire
+
+        console.log('Bouton "Enregistrer" cliqué'); // Ajouter un log pour le clic sur le bouton
+
+        // Remplacer le contenu du bouton par le SVG de trois points
+        submitButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16"><path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/></svg>';
+
+        console.log('SVG de trois points ajouté');
+
+        // Retarder la soumission du formulaire de 2 secondes
+        setTimeout(() => {
+            // Créer un objet FormData à partir du formulaire
+            const formData = new FormData(form);
+
+            $.ajax({
+                url: form.action,
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: (response) => {
+                    console.log('Requête AJAX réussie :', response);
+
+                    // Rétablir le contenu du bouton "Enregistrer"
+                    submitButton.innerHTML = 'Enregistrer';
+
+                    console.log('Contenu du bouton restauré');
+
+                    if (response.success) {
+                        // Vider le champ input file
+                        imageInput.value = '';
+
+                        // Mettre à jour l'image de profil affichée
+                        const imageUrl = '/avatars/' + response.imageName;
+                        const profilePic = document.getElementById('profile-pic');
+                        const sidebarPic = document.getElementById('sidebar-pic');
+                        profilePic.src = imageUrl;
+                        sidebarPic.src = imageUrl;
+
+                        // Fermer le modal automatiquement
+                        $('#ModalPic').modal('hide');
+                    } else {
+                        // Afficher une notification ou traiter l'erreur selon vos besoins
+                    }
+                },
+                error: (xhr, status, error) => {
+                    console.error('Requête AJAX échouée :', error);
+
+                    // Rétablir le contenu du bouton "Enregistrer"
+                    submitButton.innerHTML = 'Enregistrer';
+
+                    // Afficher une notification ou traiter l'erreur selon vos besoins
+                }
+            });
+        }, 2000); // Retarder de 2 secondes
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
 
 
 

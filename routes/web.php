@@ -40,3 +40,5 @@ Route::post('/uploadingPhoto', [profilController::class, 'storeOrUpdateImage'])-
 Route::patch('/updateUserInfo', [profilController::class, 'updateUserData'])->name('user.update');
 Route::post('/pay', [payController::class, 'paySign'])->name('pay');
 Route::get('/successTrans', [payController::class, 'transactionCallback'])->name('payment.success');
+
+Route::post('check/password', [profilController::class, 'checkPassword'])->name('check.password');
