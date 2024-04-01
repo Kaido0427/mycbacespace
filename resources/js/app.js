@@ -109,19 +109,19 @@ document.querySelectorAll('.sidebar-list-item a').forEach(item => {
 });
 
 //afficher et cacher le mot de passe
-
 document.getElementById('currentPasswordToggle').addEventListener('click', function () {
     var input = document.getElementById('currentPassword');
     if (input.type === 'password') {
         input.type = 'text';
-        this.querySelector('svg').classList.remove('bi', ' bi-eye-fill');
-        this.querySelector('svg').classList.add('bi', 'bi-eye-slash-fill');
+        this.querySelector('svg').classList.remove('bi-eye-fill');
+        this.querySelector('svg').classList.add('bi-eye-slash-fill');
     } else {
         input.type = 'password';
-        this.querySelector('svg').classList.remove('bi', 'bi-eye-slash-fill');
-        this.querySelector('svg').classList.add('bi', ' bi-eye-fill');
+        this.querySelector('svg').classList.remove('bi-eye-slash-fill');
+        this.querySelector('svg').classList.add('bi-eye-fill');
     }
 });
+
 
 document.getElementById('newPasswordToggle').addEventListener('click', function () {
     var input = document.getElementById('newPassword');
@@ -291,10 +291,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             $('#loadingModal').modal('hide');
                             $('#Modalinfo').modal('hide');
                         }, 500);
-                    }, 1500);
+                    }, 500);
                 }
             });
-        }, 1500);
+        }, 1000);
     });
 });
 

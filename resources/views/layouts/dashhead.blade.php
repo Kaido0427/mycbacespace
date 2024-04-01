@@ -7,8 +7,7 @@
         </svg>
     </button>
 
-    <h4 class="app-content-headerText">
-        TABLEAU DE BOARD</h4>
+
     <button class="mode-switch" title="Switch Theme">
         <svg class="moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
             stroke-width="2" width="24" height="24" viewBox="0 0 24 24">

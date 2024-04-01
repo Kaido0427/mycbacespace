@@ -36,19 +36,27 @@
                 @include('layouts.dashhead')
             </div>
             <div class="app-content" style="overflow-y: auto; height: calc(100vh - );">
+                <div id="profil">
+                    <h3 style="color: #fff" class="text-center">MON PROFIL</h3>
+                    <hr style="color: #fff;">
+                </div>
+                <div id="tasks">
+                    <h3 style="color: #fff" class="text-center">MES TACHES</h3>
+                    <hr style="color: #fff;">
+                </div>
                 <div id="relances">
-                    <h3 style="color: #000" class="text-center">MES RAPPELS</h3>
+                    <h3 style="color: #000" class="text-center">MES NOTIFICATIONS</h3>
                     <hr style="color: #fff;">
                     <section class="section-50">
                         <div class="container">
                             <div class="notification-ui_dd-content">
-                                <div class="notification-list notification-list--unread">
+                                <div class="notification-list unread">
                                     <div class="notification-list_content">
                                         <div class="notification-list_img">
-                                            <img src="https://i.imgur.com/zYxDCQT.jpg" alt="user">
+                                            <img src="{{ asset('dist/notiftaskpending.png') }}" alt="user">
                                         </div>
                                         <div class="notification-list_detail">
-                                            <p><b>John Doe</b> reacted to your post</p>
+                                            <p><b>Administrateur</b></p>
                                             <p class="text-muted">Lorem ipsum dolor sit amet consectetur, adipisicing
                                                 elit. Unde, dolorem.</p>
                                             <p class="text-muted"><small>10 mins ago</small></p>
@@ -58,26 +66,45 @@
                                         <img src="https://i.imgur.com/AbZqFnR.jpg" alt="Feature image">
                                     </div>
                                 </div>
-                                <div class="notification-list">
-                                    <div class="notification-list_content">
-                                        <div class="notification-list_img">
-                                            <img src="https://i.imgur.com/ltXdE4K.jpg" alt="user">
+                                <div class="notification-ui_dd-content">
+                                    <div class="notification-list unread">
+                                        <div class="notification-list_content">
+                                            <div class="notification-list_img">
+                                                <img src="{{ asset('dist/notiftaskcancel.png') }}" alt="user">
+                                            </div>
+                                            <div class="notification-list_detail">
+                                                <p><b>Administrateur</b></p>
+                                                <p class="text-muted">Lorem ipsum dolor sit amet consectetur,
+                                                    adipisicing
+                                                    elit. Unde, dolorem.</p>
+                                                <p class="text-muted"><small>10 mins ago</small></p>
+                                            </div>
                                         </div>
-                                        <div class="notification-list_detail">
-                                            <p><b>Brian Cumin</b> reacted to your post</p>
-                                            <p class="text-muted">Lorem ipsum dolor sit amet consectetur, adipisicing
-                                                elit. Unde, dolorem.</p>
-                                            <p class="text-muted"><small>10 mins ago</small></p>
+                                        <div class="notification-list_feature-img">
+                                            <img src="https://i.imgur.com/AbZqFnR.jpg" alt="Feature image">
                                         </div>
                                     </div>
-                                    <div class="notification-list_feature-img">
-                                        <img src="https://i.imgur.com/bpBpAlH.jpg" alt="Feature image">
+                                    <div class="notification-list read">
+                                        <div class="notification-list_content">
+                                            <div class="notification-list_img">
+                                                <img src="{{ asset('dist/notiftasksuccess.png') }}" alt="user">
+                                            </div>
+                                            <div class="notification-list_detail">
+                                                <p><b>Administrateur</b></p>
+                                                <p class="text-muted">Lorem ipsum dolor sit amet consectetur,
+                                                    adipisicing
+                                                    elit. Unde, dolorem.</p>
+                                                <p class="text-muted"><small>10 mins ago</small></p>
+                                            </div>
+                                        </div>
+                                        <div class="notification-list_feature-img">
+                                            <img src="https://i.imgur.com/bpBpAlH.jpg" alt="Feature image">
+                                        </div>
                                     </div>
+
                                 </div>
 
                             </div>
-
-                        </div>
                     </section>
                 </div>
                 <div id="settings">
@@ -118,7 +145,8 @@
                             </div>
                             <div class="col-auto mx-1 mx-md-3">
                                 <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#ModalPic">
-                                    <img id="profile-pic" src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
+                                    <img id="profile-pic"
+                                        src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
                                         class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <p class="card-text text-center">Mettre à jour ma photo de profil</p>

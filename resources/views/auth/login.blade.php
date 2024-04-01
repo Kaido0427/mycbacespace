@@ -1998,7 +1998,7 @@
                                 <h2 class="elementor-heading-title elementor-size-default">Connexion</h2>
                             </div>
                         </div>
-                        <div class="elementor-element elementor-element-014f3d4 elementor-widget elementor-widget-wpforms"
+                        <div style="color: #000;" class="elementor-element elementor-element-014f3d4 elementor-widget elementor-widget-wpforms"
                             data-id="014f3d4" data-element_type="widget" data-widget_type="wpforms.default">
                             <div class="elementor-widget-container">
                                 <style id="wpforms-css-vars-root">
@@ -2066,7 +2066,7 @@
                                                 <div class="form-group">
                                                     <label for="email">E-mail <span
                                                             class="text-danger">*</span></label>
-                                                    <input type="email" id="email" value="{{ old('email') }}"
+                                                    <input style="color: #000;" type="email" id="email" value="{{ old('email') }}"
                                                         class="form-control" name="email" spellcheck="false"
                                                         required>
                                                 </div>
@@ -2074,7 +2074,7 @@
                                                 <div class="form-group">
                                                     <label for="password">Mot de passe <span
                                                             class="text-danger">*</span></label>
-                                                    <input type="password" id="password" class="form-control"
+                                                    <input style="color: #000;" type="password" id="password" class="form-control"
                                                         name="password" required autocomplete="current-password">
                                                 </div>
 
