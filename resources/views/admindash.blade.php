@@ -9,6 +9,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss'])
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+
 </head>
 
 <body>
@@ -179,8 +180,9 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger"
                                                 data-bs-dismiss="modal">Fermer</button>
-                                            <button type="submit" id="submit-button"
-                                                class="btn btn-primary">Enregistrer</button>
+                                            <button type="submit" id="submit-button" class="btn btn-primary"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#loadingModal">Enregistrer</button>
                                         </div>
                                     </form>
                                 </div>
@@ -260,16 +262,33 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
+                                                data-bs-dismiss="modal">Fermer</button>
                                             <button type="submit"
                                                 onclick="return confirm('Vous serez amener à vous reconnecter,êtes-vous sûr?');"
-                                                class="btn btn-primary" id="saveChangesButton">Save changes</button>
+                                                class="btn btn-primary" id="saveChangesButton">Enregistrer</button>
 
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
+                        <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center">
+                                        <!-- Animation de chargement -->
+                                        <div id="loadingSpinner" class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Chargement...</span>
+                                        </div>
+                                        
+                                        <!-- Message -->
+                                        <p id="loadingMessage" class="mt-2">Patientez un instant</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Modal adhesion -->
                         <div id="modal-backdrop"></div>
 
@@ -336,6 +355,8 @@
             }
         }
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 </body>
 
 </html>

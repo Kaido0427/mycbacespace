@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>DASHBOARD | CBACE-CGA</title>
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss', 'resources/scss/notif.scss'])
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 </head>
 
@@ -26,7 +26,9 @@
                 <div class="account-info-picture">
                     <img id="sidebar-pic" src="{{ asset('avatars/' . auth()->user()->avatar->image) }}" alt="Account">
                 </div>
-                <div class="account-info-name">{{ auth()->user()->prenoms }} {{ auth()->user()->nom }}</div>
+                <div class="account-info-name" id="account-info-name">{{ auth()->user()->prenoms }}
+                    {{ auth()->user()->nom }}</div>
+
             </div>
         </div>
         <div class="main-container">
@@ -125,7 +127,22 @@
                             </div>
 
                         </div>
+                        <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center">
+                                        <!-- Animation de chargement -->
+                                        <div id="loadingSpinner" class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Chargement...</span>
+                                        </div>
 
+                                        <!-- Message -->
+                                        <p id="loadingMessage" class="mt-2">Patientez un instant</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Modal photo de profil -->
                         <div class="modal fade" id="ModalPic" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
@@ -146,14 +163,16 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger"
                                                 data-bs-dismiss="modal">Fermer</button>
-                                            <button type="submit" id="submit-button"
-                                                class="btn btn-primary">Enregistrer</button>
+                                            <button type="submit" id="submit-button" class="btn btn-primary"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#loadingModal">Enregistrer</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
 
                         </div>
+
 
                         <!-- Modal mot de passe -->
                         <div class="modal fade" id="ModalPass" tabindex="-1" aria-labelledby="ModalLabel"
@@ -238,6 +257,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <!-- Modal info -->
                         <div class="modal fade" id="Modalinfo" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
@@ -248,7 +268,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
-                                    <form id="InfoForm" action="{{ route('user.update') }}" method="POST">
+                                    <form id="infoForm" action="{{ route('user.update') }}" method="POST">
                                         @csrf
                                         @method('PATCH')
                                         <div class="modal-body">
@@ -298,9 +318,9 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger"
                                                 data-bs-dismiss="modal">Fermer</button>
-                                            <button type="submit"
-                                                onclick="return confirm('Vous êtes sur le point de mettre à jour vos information standards,êtes-vous sûr?');"
-                                                class="btn btn-primary" id="infoButton">Mettre à jour</button>
+                                            <button type="submit" class="btn btn-primary" id="infoButton"
+                                                data-bs-toggle="modal" data-bs-target="#loadingModal">Mettre à
+                                                jour</button>
 
                                         </div>
                                     </form>
@@ -345,6 +365,9 @@
                             </div>
                         </div>
 
+
+
+
                     </div>
                     <div id="modal-backdrop"></div>
                 </div>
@@ -354,6 +377,7 @@
         </div>
 
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function checkCurrentPassword() {
             var currentPassword = document.getElementById("currentPassword");
@@ -408,8 +432,9 @@
                 }
             }
         }
-      
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 </body>
 
 </html>

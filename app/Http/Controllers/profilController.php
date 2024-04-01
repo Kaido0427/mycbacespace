@@ -47,22 +47,32 @@ class profilController extends Controller
 
     public function updateUserData(Request $request)
     {
-        Log::info('Updating user data', ['data' => $request]);
+        Log::info('Updating user data', ['data' => $request->all()]);
 
         $user = User::find(auth()->user()->id);
 
         $user->update([
-            'nom' => $request['nom'],
-            'prenoms' => $request['prenoms'],
-            'adresse' => $request['adresse'],
-            'bp' => $request['bp'],
-            'telephone' => $request['telephone'],
+            'nom' => $request->input('nom'),
+            'prenoms' => $request->input('prenoms'),
+            'adresse' => $request->input('adresse'),
+            'bp' => $request->input('bp'),
+            'telephone' => $request->input('telephone'),
         ]);
 
         Log::info('User data updated ', ['user' => $user]);
 
-        return redirect()->back()->with('success', 'Vos informations ont été mises à jour avec succès.');
+        // Renvoie les données mises à jour dans la réponse JSON
+        return response()->json([
+            'success' => true,
+            'message' => 'Vos informations ont été mises à jour avec succès.',
+            'nom' => $user->nom,
+            'prenoms' => $user->prenoms,
+            'adresse' => $user->adresse,
+            'bp' => $user->bp,
+            'telephone' => $user->telephone
+        ], 200);
     }
+
 
     public function storeOrUpdateImage(Request $request)
     {

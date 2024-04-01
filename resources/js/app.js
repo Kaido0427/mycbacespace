@@ -114,12 +114,12 @@ document.getElementById('currentPasswordToggle').addEventListener('click', funct
     var input = document.getElementById('currentPassword');
     if (input.type === 'password') {
         input.type = 'text';
-        this.querySelector('svg').classList.remove('bi bi-eye-fill');
-        this.querySelector('svg').classList.add('bi bi-eye-slash-fill');
+        this.querySelector('svg').classList.remove('bi', ' bi-eye-fill');
+        this.querySelector('svg').classList.add('bi', 'bi-eye-slash-fill');
     } else {
         input.type = 'password';
-        this.querySelector('svg').classList.remove('bi bi-eye-slash-fill');
-        this.querySelector('svg').classList.add('bi bi-eye-fill');
+        this.querySelector('svg').classList.remove('bi', 'bi-eye-slash-fill');
+        this.querySelector('svg').classList.add('bi', ' bi-eye-fill');
     }
 });
 
@@ -127,12 +127,12 @@ document.getElementById('newPasswordToggle').addEventListener('click', function 
     var input = document.getElementById('newPassword');
     if (input.type === 'password') {
         input.type = 'text';
-        this.querySelector('svg').classList.remove('bi bi-eye-fill');
-        this.querySelector('svg').classList.add('bi bi-eye-slash-fill');
+        this.querySelector('svg').classList.remove('bi', ' bi-eye-fill');
+        this.querySelector('svg').classList.add('bi', 'bi-eye-slash-fill');
     } else {
         input.type = 'password';
-        this.querySelector('svg').classList.remove('bi bi-eye-slash-fill');
-        this.querySelector('svg').classList.add('bi bi-eye-fill');
+        this.querySelector('svg').classList.remove('bi', 'bi-eye-slash-fill');
+        this.querySelector('svg').classList.add('bi', ' bi-eye-fill');
     }
 });
 
@@ -140,12 +140,12 @@ document.getElementById('confirmPasswordToggle').addEventListener('click', funct
     var input = document.getElementById('confirmPassword');
     if (input.type === 'password') {
         input.type = 'text';
-        this.querySelector('svg').classList.remove('bi bi-eye-fill');
-        this.querySelector('svg').classList.add('bi bi-eye-slash-fill');
+        this.querySelector('svg').classList.remove('bi', ' bi-eye-fill');
+        this.querySelector('svg').classList.add('bi', 'bi-eye-slash-fill');
     } else {
         input.type = 'password';
-        this.querySelector('svg').classList.remove('bi bi-eye-slash-fill');
-        this.querySelector('svg').classList.add('bi bi-eye-fill');
+        this.querySelector('svg').classList.remove('bi', 'bi-eye-slash-fill');
+        this.querySelector('svg').classList.add('bi', ' bi-eye-fill');
     }
 });
 
@@ -159,9 +159,10 @@ window.onload = function () {
     appContent.style.height = 'calc(100vh - ' + headerHeight + 'px)';
 }
 
-
-//photo de profil
+//script pour la photo de l'user
 document.addEventListener('DOMContentLoaded', () => {
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const loadingMessage = document.getElementById('loadingMessage');
     const submitButton = document.getElementById('submit-button');
     const form = document.getElementById('image-form');
     const imageInput = document.getElementById('photo');
@@ -171,12 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log('Bouton "Enregistrer" cliqué'); // Ajouter un log pour le clic sur le bouton
 
-        // Remplacer le contenu du bouton par le SVG de trois points
-        submitButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16"><path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/></svg>';
+        // Afficher le modal de chargement
+        $('#loadingModal').modal('show');
 
-        console.log('SVG de trois points ajouté');
-
-        // Retarder la soumission du formulaire de 2 secondes
+        // Retarder la soumission du formulaire de 1.5 secondes
         setTimeout(() => {
             // Créer un objet FormData à partir du formulaire
             const formData = new FormData(form);
@@ -190,11 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 success: (response) => {
                     console.log('Requête AJAX réussie :', response);
 
-                    // Rétablir le contenu du bouton "Enregistrer"
-                    submitButton.innerHTML = 'Enregistrer';
-
-                    console.log('Contenu du bouton restauré');
-
                     if (response.success) {
                         // Vider le champ input file
                         imageInput.value = '';
@@ -206,8 +200,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         profilePic.src = imageUrl;
                         sidebarPic.src = imageUrl;
 
-                        // Fermer le modal automatiquement
+                        // Fermer le modal #ModalPic après le chargement
                         $('#ModalPic').modal('hide');
+
+                        // Fermer le modal de chargement après le chargement
+                        $('#loadingModal').modal('hide');
                     } else {
                         // Afficher une notification ou traiter l'erreur selon vos besoins
                     }
@@ -215,15 +212,99 @@ document.addEventListener('DOMContentLoaded', () => {
                 error: (xhr, status, error) => {
                     console.error('Requête AJAX échouée :', error);
 
-                    // Rétablir le contenu du bouton "Enregistrer"
-                    submitButton.innerHTML = 'Enregistrer';
+                    // Fermer le modal de chargement en cas d'erreur
+                    $('#loadingModal').modal('hide');
 
                     // Afficher une notification ou traiter l'erreur selon vos besoins
                 }
             });
-        }, 2000); // Retarder de 2 secondes
+        }, 1500); // Retarder de 1.5 secondes
+
+        setTimeout(() => {
+            // Cacher le spinner
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            loadingSpinner.style.display = 'none';
+
+
+            // Mettre à jour le message
+            const loadingMessage = document.getElementById('loadingMessage');
+            loadingMessage.innerText = 'Enregistré';
+        }, 1500);
+
+
     });
 });
+
+
+
+//script pour les information standard
+document.addEventListener('DOMContentLoaded', () => {
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const loadingMessage = document.getElementById('loadingMessage');
+    const submitButton = document.getElementById('infoButton');
+    const form = document.getElementById('infoForm');
+    const accountInfoName = document.getElementById('account-info-name');
+
+    submitButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Bouton "Enregistrer" cliqué');
+
+        $('#loadingModal').modal('show');
+
+        setTimeout(() => {
+            const formData = new FormData(form);
+
+            $.ajax({
+                url: form.action,
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: (response) => {
+                    console.log('Requête AJAX réussie :', response);
+                    if (response.success) {
+                        console.log('Mise à jour des données :', response);
+                        console.log('Élément accountInfoName :', accountInfoName);
+
+                        accountInfoName.innerHTML = response.prenoms + ' ' + response.nom;
+
+                        $('#nom').val(response.nom);
+                        $('#prenoms').val(response.prenoms);
+                        $('#adresse').val(response.adresse);
+                        $('#bp').val(response.bp);
+                        $('#telephone').val(response.telephone);
+
+                        $('#Modalinfo').modal('hide');
+                    } else {
+                        console.warn('La réponse ne contient pas de données valides :', response);
+                    }
+                },
+                error: (xhr, status, error) => {
+                    console.error('Requête AJAX échouée :', error);
+                },
+                complete: () => {
+                    setTimeout(() => {
+                        loadingSpinner.style.display = 'none';
+                        loadingMessage.innerText = 'Effectué avec succès';
+
+                        setTimeout(() => {
+                            $('#loadingModal').modal('hide');
+                            $('#Modalinfo').modal('hide');
+                        }, 500);
+                    }, 1500);
+                }
+            });
+        }, 1500);
+    });
+});
+
+
+
+
+
+
+
+
 
 
 
