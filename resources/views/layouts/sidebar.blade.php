@@ -45,7 +45,7 @@
         </a>
     </li>
     <li class="sidebar-list-item">
-        <a href="#" data-target="tasks">
+        <a  href="#" data-target="tasks">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                 class="bi bi-list-task" viewBox="0 0 16 16">
                 <path fill-rule="evenodd"

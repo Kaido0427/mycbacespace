@@ -29,84 +29,94 @@ modeSwitch.addEventListener('click', function () {
 });
 
 
-document.addEventListener('DOMContentLoaded', function () {
+
+//gestion des liens dynamique de la sidebar
+$(document).ready(function () {
     // Récupérer l'identifiant de l'onglet actif depuis sessionStorage
     var activeTab = sessionStorage.getItem('activeTab');
 
     // Sélectionner l'élément actif dans la sidebar
-    var activeItem = document.querySelector(`a[data-target="${activeTab}"]`);
+    var activeItem = $(`a[data-target="${activeTab}"]`);
 
     // Supprimer la classe 'active' de tous les items
-    document.querySelectorAll('.sidebar-list-item').forEach(item => {
-        item.classList.remove('active');
-    });
+    $('.sidebar-list-item').removeClass('active');
 
     // Ajouter la classe 'active' à l'élément actif dans la sidebar
-    if (activeItem) {
-        activeItem.parentNode.classList.add('active');
+    if (activeItem.length) {
+        activeItem.parent().addClass('active');
 
         // Sélectionner l'élément de contenu correspondant à l'élément actif dans la sidebar
-        var activeContent = document.querySelector('#' + activeTab);
+        var activeContent = $('#' + activeTab);
 
         // Afficher l'élément de contenu correspondant à l'élément actif dans la sidebar
-        activeContent.style.display = 'block';
+        activeContent.show();
     } else {
         // Si aucun élément actif n'est trouvé, sélectionner le premier élément de la sidebar
-        var firstItem = document.querySelector('.sidebar-list-item:first-child');
-        if (firstItem) {
-            firstItem.classList.add('active');
+        var firstItem = $('.sidebar-list-item:first-child');
+        if (firstItem.length) {
+            firstItem.addClass('active');
 
             // Sélectionner l'élément de contenu correspondant au premier élément de la sidebar
-            var firstContent = document.querySelector('#' + firstItem.querySelector('a').getAttribute('data-target'));
+            var firstContent = $('#' + firstItem.find('a').data('target'));
 
             // Afficher l'élément de contenu correspondant au premier élément de la sidebar
-            firstContent.style.display = 'block';
+            firstContent.show();
         }
     }
 
     // Ajouter l'écouteur d'événement sur le bouton de menu
-    document.querySelector('#menu-toggle').addEventListener('click', event => {
-        let sidebar = document.querySelector('#sidebar');
-        let accountInfo = document.querySelector('.account-info');
-        if (window.innerWidth > 768) { // Si l'écran est suffisamment grand
-            sidebar.classList.toggle('collapsed'); // Basculer entre le style normal et le style partiellement fermé
-            if (sidebar.classList.contains('collapsed')) { // Si la sidebar est partiellement fermée
-                accountInfo.querySelector('.account-info-name').style.display = 'none'; // Masquer le nom dans la section account-info
+    $('#menu-toggle').click(function () {
+        let sidebar = $('#sidebar');
+        let accountInfo = $('.account-info');
+        if ($(window).width() > 768) { // Si l'écran est suffisamment grand
+            sidebar.toggleClass('collapsed'); // Basculer entre le style normal et le style partiellement fermé
+            if (sidebar.hasClass('collapsed')) { // Si la sidebar est partiellement fermée
+                accountInfo.find('.account-info-name').hide(); // Masquer le nom dans la section account-info
             } else { // Sinon
-                accountInfo.querySelector('.account-info-name').style.display = 'block'; // Afficher le nom dans la section account-info
+                accountInfo.find('.account-info-name').show(); // Afficher le nom dans la section account-info
             }
         } else { // Sinon
-            sidebar.classList.toggle('active'); // Afficher/masquer la sidebar
+            sidebar.toggleClass('active'); // Afficher/masquer la sidebar
         }
     });
-});
 
-// Ajouter un écouteur d'événement sur chaque lien de la sidebar
-document.querySelectorAll('.sidebar-list-item a').forEach(item => {
-    item.addEventListener('click', event => {
+    // Ajouter un écouteur d'événement sur chaque lien de la sidebar
+    $('.sidebar-list-item a').click(function (event) {
         event.preventDefault();
-        let target = event.currentTarget.getAttribute('data-target');
+        let target = $(this).data('target');
 
         // Supprimer la classe 'active' de tous les items
-        document.querySelectorAll('.sidebar-list-item').forEach(item => {
-            item.classList.remove('active');
-        });
+        $('.sidebar-list-item').removeClass('active');
 
         // Ajouter la classe 'active' à l'item cliqué
-        event.currentTarget.parentNode.classList.add('active');
+        $(this).parent().addClass('active');
 
         // Afficher la section correspondante
-        document.querySelectorAll('.app-content > div').forEach(section => {
-            section.style.display = 'none';
-            if (section.getAttribute('id') === target) {
-                section.style.display = 'block';
-            }
-        });
+        $('.app-content > div').hide();
+        $('#' + target).show();
 
         // Stocker l'identifiant de l'onglet actif dans sessionStorage
         sessionStorage.setItem('activeTab', target);
     });
+
+    // Ajouter un écouteur d'événement sur le lien dans la div #relances
+    $('#relances a').click(function (e) {
+        e.preventDefault(); // Empêcher le comportement par défaut du lien
+
+        // Changer le contenu principal
+        $('.app-content > div').hide(); // Cacher toutes les div
+        $('#tasks').show(); // Afficher la div #tasks
+
+        // Changer la classe active
+        $('.sidebar-list-item').removeClass('active'); // Supprimer la classe active de tous les éléments de la sidebar
+        $('.sidebar-list-item a[data-target="tasks"]').parent().addClass('active'); // Ajouter la classe active au nouvel élément de la sidebar
+
+        // Stocker l'identifiant de l'onglet actif dans sessionStorage
+        sessionStorage.setItem('activeTab', 'tasks');
+    });
 });
+
+
 
 //afficher et cacher le mot de passe
 document.getElementById('currentPasswordToggle').addEventListener('click', function () {
@@ -197,13 +207,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     const imageUrl = '/avatars/' + response.imageName;
                     const profilePic = document.getElementById('profile-pic');
                     const sidebarPic = document.getElementById('sidebar-pic');
+                    const profilPic = document.getElementById('ppImg');
                     profilePic.src = imageUrl;
                     sidebarPic.src = imageUrl;
+                    profilPic.src = imageUrl;
 
                     // Mettre à jour le message
                     loadingMessage.innerText = 'Enregistré';
                 } else {
-                    
+
                     // Afficher une notification ou traiter l'erreur selon vos besoins
                     console.error('Réponse AJAX avec succès mais avec une erreur :', response);
                     // Mettre à jour le message
@@ -234,11 +246,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
-
-
-
-
 //script pour les information standard
 document.addEventListener('DOMContentLoaded', () => {
     const loadingSpinner = document.getElementById('loadingSpinner');
@@ -246,6 +253,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitButton = document.getElementById('infoButton');
     const form = document.getElementById('infoForm');
     const accountInfoName = document.getElementById('account-info-name');
+    const ppName = document.getElementById('ppName');
+    const ppAdd = document.getElementById('ppAdd');
 
     submitButton.addEventListener('click', (e) => {
         e.preventDefault();
@@ -269,6 +278,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.log('Élément accountInfoName :', accountInfoName);
 
                         accountInfoName.innerHTML = response.prenoms + ' ' + response.nom;
+                        ppName.innerHTML = response.nom + ' ' + response.prenoms;
+                        ppAdd.innerHTML = response.adresse + ',' + response.bp;
 
                         $('#nom').val(response.nom);
                         $('#prenoms').val(response.prenoms);
@@ -300,6 +311,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+
+//lien vers les taches depuis les notifications
+
+$(document).ready(function () {
+    $('#relances a').on('click', function (e) {
+        e.preventDefault(); // Empêcher le comportement par défaut du lien
+
+        // Changer le contenu principal
+        $('.app-content > div').hide(); // Cacher toutes les div
+        $('#tasks').show(); // Afficher la div #tasks
+
+        // Changer la classe active
+        $('.sidebar-list-item a').removeClass('active'); // Supprimer la classe active de tous les liens
+        $('.sidebar-list-item a[data-target="tasks"]').addClass('active'); // Ajouter la classe active au lien #tasks
+    });
+});
 
 
 

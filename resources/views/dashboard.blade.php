@@ -39,7 +39,180 @@
                 <div id="profil">
                     <h3 style="color: #fff" class="text-center">MON PROFIL</h3>
                     <hr style="color: #fff;">
+                    <!-- Modal -->
+                    <div class="modal fade" id="adhDetails" tabindex="-1" role="dialog"
+                        aria-labelledby="userInfoModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="userInfoModalLabel">DETAILS DE L'ADHESION</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    
+                                    <div class="mb-3">
+                                        <strong>Date d'adhésion :</strong>
+                                        <div> {{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}</div>
+                                    </div>
+                                   
+                                    <hr>
+
+                                    <div class="mb-3">
+                                        <strong>Raison sociale :</strong>
+                                        <div>{!! Auth::user()->raison !!}</div>
+                                    </div>
+                                    <hr>
+                                    <div class="mb-3">
+                                        <strong>Déclaration :</strong>
+                                        <div>{!! Auth::user()->declaration !!}</div>
+                                    </div>
+                                    <hr>
+                                    <div class="mb-3">
+                                        <strong>Service :</strong>
+                                        <div>{!! Auth::user()->service !!}</div>
+                                    </div>
+                                    <hr>
+                                    <div class="mb-3">
+                                        <strong>Engagement :</strong>
+                                        <div>{!! Auth::user()->engagement !!}</div>
+                                    </div>
+                                    <hr>
+                                    <div class="mb-3">
+                                        <strong>Engagement supplémentaire :</strong>
+                                        <div>{!! Auth::user()->engagsup !!}</div>
+                                    </div>
+                                    <hr>
+                                    <div class="mb-3">
+                                        <strong>Date de creation de l'entreprise :</strong>
+                                        <div> {{ \Carbon\Carbon::parse(auth()->user()->date)->isoFormat('D MMMM YYYY') }}</div>
+                                    </div>
+                                    <hr>
+                                    <div class="mb-3">
+                                        <strong>Origine :</strong>
+                                        <div>{!! Auth::user()->origine !!}</div>
+                                    </div>
+                                   
+                                    <hr>
+                                    <div class="mb-3">
+                                        <strong>Numéro d'associés :</strong>
+                                        <div>{!! Auth::user()->numAssocies !!}</div>
+                                    </div>
+                                    <hr>
+                                    <div class="mb-3">
+                                        <strong>Régime :</strong>
+                                        <div>{!! Auth::user()->regime !!}</div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-dark"
+                                        data-bs-dismiss="modal">Fermer</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div id="modal-backdrop"></div>
+
+                    <div class="container">
+                        <div class="main-body">
+                            <div class="row gutters-sm justify-content-center">
+                                <div class="col-auto mx-1 mx-md-3">
+                                    <div class="card h-100">
+                                        <div class="card-body d-flex flex-column justify-content-center">
+                                            <div class="d-flex flex-column align-items-center text-center">
+                                                <div id="image-profil">
+                                                    <img id="ppImg" src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
+                                                        alt="Admin">
+                                                </div>
+
+
+                                                <div class="mt-3">
+                                                    <h4 id="ppName">{{ auth()->user()->nom }} {{ auth()->user()->prenoms }}</h4>
+                                                    <p class="text-secondary mb-1">+229 {{ auth()->user()->telephone }}
+                                                        </< /p>
+                                                    <p id="ppAdd" class="text-muted font-size-sm">
+                                                        {{ auth()->user()->adresse }},{{ auth()->user()->bp }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto mx-1 mx-md-3">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="row">
+                                                            <div class="col-sm-12 btn">
+                                                                <strong>INFORMATIONS D'ADHESION</strong>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="col-sm-3">
+                                                            <h6 class="mb-0">Date Adhésion</h6>
+                                                        </div>
+                                                        <div class="col-sm-9 text-secondary">
+                                                            {{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}
+
+                                                        </div>
+                                                        <hr>
+                                                        <div class="col-sm-3">
+                                                            <h6 class="mb-0">Service</h6>
+                                                        </div>
+                                                        <div class="col-sm-9 text-secondary">
+                                                            {{ auth()->user()->service }}
+                                                        </div>
+                                                        <hr>
+                                                        <div class="col-sm-3">
+                                                            <h6 class="mb-0">Structure</h6>
+                                                        </div>
+                                                        <div class="col-sm-9 text-secondary">
+                                                            {{ auth()->user()->origine }}
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="row">
+                                                        <div data-bs-toggle="modal" data-bs-target="#adhDetails"
+                                                            class="col-sm-12 btn btn-primary">
+                                                            Details
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 mb-3">
+                                            <div class="card mb-3 h-100">
+                                                <div class="card-body">
+                                                    <h6 class="d-flex align-items-center mb-3"><i
+                                                            class="material-icons text-info mr-2">assignment</i>Project
+                                                        Status</h6>
+                                                    <small>Web Design</small>
+                                                    <div class="progress mb-3" style="height: 5px">
+                                                        <div class="progress-bar bg-primary" role="progressbar"
+                                                            style="width: 80%" aria-valuenow="80" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                    <small>Website Markup</small>
+                                                    <div class="progress mb-3" style="height: 5px">
+                                                        <div class="progress-bar bg-primary" role="progressbar"
+                                                            style="width: 72%" aria-valuenow="72" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <div id="tasks">
                     <h3 style="color: #fff" class="text-center">MES TACHES</h3>
                     <hr style="color: #fff;">
@@ -63,7 +236,7 @@
                                         </div>
                                     </div>
                                     <div class="notification-list_feature-img">
-                                        <img src="https://i.imgur.com/AbZqFnR.jpg" alt="Feature image">
+                                        <img src="{{ asset('dist/goto.png') }}" alt="Feature image">
                                     </div>
                                 </div>
                                 <div class="notification-ui_dd-content">
@@ -81,7 +254,7 @@
                                             </div>
                                         </div>
                                         <div class="notification-list_feature-img">
-                                            <img src="https://i.imgur.com/AbZqFnR.jpg" alt="Feature image">
+                                            <img src="{{ asset('dist/goto.png') }}" alt="Feature image">
                                         </div>
                                     </div>
                                     <div class="notification-list read">
@@ -97,9 +270,12 @@
                                                 <p class="text-muted"><small>10 mins ago</small></p>
                                             </div>
                                         </div>
-                                        <div class="notification-list_feature-img">
-                                            <img src="https://i.imgur.com/bpBpAlH.jpg" alt="Feature image">
-                                        </div>
+                                        <a href="#">
+                                            <div class="notification-list_feature-img">
+                                                <img src="{{ asset('dist/goto.png') }}" alt="Feature image">
+                                            </div>
+                                        </a>
+
                                     </div>
 
                                 </div>
