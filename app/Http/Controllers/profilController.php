@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\avatar;
 use App\Models\User;
+use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -76,10 +77,18 @@ class profilController extends Controller
 
     public function storeOrUpdateImage(Request $request)
     {
-        // Valider les données de la requête
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Assurez-vous que l'image est valide
-        ]);
+        try {
+            // Valider les données de la requête
+            $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,bmp,svg,webp,ico|max:2048',
+            ]);
+        } catch (ValidationException $e) {
+            // En cas d'erreur de validation, enregistrer un log d'erreur
+            Log::error('Erreur de validation de la photo de profil pour l\'utilisateur: ' . Auth::id() . '. Message d\'erreur: ' . $e->getMessage());
+
+            // Retourner une réponse JSON d'erreur
+            return response()->json(['success' => false, 'message' => 'Le format de l\'image n\'est pas valide. Veuillez réessayer.']);
+        }
 
         try {
             // Récupérer l'utilisateur connecté

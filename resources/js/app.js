@@ -175,65 +175,67 @@ document.addEventListener('DOMContentLoaded', () => {
         // Afficher le modal de chargement
         $('#loadingModal').modal('show');
 
-        // Retarder la soumission du formulaire de 1.5 secondes
-        setTimeout(() => {
-            // Créer un objet FormData à partir du formulaire
-            const formData = new FormData(form);
+        // Créer un objet FormData à partir du formulaire
+        const formData = new FormData(form);
 
-            $.ajax({
-                url: form.action,
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: (response) => {
-                    console.log('Requête AJAX réussie :', response);
+        // Effectuer la requête AJAX sans délai
+        $.ajax({
+            url: form.action,
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (response) => {
+                console.log('Requête AJAX réussie :', response);
 
-                    if (response.success) {
-                        // Vider le champ input file
-                        imageInput.value = '';
+                // Mettre à jour le message en fonction du résultat
+                if (response.success) {
+                    // Vider le champ input file
+                    imageInput.value = '';
 
-                        // Mettre à jour l'image de profil affichée
-                        const imageUrl = '/avatars/' + response.imageName;
-                        const profilePic = document.getElementById('profile-pic');
-                        const sidebarPic = document.getElementById('sidebar-pic');
-                        profilePic.src = imageUrl;
-                        sidebarPic.src = imageUrl;
+                    // Mettre à jour l'image de profil affichée
+                    const imageUrl = '/avatars/' + response.imageName;
+                    const profilePic = document.getElementById('profile-pic');
+                    const sidebarPic = document.getElementById('sidebar-pic');
+                    profilePic.src = imageUrl;
+                    sidebarPic.src = imageUrl;
 
-                        // Fermer le modal #ModalPic après le chargement
-                        $('#ModalPic').modal('hide');
-
-                        // Fermer le modal de chargement après le chargement
-                        $('#loadingModal').modal('hide');
-                    } else {
-                        // Afficher une notification ou traiter l'erreur selon vos besoins
-                    }
-                },
-                error: (xhr, status, error) => {
-                    console.error('Requête AJAX échouée :', error);
-
-                    // Fermer le modal de chargement en cas d'erreur
-                    $('#loadingModal').modal('hide');
-
+                    // Mettre à jour le message
+                    loadingMessage.innerText = 'Enregistré';
+                } else {
+                    
                     // Afficher une notification ou traiter l'erreur selon vos besoins
+                    console.error('Réponse AJAX avec succès mais avec une erreur :', response);
+                    // Mettre à jour le message
+                    loadingMessage.innerText = 'Une erreur est survenue';
                 }
-            });
-        }, 1500); // Retarder de 1.5 secondes
 
-        setTimeout(() => {
-            // Cacher le spinner
-            const loadingSpinner = document.getElementById('loadingSpinner');
-            loadingSpinner.style.display = 'none';
+                // Fermer le modal de chargement après 0.5 secondes
+                setTimeout(() => {
+                    $('#loadingModal').modal('hide');
+                }, 1000);
+            },
+            error: (xhr, status, error) => {
+                imageInput.value = '';
+                console.error('Requête AJAX échouée :', error);
+                console.error('Statut :', status);
+                console.error('Réponse du serveur :', xhr.responseText);
 
+                // Mettre à jour le message
+                loadingMessage.innerText = 'Une erreur est survenue';
 
-            // Mettre à jour le message
-            const loadingMessage = document.getElementById('loadingMessage');
-            loadingMessage.innerText = 'Enregistré';
-        }, 1500);
-
-
+                // Fermer le modal de chargement après 0.5 secondes
+                setTimeout(() => {
+                    $('#loadingModal').modal('hide');
+                }, 1000);
+            }
+        });
     });
 });
+
+
+
+
 
 
 
