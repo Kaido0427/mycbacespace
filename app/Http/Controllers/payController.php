@@ -9,119 +9,43 @@ use Illuminate\Support\Facades\Log;
 class payController extends Controller
 {
 
-    public function paySign(Request $request)
+    public function pay(Request $request)
     {
-        $montant = $request->input('montant');
-        $user = auth()->user();
+        //Je recupere les informations de la transaction effetué depuis le widget dans la vue
+        //Puis je les enregistrent dans les tables transactions,et article_transactions
 
-        try {
-            \FedaPay\FedaPay::setApiKey("sk_sandbox_PpbR6paPMzU_riHeOcUxG1th");
-            \FedaPay\FedaPay::setEnvironment('sandbox');
+        $public_key = config('kkiapay.public_key');
+        $private_key = config('kkiapay.private_key');
+        $secret = config('kkiapay.secret');
+        $sandbox = config("kkiapay.sandbox");
 
-            $transaction = \FedaPay\Transaction::create(array(
-                "description" => 'Transaction de ' . $user->nom,
-                "amount" => $montant,
-                "currency" => ["iso" => "XOF"],
-                "callback_url" => "https://127.0.0.1:8000/successTrans",
-                "customer" => [
-                    "firstname" => $user->prenoms,
-                    "lastname" => $user->nom,
-                    "email" => $user->email,
-                    "phone_number" => [
-                        "number" => $user->telephone,
-                        "country" => "bj"
-                    ]
-                ]
-            ));
+        $kkiapay = new \Kkiapay\Kkiapay(
+            $public_key,
+            $private_key,
+            $secret,
+            $sandbox
+        );
+        $transactionData = $request->all();
+        Log::info($request->all());
 
-            Log::info("Transaction créée avec succès. ID de transaction : " . $transaction->id);
-            Log::info("Montant de la transaction : " . $montant);
-            Log::info("Nom du client : " . $user->nom);
-            Log::info("Prénoms du client : " . $user->prenoms);
-            Log::info("Email du client : " . $user->email);
-            Log::info("Téléphone du client : " . $user->telephone);
+        $transactionId = $transactionData['transaction_id'];
 
-            $transaction = \FedaPay\Transaction::retrieve($transaction->id);
-            $transaction->sendNow(['transaction_id' => $transaction->id]);
-            Log::info("Transaction envoyée avec succès. ID de transaction : " . $transaction->id);
+        $transactionDetails = $kkiapay->verifyTransaction($transactionId);
 
-            return redirect()->route('payment.success')->with('success', 'La transaction a été créée avec succès. ID de transaction : ' . $transaction->id);
-        } catch (\FedaPay\Error\ApiConnection $e) {
-            Log::error("Erreur de connexion à l'API : " . $e->getMessage());
-            return redirect()->back()->with('error', 'Erreur de connexion à l\'API : ' . $e->getMessage());
-        } catch (\FedaPay\Error\ApiConnection $e) {
-            Log::error("Erreur API : " . $e->getMessage());
-            return redirect()->back()->with('error', 'Erreur API : ' . $e->getMessage());
-        } catch (\Exception $e) {
-            Log::error("Une erreur est survenue : " . $e->getMessage());
-            return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
-        }
-    }
+        Log::info(get_object_vars($transactionDetails));
+        if ($transactionDetails->status === 'SUCCESS') {
+            // Enregistre les données de la transaction dans la base de données
+            payment::create([
+                'montant' => $transactionDetails->amount,
+                'status' => $transactionDetails->status,
+                'transaction_id' => $transactionId ?? null,
+                'user_id' => auth()->user()->id,
+            ]);
 
-    public function transactionCallback(Request $request)
-    {
-        try {
-            // Vérifier si le statut de la transaction est approuvé
-            if ($request->status == 'approved') {
-                // Enregistrer les données de paiement avec le statut approuvé
-                Payment::create([
-                    'montant' => $request->amount,
-                    'transaction_id' => $request->transaction_id,
-                    'devise' => 'XOF', // Assurez-vous d'adapter cela en fonction de vos besoins
-                    'user_id' => auth()->id(), // Supposons que vous utilisez l'authentification de Laravel
-                    'statut' => 'approved'
-                ]);
-            } elseif ($request->status == 'transferred') {
-                // Enregistrer les données de paiement avec le statut transféré
-                Payment::create([
-                    'montant' => $request->amount,
-                    'transaction_id' => $request->transaction_id,
-                    'devise' => 'XOF', // Assurez-vous d'adapter cela en fonction de vos besoins
-                    'user_id' => auth()->id(), // Supposons que vous utilisez l'authentification de Laravel
-                    'statut' => 'transferred'
-                ]);
-            } elseif ($request->status == 'refunded') {
-                // Enregistrer les données de paiement avec le statut remboursé
-                Payment::create([
-                    'montant' => $request->amount,
-                    'transaction_id' => $request->transaction_id,
-                    'devise' => 'XOF', // Assurez-vous d'adapter cela en fonction de vos besoins
-                    'user_id' => auth()->id(), // Supposons que vous utilisez l'authentification de Laravel
-                    'statut' => 'refunded'
-                ]);
-            } elseif ($request->status == 'approved_partially_refunded') {
-                // Enregistrer les données de paiement avec le statut partiellement remboursé
-                Payment::create([
-                    'montant' => $request->amount,
-                    'transaction_id' => $request->transaction_id,
-                    'devise' => 'XOF', // Assurez-vous d'adapter cela en fonction de vos besoins
-                    'user_id' => auth()->id(), // Supposons que vous utilisez l'authentification de Laravel
-                    'statut' => 'approved_partially_refunded'
-                ]);
-            } elseif ($request->status == 'transferred_partially_refunded') {
-                // Enregistrer les données de paiement avec le statut partiellement transféré et partiellement remboursé
-                Payment::create([
-                    'montant' => $request->amount,
-                    'transaction_id' => $request->transaction_id,
-                    'devise' => 'XOF', // Assurez-vous d'adapter cela en fonction de vos besoins
-                    'user_id' => auth()->id(), // Supposons que vous utilisez l'authentification de Laravel
-                    'statut' => 'transferred_partially_refunded'
-                ]);
-            } else {
-                // Enregistrer les données de paiement avec un statut par défaut si aucun des statuts ne correspond
-                Payment::create([
-                    'montant' => $request->amount,
-                    'transaction_id' => $request->transaction_id,
-                    'devise' => 'XOF', // Assurez-vous d'adapter cela en fonction de vos besoins
-                    'user_id' => auth()->id(), // Supposons que vous utilisez l'authentification de Laravel
-                    'statut' => 'unknown' // Ou tout autre statut par défaut approprié
-                ]);
-            }
-
-            return response()->json(['message' => 'Transaction enregistrée avec succès.'], 200);
-        } catch (\Exception $e) {
-            // Log des autres exceptions
-            return response()->json(['error' => 'Une erreur est survenue : ' . $e->getMessage()], 500);
+            return redirect()->route('mails.index')->with('success', 'Le mail a été envoyé avec succès ! Consultez votre boîte mail');
+        } else {
+            // Gérer le cas où la transaction a échoué
+            return response()->json(['error' => 'La transaction a échoué'], 400);
         }
     }
 }

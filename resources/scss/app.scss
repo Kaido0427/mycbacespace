@@ -926,3 +926,26 @@ body,
 }
 
 
+//la souscription 
+
+.custom-container {
+    margin-top:45px; /* Ajustez la valeur de la marge supérieure selon vos besoins */
+}
+#card-body {
+    text-align: center;
+}
+
+.kkiapay-button {
+    background-color: #0095ff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.kkiapay-button:hover {
+    background-color: #0077cc;
+}
+
+

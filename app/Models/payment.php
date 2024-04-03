@@ -16,4 +16,9 @@ class payment extends Model
         'devise',
         'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

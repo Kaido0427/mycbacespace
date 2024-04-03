@@ -35,4 +35,14 @@ class HomeController extends Controller
             return view('dashboard');
         }
     }
+
+    public function subscription()
+    {
+        return view('abonement');
+    }
+
+    public function mailIndex()
+    {
+        return view('mails.index');
+    }
 }

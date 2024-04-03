@@ -61,6 +61,11 @@ class User extends Authenticatable
 
     public function avatar()
     {
-       return $this->hasOne(avatar::class);
+        return $this->hasOne(avatar::class);
+    }
+
+    public function payements()
+    {
+        return $this->hasMany(payment::class);
     }
 }

@@ -6,12 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>DASHBOARD | CBACE-CGA</title>
+        <!-- Fonts -->
+        <link rel="dns-prefetch" href="//fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss', 'resources/scss/notif.scss'])
 
 
 </head>
 
 <body>
+ 
     <div class="app-container">
         <div id="sidebar" class="sidebar">
             <div class="sidebar-header">
@@ -212,7 +216,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="tasks">
                     <h3 style="color: #fff" class="text-center">MES TACHES</h3>
                     <hr style="color: #fff;">
@@ -575,12 +578,11 @@
                     </div>
                     <div id="modal-backdrop"></div>
                 </div>
-
-
             </div>
         </div>
-
     </div>
+  
+   
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function checkCurrentPassword() {

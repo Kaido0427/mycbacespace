@@ -1986,13 +1986,12 @@
                 </div>
             </div>
         </section>
-        <section  
+        <section
             class="elementor-section elementor-top-section elementor-element elementor-element-fdc655d elementor-section-boxed elementor-section-height-default elementor-section-height-default"
             data-id="fdc655d" data-element_type="section">
-            <div   class="elementor-container elementor-column-gap-default">
+            <div class="elementor-container elementor-column-gap-default">
                 <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-0af101e"
-                    data-id="0af101e" data-element_type="column"
-                    >
+                    data-id="0af101e" data-element_type="column">
                     <div class="elementor-widget-wrap elementor-element-populated">
                         <div class="elementor-element elementor-element-945b238 elementor-widget elementor-widget-heading"
                             data-id="945b238" data-element_type="widget" data-widget_type="heading.default">
@@ -2000,7 +1999,8 @@
                                 <h2 class="elementor-heading-title elementor-size-default">Bulletin d'Adhésion</h2>
                             </div>
                         </div>
-                        <div style="color: #000;" class="elementor-element elementor-element-014f3d4 elementor-widget elementor-widget-wpforms"
+                        <div style="color: #000;"
+                            class="elementor-element elementor-element-014f3d4 elementor-widget elementor-widget-wpforms"
                             data-id="014f3d4" data-element_type="widget" data-widget_type="wpforms.default">
                             <div class="elementor-widget-container">
                                 <style id="wpforms-css-vars-root">
@@ -2237,7 +2237,7 @@
                                                                 required>
                                                             <label class="wpforms-field-label-inline"
                                                                 for="wpforms-714-field_9_6">Autres prestation ( à
-                                                                préciser dans la lettre de mission</label>
+                                                                préciser dans la lettre de mission)</label>
                                                         </li>
                                                     </ul>
                                                     <div id="wpforms-714-field_9-description"
@@ -2308,8 +2308,8 @@
                                                     <div id="wpforms-714-field_13" class="list-unstyled">
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_1" name="Origine"
-                                                                value="Individuel" required>
+                                                                id="" name="Origine" value="Individuel"
+                                                                required>
                                                             <label class="form-check-label"
                                                                 for="wpforms-714-field_13_1">Individuel</label>
                                                         </div>
@@ -2323,16 +2323,16 @@
                                                         </div>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_3" name="Origine"
-                                                                value="Société Anonyme" required>
+                                                                id="" name="Origine" value="Société Anonyme"
+                                                                required>
                                                             <label class="form-check-label"
                                                                 for="wpforms-714-field_13_3">Société Anonyme</label>
                                                         </div>
                                                         <!-- Ajoutez les autres options de la même manière -->
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_1" name="Origine"
-                                                                value="GIE" required>
+                                                                id="" name="Origine" value="GIE"
+                                                                required>
                                                             <label class="form-check-label"
                                                                 for="wpforms-714-field_13_1">GIE</label>
                                                         </div>
@@ -2458,14 +2458,18 @@
                                             </div>
                                         </div><!-- .wpforms-field-container -->
                                         <div class="wpforms-submit-container">
-                                            <button onclick="signInController();" type="submit">
-                                                {{ __('Envoyer') }}</button>
+
+                                            <button 
+                                            onclick="signInController();" type="submit">
+                                            {{ __('J\'adhere') }}</button>
                                             <img decoding="async"
                                                 src="https://cbace-cga.com/wp-content/plugins/wpforms-lite/assets/images/submit-spin.svg"
                                                 class="wpforms-submit-spinner" style="display: none;" width="26"
                                                 height="26" alt="Chargement en cours">
                                         </div>
+
                                     </form>
+
                                 </div>
                                 <div>
                                     <p>Vous aviez déja un compte?
@@ -3263,16 +3267,8 @@
             }
 
         }
-
-        //pour eviter que la page se recharger apres une sousimission de formulaire
-        function notReload() {
-            event.preventDefault();
-        }
-        //confirmation pour toute suppression sur le site
-        function delConfirmation() {
-            confirm('Etes-vous sûr de vouloir supprimer ce dernier?');
-        }
     </script>
+
     <!-- Cookie Notice plugin v2.4.13 by Hu-manity.co https://hu-manity.co/ -->
     <div id="cookie-notice" role="dialog" class="cookie-notice-hidden cookie-revoke-hidden cn-position-bottom"
         aria-label="Cookie Notice" style="background-color: rgba(50,50,58,1);">
@@ -3288,7 +3284,6 @@
 
     </div>
     <!-- / Cookie Notice plugin -->
-
 
 
 
