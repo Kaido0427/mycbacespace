@@ -13,8 +13,8 @@ class payment extends Model
     protected $fillable = [
         'montant',
         'transaction_id',
-        'devise',
         'user_id',
+        'status'
     ];
 
     public function user()

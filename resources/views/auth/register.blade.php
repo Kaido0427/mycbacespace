@@ -2454,6 +2454,7 @@
                                                                 class="wpforms-field-label-inline"
                                                                 for="wpforms-714-field_16_4">IBA</label></li>
                                                     </ul>
+                                                    <input type="hidden" value="client" name="user_type">
                                                 </fieldset>
                                             </div>
                                         </div><!-- .wpforms-field-container -->

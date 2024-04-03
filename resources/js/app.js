@@ -329,6 +329,69 @@ $(document).ready(function () {
 });
 
 
+//barre de progression au profil:
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Récupérer la valeur actuelle de la barre de progression
+    const progressValue = document.getElementById('progressBar').getAttribute('aria-valuenow');
+
+    // Définir la classe CSS en fonction de la valeur actuelle
+    let progressClass;
+    if (progressValue < 25) {
+        progressClass = 'bg-danger';
+    } else if (progressValue < 75) {
+        progressClass = 'bg-warning';
+    } else {
+        progressClass = 'bg-success';
+    }
+
+    // Appliquer la classe CSS à la barre de progression
+    document.getElementById('progressBar').className = `progress-bar ${progressClass}`;
+});
+
+
+//pour charger les info du client dans le modal depuis le dashboard adminn
+
+$(document).ready(function () {
+    $('#fullscreenModal').on('show.bs.modal', function (event) {
+        // Récupérer le bouton qui a déclenché le modal
+        var button = $(event.relatedTarget);
+
+        // Récupérer les données du client à partir des attributs de données
+        var clientId = button.data('client-id');
+        var clientImage = button.data('client-image');
+        var datecreateClient = button.data('client-datecreate');
+        var clientReason = button.data('client-reason');
+        var clientDeclaration = button.data('client-declaration');
+        var clientService = button.data('client-service');
+        var clientEngagement = button.data('client-engagement');
+        var engagSupClient = button.data('engag-sup-client');
+        var entrepriseClientDate = button.data('entreprise-client-date');
+        var origineClient = button.data('origine-client');
+        var clientAssocies = button.data('client-associes');
+        var clientRegime = button.data('client-regime');
+        var clientName = button.data('client-nom');
+        var clientPrenoms = button.data('client-prenoms');
+
+
+        // Mettre à jour l'image du client
+        $('#img-client').attr('src', clientImage);
+
+        // Mettre à jour les informations du client
+        $('#datecreate-client').text(datecreateClient);
+        $('#client-reason').text(clientReason);
+        $('#client-declaration').html(clientDeclaration);
+        $('#client-service').html(clientService);
+        $('#client-engagement').html(clientEngagement);
+        $('#engag-sup-client').html(engagSupClient);
+        $('#entreprise-client-date').text(entrepriseClientDate);
+        $('#origine-client').html(origineClient);
+        $('#client-associes').html(clientAssocies);
+        $('#client-regime').html(clientRegime);
+        $('#client-name').html(clientName +'   '+ clientPrenoms)
+    });
+});
+
 
 
 

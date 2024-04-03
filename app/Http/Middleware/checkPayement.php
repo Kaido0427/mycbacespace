@@ -19,13 +19,16 @@ class CheckPayement
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::user()->hasPaid()) {
+        if (Auth::user()->user_type == "admin") {
+            // L'utilisateur est un administrateur, je lui donne l'accès
+            return $next($request);
+        } elseif (!Auth::user()->hasPaid()) {
             // L'utilisateur est connecté mais n'a pas encore effectué de paiement
             if ($request->is('subscription')) {
-                // L'utilisateur tente d'accéder à la page de souscription ou de paiement, je lui Donne l'accès
+                // L'utilisateur tente d'accéder à la page de souscription ou de paiement, je lui donne l'accès
                 return $next($request);
             } else {
-                // je Redirige l'utilisateur vers la page de souscription
+                // Je redirige l'utilisateur vers la page de souscription
                 return redirect()->route('subscription')->with('error', 'Vous devez effectuer un paiement avant d\'accéder à cette page.');
             }
         }

@@ -42,5 +42,6 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/updateUserInfo', [profilController::class, 'updateUserData'])->name('user.update');
     Route::get('/pay', [payController::class, 'pay'])->name('pay');
     Route::get('/subsuccess', [HomeController::class, 'mailIndex'])->name('mails.index');
+    Route::get('/suberror', [HomeController::class, 'mailerror'])->name('mails.error');
     Route::post('check/password', [profilController::class, 'checkPassword'])->name('check.password');
 });

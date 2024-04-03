@@ -24,17 +24,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //J'affiche le tableau de bord a l'utilisateur en fonction de son type 
-        //apres sa connexion
+        // je  récupére le rôle de l'utilisateur connecté
         $role = auth()->user()->user_type;
-        $clients = User::where('user_type', "client")->get();
 
-        if ($role == "admin") {
+        // Je récupére la liste des clients
+        $clients = User::where('user_type', 'client')->get();
+        // j'affiche le tableau de bord en fonction du rôle de l'utilisateur
+        if ($role === 'admin') {
             return view('admindash', compact('clients'));
         } else {
             return view('dashboard');
         }
     }
+
 
     public function subscription()
     {
@@ -44,5 +46,10 @@ class HomeController extends Controller
     public function mailIndex()
     {
         return view('mails.index');
+    }
+
+    public function mailerror()
+    {
+        return view('mails.error');
     }
 }

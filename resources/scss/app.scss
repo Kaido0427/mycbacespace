@@ -29,7 +29,7 @@
     --app-content-secondary-color: #f3f6fd;
     --app-content-main-color: #1f1c2e;
     --sidebar-link: #1f1c2e;
-    --sidebar-hover-link: rgba(195, 207, 244, 0.5);
+    --sidebar-hover-link: rgba(246, 247, 250, 0.5);
     --sidebar-active-link: rgba(195, 207, 244, 1);
     --sidebar-main-color: #1f1c2e;
     --filter-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -912,25 +912,35 @@ body,
 
 //AU NIVEAU DU PROFIL POUR L4IMAGE
 #image-profil {
-    width: 200px; /* Largeur du conteneur */
-    height: 200px; /* Hauteur du conteneur */
-    overflow: hidden; /* Masquer toute partie de l'image qui dépasse de la zone */
-    border-radius: 50%; /* Rendre la forme ronde */
+    width: 200px;
+    /* Largeur du conteneur */
+    height: 200px;
+    /* Hauteur du conteneur */
+    overflow: hidden;
+    /* Masquer toute partie de l'image qui dépasse de la zone */
+    border-radius: 50%;
+    /* Rendre la forme ronde */
 }
 
 #image-profil img {
-    width: 100%; /* Utiliser toute la largeur du conteneur */
-    height: 100%; /* Utiliser toute la hauteur du conteneur */
-    object-fit: cover; /* Redimensionner l'image pour qu'elle remplisse complètement le conteneur */
-    object-position: center; /* Centrer l'image dans le conteneur */
+    width: 100%;
+    /* Utiliser toute la largeur du conteneur */
+    height: 100%;
+    /* Utiliser toute la hauteur du conteneur */
+    object-fit: cover;
+    /* Redimensionner l'image pour qu'elle remplisse complètement le conteneur */
+    object-position: center;
+    /* Centrer l'image dans le conteneur */
 }
 
 
 //la souscription 
 
 .custom-container {
-    margin-top:45px; /* Ajustez la valeur de la marge supérieure selon vos besoins */
+    margin-top: 45px;
+    /* Ajustez la valeur de la marge supérieure selon vos besoins */
 }
+
 #card-body {
     text-align: center;
 }
@@ -948,4 +958,71 @@ body,
     background-color: #0077cc;
 }
 
+//le modal plein ecran cez l'admin
 
+.modal-fullscreen {
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+.modal-fullscreen .modal-content {
+    height: auto;
+    min-height: 100vh;
+    border-radius: 0;
+}
+
+.modal-transparent-blur .modal-dialog {
+    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(118, 196, 241, 0.5));
+    /* Dégradé blanc transparent */
+    backdrop-filter: blur(8px);
+    border-radius: 0.3rem;
+
+}
+
+.modal-transparent-blur .modal-content {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.modal-transparent-blur .modal-body {
+
+    /* Fond blanc semi-transparent */
+    border-radius: 0.3rem;
+    padding: 1.5rem;
+}
+
+.modal-transparent-blur .table th,
+.modal-transparent-blur .table td {
+
+    backdrop-filter: blur(5px);
+}
+
+#client-table {
+    display: table;
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    vertical-align: middle;
+    border-collapse: collapse;
+}
+
+
+.modal-transparent-blur .modal-footer {
+    /* Fond blanc semi-transparent */
+    border-radius: 0 0 0.3rem 0.3rem;
+}
+
+.blur-background {
+    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
+    backdrop-filter: blur(5px);
+    border-radius: 0.3rem;
+}
+
+
+.invisible-hr {
+    background-color: transparent;
+    border: 0;
+    height: 1px;
+    margin: 1rem 0;
+}

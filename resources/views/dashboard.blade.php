@@ -192,21 +192,15 @@
                                         <div class="col-sm-6 mb-3">
                                             <div class="card mb-3 h-100">
                                                 <div class="card-body">
-                                                    <h6 class="d-flex align-items-center mb-3"><i
-                                                            class="material-icons text-info mr-2">assignment</i>Project
-                                                        Status</h6>
-                                                    <small>Web Design</small>
+                                                    <div class="col-sm-12 btn">
+                                                        <strong>MA PROGRESSION</strong>
+                                                    </div>
                                                     <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar"
+                                                        <div class="progress-bar bg-primary" id="progressbar" role="progressbar"
                                                             style="width: 80%" aria-valuenow="80" aria-valuemin="0"
                                                             aria-valuemax="100"></div>
                                                     </div>
-                                                    <small>Website Markup</small>
-                                                    <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" role="progressbar"
-                                                            style="width: 72%" aria-valuenow="72" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
+                                               
                                                 </div>
                                             </div>
                                         </div>
@@ -325,7 +319,7 @@
                             <div class="col-auto mx-1 mx-md-3">
                                 <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#ModalPic">
                                     <img id="profile-pic"
-                                        src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
+                                        src="{{ asset('dist/userdefault.jpg') }}"
                                         class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <p class="card-text text-center">Mettre à jour ma photo de profil</p>

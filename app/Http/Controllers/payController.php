@@ -45,7 +45,7 @@ class payController extends Controller
             return redirect()->route('mails.index')->with('success', 'Le mail a été envoyé avec succès ! Consultez votre boîte mail');
         } else {
             // Gérer le cas où la transaction a échoué
-            return response()->json(['error' => 'La transaction a échoué'], 400);
+            return redirect()->route('mails.error')->with('error', 'Une erreur est survenu lors de la transaction');
         }
     }
 }

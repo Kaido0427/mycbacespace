@@ -30,6 +30,8 @@ class RegisterController extends Controller
      *
      * @var string
      */
+
+
     protected $redirectTo = '/subscription';
 
     /**
@@ -68,6 +70,7 @@ class RegisterController extends Controller
             'numAssocies' => ['required', 'string', 'max:255'],
             'regime' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'user_type' => ['string']
 
         ]);
 
@@ -80,7 +83,6 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-        Log::info('Creating user', ['data' => $data]);
 
         $user = User::create([
             'nom' => $data['nom'],
@@ -99,7 +101,7 @@ class RegisterController extends Controller
             'dateCreate' => $data['createDate'],
             'numAssocies' => $data['numAssocies'],
             'regime' => $data['regime'],
-            'user_type' => 'client',
+            'user_type' => $data['user_type'],
             'password' => Hash::make($data['password']),
         ]);
 

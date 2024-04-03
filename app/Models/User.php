@@ -35,6 +35,7 @@ class User extends Authenticatable
         'numAssocies',
         'regime',
         'password',
+        'user_type'
     ];
 
 
