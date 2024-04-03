@@ -35,7 +35,7 @@ Route::post('/mycbacespace/logout', [LoginController::class, 'logout'])->name('a
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('checkPayement');
     Route::get('/subscription', [HomeController::class, 'subscription'])->name('subscription');
     Route::post('/update-password', [profilController::class, 'updatePassword'])->name('password.update');
     Route::post('/uploadingPhoto', [profilController::class, 'storeOrUpdateImage'])->name('image.store');

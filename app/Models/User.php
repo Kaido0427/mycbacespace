@@ -68,4 +68,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(payment::class);
     }
+
+    public function hasPaid()
+    {
+        //cette fonction veriifie si l'utilisateur a fait une transaction
+        $payment = payment::where('user_id', auth()->user()->id)->first();
+
+        if ($payment) {
+            return true;
+        }
+
+        return false;
+    }
 }
