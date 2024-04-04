@@ -1977,6 +1977,19 @@
                                     .elementor-widget-heading .elementor-heading-title.elementor-size-xxl {
                                         font-size: 59px
                                     }
+
+                                    #registerborder {
+                                        background-color: #fff;
+                                        border-top-width: 0px;
+                                        border-right-width: 0px;
+                                        border-left-width: 0px;
+                                        border-bottom-width: 0px;
+                                    }
+
+                                    #wpforms-form-714 input {
+                                        color: #000;
+                                        border-color: #000;
+                                    }
                                 </style>
                                 <h2 class="elementor-heading-title elementor-size-default">REMPLISSEZ LE FORMULAIRE
                                     SUIVANT </h2>
@@ -1990,9 +2003,9 @@
             class="elementor-section elementor-top-section elementor-element elementor-element-fdc655d elementor-section-boxed elementor-section-height-default elementor-section-height-default"
             data-id="fdc655d" data-element_type="section">
             <div class="elementor-container elementor-column-gap-default">
-                <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-0af101e"
+                <div class="elementor-column elementor-col-100 elementor-top-column elementor-element"
                     data-id="0af101e" data-element_type="column">
-                    <div class="elementor-widget-wrap elementor-element-populated">
+                    <div id="regiterborder" class="elementor-widget-wrap elementor-element-populated">
                         <div class="elementor-element elementor-element-945b238 elementor-widget elementor-widget-heading"
                             data-id="945b238" data-element_type="widget" data-widget_type="heading.default">
                             <div class="elementor-widget-container">
@@ -2003,61 +2016,9 @@
                             class="elementor-element elementor-element-014f3d4 elementor-widget elementor-widget-wpforms"
                             data-id="014f3d4" data-element_type="widget" data-widget_type="wpforms.default">
                             <div class="elementor-widget-container">
-                                <style id="wpforms-css-vars-root">
-                                    :root {
-                                        --wpforms-field-border-radius: 3px;
-                                        --wpforms-field-background-color: #ffffff;
-                                        --wpforms-field-border-color: rgba(0, 0, 0, 0.25);
-                                        --wpforms-field-text-color: rgba(0, 0, 0, 0.7);
-                                        --wpforms-label-color: rgba(0, 0, 0, 0.85);
-                                        --wpforms-label-sublabel-color: rgba(0, 0, 0, 0.55);
-                                        --wpforms-label-error-color: #d63637;
-                                        --wpforms-button-border-radius: 3px;
-                                        --wpforms-button-background-color: #066aab;
-                                        --wpforms-button-text-color: #ffffff;
-                                        --wpforms-field-size-input-height: 43px;
-                                        --wpforms-field-size-input-spacing: 15px;
-                                        --wpforms-field-size-font-size: 16px;
-                                        --wpforms-field-size-line-height: 19px;
-                                        --wpforms-field-size-padding-h: 14px;
-                                        --wpforms-field-size-checkbox-size: 16px;
-                                        --wpforms-field-size-sublabel-spacing: 5px;
-                                        --wpforms-field-size-icon-size: 1;
-                                        --wpforms-label-size-font-size: 16px;
-                                        --wpforms-label-size-line-height: 19px;
-                                        --wpforms-label-size-sublabel-font-size: 14px;
-                                        --wpforms-label-size-sublabel-line-height: 17px;
-                                        --wpforms-button-size-font-size: 17px;
-                                        --wpforms-button-size-height: 41px;
-                                        --wpforms-button-size-padding-h: 15px;
-                                        --wpforms-button-size-margin-top: 10px;
 
-                                    }
-                                </style>
-                                <style id="wpforms-css-vars-elementor-widget-014f3d4">
-                                    .elementor-widget-wpforms.elementor-element-014f3d4 {
-                                        --wpforms-field-border-radius: 5px;
-                                        --wpforms-field-border-color: #FFFFFF;
-                                        --wpforms-field-size-input-height: 43px;
-                                        --wpforms-field-size-input-spacing: 15px;
-                                        --wpforms-field-size-font-size: 16px;
-                                        --wpforms-field-size-line-height: 19px;
-                                        --wpforms-field-size-padding-h: 14px;
-                                        --wpforms-field-size-checkbox-size: 16px;
-                                        --wpforms-field-size-sublabel-spacing: 5px;
-                                        --wpforms-field-size-icon-size: 1;
-                                        --wpforms-label-size-font-size: 16px;
-                                        --wpforms-label-size-line-height: 19px;
-                                        --wpforms-label-size-sublabel-font-size: 14px;
-                                        --wpforms-label-size-sublabel-line-height: 17px;
-                                        --wpforms-button-size-font-size: 17px;
-                                        --wpforms-button-size-height: 41px;
-                                        --wpforms-button-size-padding-h: 15px;
-                                        --wpforms-button-size-margin-top: 10px;
-
-                                    }
-                                </style>
-                                <div class="wpforms-container wpforms-container-full wpforms-render-modern"
+                                <div style="color: #000;background-color:#fff;"
+                                    class="wpforms-container wpforms-container-full wpforms-render-modern"
                                     id="wpforms-714">
                                     <form id="wpforms-form-714"
                                         class="wpforms-validate wpforms-form wpforms-ajax-form" method="post"
@@ -2460,9 +2421,8 @@
                                         </div><!-- .wpforms-field-container -->
                                         <div class="wpforms-submit-container">
 
-                                            <button 
-                                            onclick="signInController();" type="submit">
-                                            {{ __('J\'adhere') }}</button>
+                                            <button onclick="signInController();" type="submit">
+                                                {{ __('J\'adhere') }}</button>
                                             <img decoding="async"
                                                 src="https://cbace-cga.com/wp-content/plugins/wpforms-lite/assets/images/submit-spin.svg"
                                                 class="wpforms-submit-spinner" style="display: none;" width="26"

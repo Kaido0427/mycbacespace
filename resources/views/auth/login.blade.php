@@ -19,9 +19,7 @@
     <meta property="article:modified_time" content="2023-12-15T14:09:34+00:00">
     <meta property="og:image"
         content="https://cbace-cga.com/wp-content/plugins/wpforms-lite/assets/images/submit-spin.svg">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:label1" content="Durée de lecture estimée">
-    <meta name="twitter:data1" content="2 minutes">
+
     <script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://cbace-cga.com/formulaire-dinscription/","url":"https://cbace-cga.com/formulaire-dinscription/","name":"Formulaire d'inscription - CBACE-CGA","isPartOf":{"@id":"https://cbace-cga.com/#website"},"primaryImageOfPage":{"@id":"https://cbace-cga.com/formulaire-dinscription/#primaryimage"},"image":{"@id":"https://cbace-cga.com/formulaire-dinscription/#primaryimage"},"thumbnailUrl":"https://cbace-cga.com/wp-content/plugins/wpforms-lite/assets/images/submit-spin.svg","datePublished":"2023-11-07T10:46:30+00:00","dateModified":"2023-12-15T14:09:34+00:00","breadcrumb":{"@id":"https://cbace-cga.com/formulaire-dinscription/#breadcrumb"},"inLanguage":"fr-FR","potentialAction":[{"@type":"ReadAction","target":["https://cbace-cga.com/formulaire-dinscription/"]}]},{"@type":"ImageObject","inLanguage":"fr-FR","@id":"https://cbace-cga.com/formulaire-dinscription/#primaryimage","url":"https://cbace-cga.com/wp-content/plugins/wpforms-lite/assets/images/submit-spin.svg","contentUrl":"https://cbace-cga.com/wp-content/plugins/wpforms-lite/assets/images/submit-spin.svg"},{"@type":"BreadcrumbList","@id":"https://cbace-cga.com/formulaire-dinscription/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://cbace-cga.com/"},{"@type":"ListItem","position":2,"name":"Formulaire d&#8217;inscription"}]},{"@type":"WebSite","@id":"https://cbace-cga.com/#website","url":"https://cbace-cga.com/","name":"CBACE-CGA","description":"","publisher":{"@id":"https://cbace-cga.com/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://cbace-cga.com/?s={search_term_string}"},"query-input":"required name=search_term_string"}],"inLanguage":"fr-FR"},{"@type":"Organization","@id":"https://cbace-cga.com/#organization","name":"CBACE-CGA","url":"https://cbace-cga.com/","logo":{"@type":"ImageObject","inLanguage":"fr-FR","@id":"https://cbace-cga.com/#/schema/logo/image/","url":"https://cbace-cga.com/wp-content/uploads/2023/10/logo-CBACE.png","contentUrl":"https://cbace-cga.com/wp-content/uploads/2023/10/logo-CBACE.png","width":4985,"height":2075,"caption":"CBACE-CGA"},"image":{"@id":"https://cbace-cga.com/#/schema/logo/image/"}}]}</script>
     <!-- / Yoast SEO plugin. -->
 
@@ -1975,6 +1973,14 @@
                                     .elementor-widget-heading .elementor-heading-title.elementor-size-xxl {
                                         font-size: 59px
                                     }
+
+                                    #borderform {
+                                        background-color: #fff;
+                                        border-top-width: 0px;
+                                        border-right-width: 0px;
+                                        border-left-width: 0px;
+                                        border-bottom-width: 0px;
+                                    }
                                 </style>
                                 <h2 class="elementor-heading-title elementor-size-default">ACCEDEZ A VOTRE ESPACE
                                     COMPTE </h2>
@@ -1987,76 +1993,25 @@
         <section
             class="elementor-section elementor-top-section elementor-element elementor-element-fdc655d elementor-section-boxed elementor-section-height-default elementor-section-height-default"
             data-id="fdc655d" data-element_type="section">
-            <div class="elementor-container elementor-column-gap-default">
-                <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-0af101e"
+            <div style="background-color:#fff;" class="elementor-container elementor-column-gap-default">
+                <div style="background-color:#fff;"
+                    class="elementor-column elementor-col-100 elementor-top-column elementor-element"
                     data-id="0af101e" data-element_type="column"
                     data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
-                    <div class="elementor-widget-wrap elementor-element-populated">
+                    <div id="borderform" class="elementor-widget-wrap elementor-element-populated">
                         <div class="elementor-element elementor-element-945b238 elementor-widget elementor-widget-heading"
                             data-id="945b238" data-element_type="widget" data-widget_type="heading.default">
                             <div class="elementor-widget-container">
                                 <h2 class="elementor-heading-title elementor-size-default">Connexion</h2>
                             </div>
                         </div>
-                        <div style="color: #000;" class="elementor-element elementor-element-014f3d4 elementor-widget elementor-widget-wpforms"
+                        <div style="color: #000;background-color:#fff;"
+                            class="elementor-element elementor-element-014f3d4 elementor-widget elementor-widget-wpforms"
                             data-id="014f3d4" data-element_type="widget" data-widget_type="wpforms.default">
                             <div class="elementor-widget-container">
-                                <style id="wpforms-css-vars-root">
-                                    :root {
-                                        --wpforms-field-border-radius: 3px;
-                                        --wpforms-field-background-color: #ffffff;
-                                        --wpforms-field-border-color: rgba(0, 0, 0, 0.25);
-                                        --wpforms-field-text-color: rgba(0, 0, 0, 0.7);
-                                        --wpforms-label-color: rgba(0, 0, 0, 0.85);
-                                        --wpforms-label-sublabel-color: rgba(0, 0, 0, 0.55);
-                                        --wpforms-label-error-color: #d63637;
-                                        --wpforms-button-border-radius: 3px;
-                                        --wpforms-button-background-color: #066aab;
-                                        --wpforms-button-text-color: #ffffff;
-                                        --wpforms-field-size-input-height: 43px;
-                                        --wpforms-field-size-input-spacing: 15px;
-                                        --wpforms-field-size-font-size: 16px;
-                                        --wpforms-field-size-line-height: 19px;
-                                        --wpforms-field-size-padding-h: 14px;
-                                        --wpforms-field-size-checkbox-size: 16px;
-                                        --wpforms-field-size-sublabel-spacing: 5px;
-                                        --wpforms-field-size-icon-size: 1;
-                                        --wpforms-label-size-font-size: 16px;
-                                        --wpforms-label-size-line-height: 19px;
-                                        --wpforms-label-size-sublabel-font-size: 14px;
-                                        --wpforms-label-size-sublabel-line-height: 17px;
-                                        --wpforms-button-size-font-size: 17px;
-                                        --wpforms-button-size-height: 41px;
-                                        --wpforms-button-size-padding-h: 15px;
-                                        --wpforms-button-size-margin-top: 10px;
 
-                                    }
-                                </style>
-                                <style id="wpforms-css-vars-elementor-widget-014f3d4">
-                                    .elementor-widget-wpforms.elementor-element-014f3d4 {
-                                        --wpforms-field-border-radius: 5px;
-                                        --wpforms-field-border-color: #FFFFFF;
-                                        --wpforms-field-size-input-height: 43px;
-                                        --wpforms-field-size-input-spacing: 15px;
-                                        --wpforms-field-size-font-size: 16px;
-                                        --wpforms-field-size-line-height: 19px;
-                                        --wpforms-field-size-padding-h: 14px;
-                                        --wpforms-field-size-checkbox-size: 16px;
-                                        --wpforms-field-size-sublabel-spacing: 5px;
-                                        --wpforms-field-size-icon-size: 1;
-                                        --wpforms-label-size-font-size: 16px;
-                                        --wpforms-label-size-line-height: 19px;
-                                        --wpforms-label-size-sublabel-font-size: 14px;
-                                        --wpforms-label-size-sublabel-line-height: 17px;
-                                        --wpforms-button-size-font-size: 17px;
-                                        --wpforms-button-size-height: 41px;
-                                        --wpforms-button-size-padding-h: 15px;
-                                        --wpforms-button-size-margin-top: 10px;
-
-                                    }
-                                </style>
                                 <div class="container">
-                                    <div class="row justify-content-center">
+                                    <div style="background-color: #fff;" class="row justify-content-center">
                                         <div class="col-md-6">
                                             <form id="wpforms-form-714"
                                                 class="wpforms-validate wpforms-form wpforms-ajax-form" method="post"
@@ -2066,7 +2021,8 @@
                                                 <div class="form-group">
                                                     <label for="email">E-mail <span
                                                             class="text-danger">*</span></label>
-                                                    <input style="color: #000;" type="email" id="email" value="{{ old('email') }}"
+                                                    <input style="color: #000;border-color:#000;" type="email"
+                                                        id="email" value="{{ old('email') }}"
                                                         class="form-control" name="email" spellcheck="false"
                                                         required>
                                                 </div>
@@ -2074,10 +2030,11 @@
                                                 <div class="form-group">
                                                     <label for="password">Mot de passe <span
                                                             class="text-danger">*</span></label>
-                                                    <input style="color: #000;" type="password" id="password" class="form-control"
-                                                        name="password" required autocomplete="current-password">
+                                                    <input style="color: #000;border-color:#000;" type="password"
+                                                        id="password" class="form-control" name="password" required
+                                                        autocomplete="current-password">
                                                 </div>
-
+                                                <br>
                                                 <div class="form-group">
                                                     <button type="submit" onclick="loginController();"
                                                         class="btn btn-primary">{{ __('Se connecter') }}</button>
@@ -2855,8 +2812,8 @@
         /* ]]> */
     </script>
     <script>
-          //verification des champs lors de la connexion
-          function loginController() {
+        //verification des champs lors de la connexion
+        function loginController() {
             var motdepasse = document.getElementById('password').value.trim();
 
             if (document.getElementById("email").value.trim() == "") {
