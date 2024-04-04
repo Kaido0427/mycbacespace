@@ -81,4 +81,9 @@ class User extends Authenticatable
 
         return false;
     }
+
+    public function categorie()
+    {
+        return $this->belongsTo(Categorie::class, 'categorie_id', 'id');
+    }
 }
