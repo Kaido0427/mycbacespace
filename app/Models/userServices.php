@@ -5,23 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class clientService extends Model
+class userServices extends Model
 {
     use HasFactory;
 
-    protected $table = 'client_services';
+    protected $table = "user_services";
 
     protected $fillable = [
         'user_id', 'service_id'
     ];
 
-    public function client()
+
+    public function user()
     {
-        return $this->belongsTo(User::class, 'client_id', 'id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function service()
     {
-        return $this->belongsTo(Service::class, 'service_id', 'id');
+        return $this->belongsTo(service::class, 'service_id');
     }
 }

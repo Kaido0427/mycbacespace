@@ -34,7 +34,7 @@ class HomeController extends Controller
         $clients = User::where('user_type', 'client')->get();
         // j'affiche le tableau de bord en fonction du rôle de l'utilisateur
         if ($role === 'admin') {
-            return view('admindash', compact('clients','client','role'));
+            return view('admindash', compact('clients','client','role','user'));
         } else {
             return view('dashboard',compact('user'));
         }

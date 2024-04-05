@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\avatar;
 use App\Models\categorie;
-use App\Models\clientService;
+use App\Models\service;
 use App\Models\User;
-use App\Models\userCategorie;
+use App\Models\userServices;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -107,26 +107,37 @@ class RegisterController extends Controller
             'password' => Hash::make($validatedData['password']),
         ]);
 
-        // Chemin de l'image par défaut
-        $imageName = public_path('dist/user-default.png');
+        $defaultImagePath = public_path('dist/user-default.png');
+        if (file_exists($defaultImagePath)) {
+            $imageName = time() . '_user-default.png';
+            $destinationPath = public_path('avatars/' . $imageName);
+            if (copy($defaultImagePath, $destinationPath)) {
+                // je crée l'entrée dans la base de données pour l'avatar
+                Avatar::create([
+                    'user_id' => $user->id,
+                    'image' => $imageName
+                ]);
+            } else {
+                echo "L'image par défaut n'a pas été trouvée.";
+            }
+            if (isset($validatedData['services'])) {
+                foreach ($validatedData['services'] as $serviceId) {
+                    $user->services()->attach($serviceId);
+                }
+            }
 
-        // I save the default pic as default avatar for the user who was recently sign up
-        Avatar::create([
-            'user_id' => $user->id,
-            'image' => $imageName
-        ]);
+            if (isset($validatedData['origine_id'])) {
+                $categorie = Categorie::find($validatedData['origine_id']);
+                foreach ($categorie->taches as $tache) {
+                    $user->procedures()->create([
+                        'categorie_id' => $validatedData['origine_id'],
+                        'tache_id' => $tache->id,
+                        'user_id' => $user->id,
+                    ]);
+                }
+            }
 
-        userCategorie::create([
-            'user_id' => $user->id,
-            'categorie_id' => $validatedData['origine_id']
-        ]);
-
-        // Associer les services à l'utilisateur
-        if (isset($validatedData['services'])) {
-            $user->services()->attach($validatedData['services']);
+            return $user;
         }
-
-
-        return $user;
     }
 }

@@ -80,14 +80,13 @@ class User extends Authenticatable
         return false;
     }
 
-    public function categories()
+    public function procedures()
     {
-        return $this->belongsToMany(Categorie::class, 'user_categories', 'user_id', 'categorie_id');
+        return $this->hasMany(Procedure::class, 'user_id');
     }
-    
 
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'client_services', 'user_id', 'service_id');
+        return $this->belongsToMany(Service::class, 'user_services', 'user_id', 'service_id');
     }
 }

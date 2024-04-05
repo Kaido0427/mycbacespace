@@ -15,15 +15,13 @@ class categorie extends Model
         'nom_categorie',
     ];
 
-
-    public function clients()
-{
-    return $this->belongsToMany(User::class, 'user_categories', 'categorie_id', 'user_id');
-}
-
+    public function procedures()
+    {
+        return $this->hasMany(Procedure::class, 'categorie_id');
+    }
 
     public function taches()
     {
-        return $this->hasMany(Tache::class, 'categorie_id', 'id');
+        return $this->hasMany(tache::class, 'categorie_id');
     }
 }

@@ -14,10 +14,7 @@ return new class extends Migration
         Schema::create('taches', function (Blueprint $table) {
             $table->id();
             $table->string('nom_tache');
-            $table->string('fichier_client')->nullable();
-            $table->string('fichier_traité')->nullable();
             $table->foreignId('categorie_id')->constrained();
-            $table->foreignId('service_id')->constrained();
             $table->timestamps();
         });
     }

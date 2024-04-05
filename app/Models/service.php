@@ -14,13 +14,11 @@ class service extends Model
         'nom_service'
     ];
 
-    public function clients()
+
+
+    public function user()
     {
-        return $this->belongsToMany(User::class, 'client_services', 'service_id', 'client_id');
+        return $this->belongsTo(User::class);
     }
 
-    public function taches()
-    {
-        return $this->hasMany(tache::class);
-    }
 }

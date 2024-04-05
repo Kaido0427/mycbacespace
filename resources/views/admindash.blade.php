@@ -65,8 +65,7 @@
                         <img id="sidebar-pic" src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
                             alt="Account">
                     @else
-                    <img id="sidebar-pic" src="{{ asset('dist/user-default.png') }}"
-                    alt="Account">
+                        <img id="sidebar-pic" src="{{ asset('dist/user-default.png') }}" alt="Account">
                     @endif
 
                 </div>
@@ -140,7 +139,8 @@
                                     <span>{{ $client->prenoms }} {{ $client->nom }} </span>
                                 </div>
                                 <div class="product-cell category"><span class="cell-label">Category:</span>
-                                    {{ $client->categories->unique()->pluck('nom_categorie')->join(',') }}
+                                    {{ $client->procedures->unique('id')->pluck('categorie')->unique('id')->pluck('nom_categorie')->join(',') }}
+
                                 </div>
                                 <div class="product-cell status-cell">
 
@@ -160,7 +160,9 @@
                                         data-client-engagement="{{ $client->engagement }}"
                                         data-engag-sup-client="{{ $client->engagsup }}"
                                         data-entreprise-client-date="{{ \Carbon\Carbon::parse(auth()->user()->date)->isoFormat('D MMMM YYYY') }}"
-                                        data-origine-client="{{ $client->categories->unique()->pluck('nom_categorie') }}"
+                                        data-origine-client="{{ $client->procedures->unique('id')->map(function ($procedure) {
+                                                return $procedure->categorie->nom_categorie;
+                                            })->unique()->join(',') }}"
                                         data-client-associes="{{ $client->numAssocies }}"
                                         data-client-regime="{{ $client->regime }}"
                                         data-client-nom="{{ $client->nom }}"
@@ -274,13 +276,15 @@
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Tâche</th>
-                                                            <th scope="col">Statut</th>
+                                                            <th scope="col">Document(docx,pdf)</th>
+                                                            <th scope="col">Status</th>
                                                             <th scope="col">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
                                                             <td>Tâche 1</td>
+                                                            <td></td>
                                                             <td>En cours</td>
                                                             <td><button type="button"
                                                                     class="btn btn-primary">Action</button></td>
@@ -322,13 +326,13 @@
                             </div>
                             <div class="col-auto mx-1 mx-md-3">
                                 <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#ModalPic">
-                                    @if ($role=="admin")
+                                    @if ($user->avatar)
                                         <img id="profile-pic"
                                             src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
                                             class="card-img-top" alt="...">
                                     @else
-                                    <img class="card-img-top" src="{{ asset('dist/user-default.png') }}"
-                                    alt="Account">
+                                        <img class="card-img-top" src="{{ asset('dist/user-default.png') }}"
+                                            alt="Account">
                                     @endif
                                     <div class="card-body">
                                         <p class="card-text text-center">Mettre à jour ma photo de profil</p>

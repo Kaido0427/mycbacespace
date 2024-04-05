@@ -107,9 +107,11 @@
                                     <hr>
                                     <div class="mb-3">
                                         <strong>Origine :</strong>
-                                        <div>@foreach ($user->categories->unique('id') as $structure)
-                                            {{ $structure->nom_categorie }}
-                                        @endforeach</div>
+                                        <div>
+                                            @foreach ($user->procedures->unique('id')->pluck('categorie')->unique('id') as $categorie)
+                                                {{ $categorie->nom_categorie }}
+                                            @endforeach
+                                        </div>
                                     </div>
 
                                     <hr>
@@ -203,8 +205,8 @@
                                                             <h6 class="mb-0">Structure</h6>
                                                         </div>
                                                         <div class="col-sm-9 ">
-                                                            @foreach ($user->categories->unique('id') as $structure)
-                                                                {{ $structure->nom_categorie }}
+                                                            @foreach ($user->procedures->unique('id')->pluck('categorie')->unique('id') as $categorie)
+                                                                {{ $categorie->nom_categorie }}
                                                             @endforeach
                                                         </div>
                                                     </div>
@@ -350,7 +352,7 @@
                             </div>
                             <div class="col-auto mx-1 mx-md-3">
                                 <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#ModalPic">
-                                    <img id="profile-pic" src="{{ asset('avatars/'.$user->avatar->image) }}"
+                                    <img id="profile-pic" src="{{ asset('avatars/' . $user->avatar->image) }}"
                                         class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <p class="card-text text-center">Mettre à jour ma photo de profil</p>

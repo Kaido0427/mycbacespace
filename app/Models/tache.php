@@ -12,16 +12,15 @@ class tache extends Model
     protected $table = "taches";
 
     protected $fillable = [
-        'nom_tache', 'fichier_client', 'fichier_traité', 'categorie_id', 'service_id'
+        'nom_tache', 'categorie_id'
     ];
 
     public function categorie()
     {
-        return $this->belongsTo(Categorie::class, 'categorie_id', 'id');
+        return $this->belongsTo(categorie::class);
     }
-
-    public function service()
+    public function procedures()
     {
-        return $this->belongsTo(service::class, 'service_id', 'id');
+        return $this->hasMany(Procedure::class, 'tache_id');
     }
 }
