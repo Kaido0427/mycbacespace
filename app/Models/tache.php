@@ -12,11 +12,16 @@ class tache extends Model
     protected $table = "taches";
 
     protected $fillable = [
-        'nom_tache', 'fichier_client', 'fichier_traité', 'categorie_id'
+        'nom_tache', 'fichier_client', 'fichier_traité', 'categorie_id', 'service_id'
     ];
 
     public function categorie()
     {
         return $this->belongsTo(Categorie::class, 'categorie_id', 'id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(service::class, 'service_id', 'id');
     }
 }

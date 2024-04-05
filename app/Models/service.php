@@ -5,25 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class categorie extends Model
+class service extends Model
 {
     use HasFactory;
-
-    protected $table = "categories";
+    protected $table = "services";
 
     protected $fillable = [
-        'nom_categorie',
+        'nom_service'
     ];
 
-
     public function clients()
-{
-    return $this->belongsToMany(User::class, 'user_categories', 'categorie_id', 'user_id');
-}
-
+    {
+        return $this->belongsToMany(User::class, 'client_services', 'service_id', 'client_id');
+    }
 
     public function taches()
     {
-        return $this->hasMany(Tache::class, 'categorie_id', 'id');
+        return $this->hasMany(tache::class);
     }
 }

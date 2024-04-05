@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>DASHBOARD | CBACE-CGA</title>
-        <!-- Fonts -->
-        <link rel="dns-prefetch" href="//fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss', 'resources/scss/notif.scss'])
 
 </head>
 
 <body>
- 
+
     <div class="app-container">
         <div id="sidebar" class="sidebar">
             <div class="sidebar-header">
@@ -53,12 +53,14 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    
+
                                     <div class="mb-3">
                                         <strong>Date d'adhésion :</strong>
-                                        <div> {{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}</div>
+                                        <div>
+                                            {{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}
+                                        </div>
                                     </div>
-                                   
+
                                     <hr>
 
                                     <div class="mb-3">
@@ -72,9 +74,19 @@
                                     </div>
                                     <hr>
                                     <div class="mb-3">
-                                        <strong>Service :</strong>
-                                        <div>{!! Auth::user()->service !!}</div>
+                                        <strong>
+                                            @php
+                                                $serviceCount = Auth::user()->services->unique('id')->count();
+                                            @endphp
+                                            {{ $serviceCount === 1 ? 'Service' : 'Services' }} :
+                                        </strong>
+                                        <ul>
+                                            @foreach (Auth::user()->services->unique('id') as $service)
+                                                <li>{{ $service->nom_service }}</li>
+                                            @endforeach
+                                        </ul>
                                     </div>
+
                                     <hr>
                                     <div class="mb-3">
                                         <strong>Engagement :</strong>
@@ -88,14 +100,18 @@
                                     <hr>
                                     <div class="mb-3">
                                         <strong>Date de creation de l'entreprise :</strong>
-                                        <div> {{ \Carbon\Carbon::parse(auth()->user()->date)->isoFormat('D MMMM YYYY') }}</div>
+                                        <div>
+                                            {{ \Carbon\Carbon::parse(auth()->user()->date)->isoFormat('D MMMM YYYY') }}
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="mb-3">
                                         <strong>Origine :</strong>
-                                        <div>{!! Auth::user()->origine !!}</div>
+                                        <div>@foreach ($user->categories->unique('id') as $structure)
+                                            {{ $structure->nom_categorie }}
+                                        @endforeach</div>
                                     </div>
-                                   
+
                                     <hr>
                                     <div class="mb-3">
                                         <strong>Numéro d'associés :</strong>
@@ -113,7 +129,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     <div id="modal-backdrop"></div>
 
@@ -125,13 +141,15 @@
                                         <div class="card-body d-flex flex-column justify-content-center">
                                             <div class="d-flex flex-column align-items-center text-center">
                                                 <div id="image-profil">
-                                                    <img id="ppImg" src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
+                                                    <img id="ppImg"
+                                                        src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
                                                         alt="Admin">
                                                 </div>
 
 
                                                 <div class="mt-3">
-                                                    <h4 id="ppName">{{ auth()->user()->nom }} {{ auth()->user()->prenoms }}</h4>
+                                                    <h4 id="ppName">{{ auth()->user()->nom }}
+                                                        {{ auth()->user()->prenoms }}</h4>
                                                     <p class="text-secondary mb-1">+229 {{ auth()->user()->telephone }}
                                                         </< /p>
                                                     <p id="ppAdd" class="text-muted font-size-sm">
@@ -156,23 +174,38 @@
                                                         <div class="col-sm-3">
                                                             <h6 class="mb-0">Date Adhésion</h6>
                                                         </div>
-                                                        <div class="col-sm-9 text-secondary">
+                                                        <div class="col-sm-9 ">
                                                             {{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}
 
                                                         </div>
                                                         <hr>
                                                         <div class="col-sm-3">
-                                                            <h6 class="mb-0">Service</h6>
+                                                            <h6 class="mb-0">
+                                                                @php
+                                                                    $serviceCount = $user->services
+                                                                        ->unique('id')
+                                                                        ->count();
+                                                                @endphp
+                                                                {{ $serviceCount === 1 ? 'Service' : 'Services' }}
+                                                            </h6>
                                                         </div>
-                                                        <div class="col-sm-9 text-secondary">
-                                                            {{ auth()->user()->service }}
+                                                        <div class="col-sm-9">
+                                                            <ul>
+                                                                @foreach ($user->services->unique('id') as $service)
+                                                                    <li>{{ $service->nom_service }}</li>
+                                                                @endforeach
+                                                            </ul>
                                                         </div>
+
+
                                                         <hr>
                                                         <div class="col-sm-3">
                                                             <h6 class="mb-0">Structure</h6>
                                                         </div>
-                                                        <div class="col-sm-9 text-secondary">
-                                                            {{ auth()->user()->origine }}
+                                                        <div class="col-sm-9 ">
+                                                            @foreach ($user->categories->unique('id') as $structure)
+                                                                {{ $structure->nom_categorie }}
+                                                            @endforeach
                                                         </div>
                                                     </div>
                                                     <hr>
@@ -195,11 +228,11 @@
                                                         <strong>MA PROGRESSION</strong>
                                                     </div>
                                                     <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" id="progressbar" role="progressbar"
-                                                            style="width: 80%" aria-valuenow="80" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
+                                                        <div class="progress-bar bg-primary" id="progressbar"
+                                                            role="progressbar" style="width: 80%" aria-valuenow="80"
+                                                            aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
-                                               
+
                                                 </div>
                                             </div>
                                         </div>
@@ -317,8 +350,7 @@
                             </div>
                             <div class="col-auto mx-1 mx-md-3">
                                 <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#ModalPic">
-                                    <img id="profile-pic"
-                                        src="{{ asset('dist/userdefault.jpg') }}"
+                                    <img id="profile-pic" src="{{ asset('avatars/'.$user->avatar->image) }}"
                                         class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <p class="card-text text-center">Mettre à jour ma photo de profil</p>
@@ -574,8 +606,8 @@
             </div>
         </div>
     </div>
-  
-   
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function checkCurrentPassword() {

@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('nom_tache');
             $table->string('fichier_client')->nullable();
             $table->string('fichier_traité')->nullable();
-            $table->foreignId('categorie_id')->constrained()->onDelete('cascade');
+            $table->foreignId('categorie_id')->constrained();
+            $table->foreignId('service_id')->constrained();
             $table->timestamps();
         });
     }

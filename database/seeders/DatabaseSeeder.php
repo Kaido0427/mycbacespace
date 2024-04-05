@@ -12,13 +12,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-      
-        \App\Models\User::create([
-            'nom' => 'Admin',
-            'prenoms' => 'CBACE-CGA',
-            'email' => 'admincbace@gmail.com',
-            'password' => 'cb@cePass',
-            'user_type' => 'admin'
+        $this->call([
+            ServicesCategories::class,
         ]);
     }
 }

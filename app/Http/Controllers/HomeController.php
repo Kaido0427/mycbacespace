@@ -24,16 +24,19 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $client=null;
         // je  récupére le rôle de l'utilisateur connecté
         $role = auth()->user()->user_type;
+
+        $user=auth()->user();
 
         // Je récupére la liste des clients
         $clients = User::where('user_type', 'client')->get();
         // j'affiche le tableau de bord en fonction du rôle de l'utilisateur
         if ($role === 'admin') {
-            return view('admindash', compact('clients'));
+            return view('admindash', compact('clients','client','role'));
         } else {
-            return view('dashboard');
+            return view('dashboard',compact('user'));
         }
     }
 

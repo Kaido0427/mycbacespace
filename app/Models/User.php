@@ -26,11 +26,9 @@ class User extends Authenticatable
         'telephone',
         'email',
         'declaration',
-        'service',
         'engagement',
         'engagsup',
         'date',
-        'origine',
         'dateCreate',
         'numAssocies',
         'regime',
@@ -82,8 +80,14 @@ class User extends Authenticatable
         return false;
     }
 
-    public function categorie()
+    public function categories()
     {
-        return $this->belongsTo(Categorie::class, 'categorie_id', 'id');
+        return $this->belongsToMany(Categorie::class, 'user_categories', 'user_id', 'categorie_id');
+    }
+    
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'client_services', 'user_id', 'service_id');
     }
 }

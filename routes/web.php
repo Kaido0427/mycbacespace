@@ -5,37 +5,29 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\payController;
 use App\Http\Controllers\profilController;
+use App\Models\categorie;
+use App\Models\service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 
 Route::get('/', function () {
     return view('auth.login');
 })->name('auth.login');
 
-Route::get('/mycbacespace/register', function () {
-    return view('auth.register');
+Route::get('/space/register', function () {
+    $categories = categorie::all();
+    $services = service::all();
+    return view('auth.register', compact('categories', 'services'));
 })->name('auth.register');
 
-Route::post('/register', [RegisterController::class, 'register'])->name('register');
 
-Route::post('/mycbacespace/logout', [LoginController::class, 'logout'])->name('auth.logout');
+Route::post('/space/logout', [LoginController::class, 'logout'])->name('auth.logout');
 
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('checkPayement');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/subscription', [HomeController::class, 'subscription'])->name('subscription');
     Route::post('/update-password', [profilController::class, 'updatePassword'])->name('password.update');
     Route::post('/uploadingPhoto', [profilController::class, 'storeOrUpdateImage'])->name('image.store');

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('user_categories', function (Blueprint $table) {
           $table->foreignId('user_id')->constrained()->onDelete('cascade');
           $table->foreignId('categorie_id')->constrained()->onDelete('cascade');
+          $table->timestamps();
         });
     }
 

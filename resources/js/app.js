@@ -68,17 +68,21 @@ $(document).ready(function () {
     $('#menu-toggle').click(function () {
         let sidebar = $('#sidebar');
         let accountInfo = $('.account-info');
-        if ($(window).width() > 768) { // Si l'écran est suffisamment grand
-            sidebar.toggleClass('collapsed'); // Basculer entre le style normal et le style partiellement fermé
-            if (sidebar.hasClass('collapsed')) { // Si la sidebar est partiellement fermée
-                accountInfo.find('.account-info-name').hide(); // Masquer le nom dans la section account-info
-            } else { // Sinon
-                accountInfo.find('.account-info-name').show(); // Afficher le nom dans la section account-info
+        let deco = $('.account-info-logout span'); // Mettre à jour le sélecteur ici
+        if ($(window).width() > 768) {
+            sidebar.toggleClass('collapsed');
+            if (sidebar.hasClass('collapsed')) {
+                accountInfo.find('.account-info-name').hide();
+                deco.hide(); // Masquer le bouton de déconnexion
+            } else {
+                accountInfo.find('.account-info-name').show();
+                deco.show(); // Afficher le bouton de déconnexion
             }
-        } else { // Sinon
-            sidebar.toggleClass('active'); // Afficher/masquer la sidebar
+        } else {
+            sidebar.toggleClass('active');
         }
     });
+    
 
     // Ajouter un écouteur d'événement sur chaque lien de la sidebar
     $('.sidebar-list-item a').click(function (event) {
@@ -388,7 +392,7 @@ $(document).ready(function () {
         $('#origine-client').html(origineClient);
         $('#client-associes').html(clientAssocies);
         $('#client-regime').html(clientRegime);
-        $('#client-name').html(clientName +'   '+ clientPrenoms)
+        $('#client-name').html(clientName + '   ' + clientPrenoms)
     });
 });
 

@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\avatar;
+use App\Models\categorie;
+use App\Models\clientService;
 use App\Models\User;
+use App\Models\userCategorie;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -61,17 +64,16 @@ class RegisterController extends Controller
             'telephone' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'declaration' => ['bail', 'string', 'max:255'],
-            'service' => ['required', 'string', 'max:255'],
             'engagement' => ['required', 'string', 'max:255'],
             'engagsup' => ['bail', 'string', 'max:255'],
             'date' => ['required', 'date'],
-            'Origine' => ['required', 'string', 'max:255'],
             'createDate' => ['required', 'date'],
             'numAssocies' => ['required', 'string', 'max:255'],
             'regime' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'user_type' => ['string']
-
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'user_type' => ['string'],
+            'origine_id' => ['required'],
+            'services.*' => 'exists:services,id',
         ]);
 
         if ($validator->fails()) {
@@ -83,50 +85,48 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
+        // Valider les données avant de les utiliser
+        $validatedData = $this->validator($data)->validate();
 
         $user = User::create([
-            'nom' => $data['nom'],
-            'prenoms' => $data['prenoms'],
-            'raison' => $data['reason'],
-            'adresse' => $data['adresse'],
-            'bp' => $data['bp'],
-            'telephone' => $data['telephone'],
-            'email' => $data['email'],
-            'declaration' => $data['declaration'],
-            'service' => $data['service'],
-            'engagement' => $data['engagement'],
-            'engagsup' => $data['engagsup'],
-            'date' => $data['date'],
-            'origine' => $data['Origine'],
-            'dateCreate' => $data['createDate'],
-            'numAssocies' => $data['numAssocies'],
-            'regime' => $data['regime'],
-            'user_type' => $data['user_type'],
-            'password' => Hash::make($data['password']),
+            'nom' => $validatedData['nom'],
+            'prenoms' => $validatedData['prenoms'],
+            'raison' => $validatedData['reason'],
+            'adresse' => $validatedData['adresse'],
+            'bp' => $validatedData['bp'],
+            'telephone' => $validatedData['telephone'],
+            'email' => $validatedData['email'],
+            'declaration' => $validatedData['declaration'],
+            'engagement' => $validatedData['engagement'],
+            'engagsup' => $validatedData['engagsup'],
+            'date' => $validatedData['date'],
+            'dateCreate' => $validatedData['createDate'],
+            'numAssocies' => $validatedData['numAssocies'],
+            'regime' => $validatedData['regime'],
+            'user_type' => $validatedData['user_type'],
+            'password' => Hash::make($validatedData['password']),
         ]);
 
         // Chemin de l'image par défaut
-        $defaultImagePath = public_path('dist/user-default.png');
+        $imageName = public_path('dist/user-default.png');
 
-        // Vérifiez si le fichier existe
-        if (file_exists($defaultImagePath)) {
-            $imageName = time() . '_user-default.png';
-            $destinationPath = public_path('avatars/' . $imageName);
-            if (copy($defaultImagePath, $destinationPath)) {
-                // Créer l'entrée dans la base de données pour l'avatar
-                $avatar = Avatar::create([
-                    'user_id' => $user->id,
-                    'image' => $imageName
-                ]);
-            } else {
-                echo "L'image par défaut n'a pas été trouvée.";
-            }
+        // I save the default pic as default avatar for the user who was recently sign up
+        Avatar::create([
+            'user_id' => $user->id,
+            'image' => $imageName
+        ]);
 
+        userCategorie::create([
+            'user_id' => $user->id,
+            'categorie_id' => $validatedData['origine_id']
+        ]);
 
-
-            Log::info('User created ', ['user' => $user]);
-
-            return $user;
+        // Associer les services à l'utilisateur
+        if (isset($validatedData['services'])) {
+            $user->services()->attach($validatedData['services']);
         }
+
+
+        return $user;
     }
 }

@@ -21,14 +21,13 @@ return new class extends Migration
             $table->string('telephone');
             $table->string('email')->unique();
             $table->string('declaration');
-            $table->string('service');
             $table->string('engagement');
             $table->string('Engagsup');
             $table->date('date');
-            $table->string('origine');
             $table->date('dateCreate');
             $table->string('numAssocies');
             $table->string('regime');
+            $table->enum('user_type', ['admin', 'client'])->default('client');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

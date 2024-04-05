@@ -41,11 +41,38 @@
                 @include('layouts.sidebar')
             </ul>
             <div class="account-info">
+                <div class="account-info-logout">
+                    <a style="color: red;text-decoration:none;" href="{{ route('auth.logout') }}"
+                        onclick="event.preventDefault();
+                                  document.getElementById('logout-form').submit();">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
+                            <path fill-rule="evenodd"
+                                d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+                        </svg>
+                        <span> {{ __('Déconnexion') }}</span>
+                    </a>
+
+                    <form id="logout-form" action="{{ route('auth.logout') }}" method="post" class="d-none">
+                        @csrf
+                    </form>
+                </div>
+
                 <div class="account-info-picture">
-                    <img id="sidebar-pic" src="{{ asset('avatars/' . auth()->user()->avatar->image) }}" alt="Account">
+                    @if (auth()->user()->avatar)
+                        <img id="sidebar-pic" src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
+                            alt="Account">
+                    @else
+                    <img id="sidebar-pic" src="{{ asset('dist/user-default.png') }}"
+                    alt="Account">
+                    @endif
+
                 </div>
                 <div class="account-info-name">{{ auth()->user()->prenoms }}</div>
             </div>
+
         </div>
         <div class="main-container">
             <div class="app-head">
@@ -113,7 +140,7 @@
                                     <span>{{ $client->prenoms }} {{ $client->nom }} </span>
                                 </div>
                                 <div class="product-cell category"><span class="cell-label">Category:</span>
-                                    {{ $client->origine }}
+                                    {{ $client->categories->unique()->pluck('nom_categorie')->join(',') }}
                                 </div>
                                 <div class="product-cell status-cell">
 
@@ -127,11 +154,13 @@
                                         data-client-datecreate="{{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}"
                                         data-client-reason="{{ $client->raison }}"
                                         data-client-declaration="{{ $client->declaration }}"
-                                        data-client-service="{{ $client->service }}"
+                                        data-client-service="<ul>{{ $client->services->unique('id')->map(function ($service) {
+                                                return '<li>' . e($service->nom_service) . '</li>';
+                                            })->join('') }}</ul>"
                                         data-client-engagement="{{ $client->engagement }}"
                                         data-engag-sup-client="{{ $client->engagsup }}"
                                         data-entreprise-client-date="{{ \Carbon\Carbon::parse(auth()->user()->date)->isoFormat('D MMMM YYYY') }}"
-                                        data-origine-client="{{ $client->origine }}"
+                                        data-origine-client="{{ $client->categories->unique()->pluck('nom_categorie') }}"
                                         data-client-associes="{{ $client->numAssocies }}"
                                         data-client-regime="{{ $client->regime }}"
                                         data-client-nom="{{ $client->nom }}"
@@ -154,6 +183,7 @@
                     </div>
 
                     <!-- Modal -->
+
                     <div class="modal fade modal-transparent-blur" id="fullscreenModal" tabindex="-1"
                         role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-fullscreen">
@@ -169,10 +199,14 @@
                                             <div class="col-12 col-md-4">
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <img id="img-client" class="img-fluid"
-                                                            style="object-fit: cover; border-radius: 0.5rem; max-height: 200px;"
-                                                            src="{{ asset('avatars/' . $client->avatar->image) }}"
-                                                            alt="">
+                                                        @if ($client)
+                                                            <img id="img-client" class="img-fluid"
+                                                                style="object-fit: cover; border-radius: 0.5rem; max-height: 200px;"
+                                                                src="{{ asset('avatars/' . $client->avatar->image) }}"
+                                                                alt="">
+                                                        @else
+                                                        @endif
+
                                                     </div>
                                                 </div>
                                                 <hr class="invisible-hr">
@@ -288,9 +322,14 @@
                             </div>
                             <div class="col-auto mx-1 mx-md-3">
                                 <div class="card mb-4" data-bs-toggle="modal" data-bs-target="#ModalPic">
-                                    <img id="profile-pic"
-                                        src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
-                                        class="card-img-top" alt="...">
+                                    @if ($role=="admin")
+                                        <img id="profile-pic"
+                                            src="{{ asset('avatars/' . auth()->user()->avatar->image) }}"
+                                            class="card-img-top" alt="...">
+                                    @else
+                                    <img class="card-img-top" src="{{ asset('dist/user-default.png') }}"
+                                    alt="Account">
+                                    @endif
                                     <div class="card-body">
                                         <p class="card-text text-center">Mettre à jour ma photo de profil</p>
                                     </div>

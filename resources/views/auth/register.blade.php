@@ -2148,58 +2148,18 @@
                                                     </legend>
                                                     <ul id="wpforms-714-field_9"
                                                         class="wpforms-field-required list-unstyled">
-                                                        <li class="choice-1 depth-1">
-                                                            <input type="checkbox" id="wpforms-714-field_9_1"
-                                                                name="service" value="Assistant comptable et fiscale"
-                                                                required>
-                                                            <label class="wpforms-field-label-inline"
-                                                                for="wpforms-714-field_9_1">Assistant comptable et
-                                                                fiscale</label>
-                                                        </li>
-                                                        <li class="choice-2 depth-1">
-                                                            <input type="checkbox" id="wpforms-714-field_9_2"
-                                                                name="service" value="Tenue de la comptabilité"
-                                                                required>
-                                                            <label class="wpforms-field-label-inline"
-                                                                for="wpforms-714-field_9_2">Tenue de la
-                                                                comptabilité</label>
-                                                        </li>
-                                                        <li class="choice-3 depth-1">
-                                                            <input type="checkbox" id="wpforms-714-field_9_3"
-                                                                name="service"
-                                                                value="Conseils et formation pratique en gestion"
-                                                                required>
-                                                            <label class="wpforms-field-label-inline"
-                                                                for="wpforms-714-field_9_3">Conseils et formation
-                                                                pratique en gestion</label>
-                                                        </li>
-                                                        <li class="choice-4 depth-1">
-                                                            <input type="checkbox" id="wpforms-714-field_9_4"
-                                                                name="service"
-                                                                value="Etude de micro projet d'investissement"
-                                                                required>
-                                                            <label class="wpforms-field-label-inline"
-                                                                for="wpforms-714-field_9_4">Etude de micro projet
-                                                                d'investissement</label>
-                                                        </li>
-                                                        <li class="choice-5 depth-1">
-                                                            <input type="checkbox" id="wpforms-714-field_9_5"
-                                                                name="service"
-                                                                value="Evaluation économique et financière  des PME et PMI"
-                                                                required>
-                                                            <label class="wpforms-field-label-inline"
-                                                                for="wpforms-714-field_9_5">Evaluation économique et
-                                                                financière des PME et PMI</label>
-                                                        </li>
-                                                        <li class="choice-6 depth-1">
-                                                            <input type="checkbox" id="wpforms-714-field_9_6"
-                                                                name="service"
-                                                                value="Autres prestation ( à préciser dans la lettre de mission"
-                                                                required>
-                                                            <label class="wpforms-field-label-inline"
-                                                                for="wpforms-714-field_9_6">Autres prestation ( à
-                                                                préciser dans la lettre de mission)</label>
-                                                        </li>
+                                                        @foreach ($services as $service)
+                                                            <li class="choice-1 depth-1">
+                                                                <input type="checkbox"
+                                                                    id="wpforms-714-field_9_{{ $service->id }}"
+                                                                    name="services[]" value="{{ $service->id }}"
+                                                                    required>
+                                                                <label class="wpforms-field-label-inline"
+                                                                    for="wpforms-714-field_9_{{ $service->id }}">{{ $service->nom_service }}</label>
+                                                            </li>
+                                                        @endforeach
+
+
                                                     </ul>
                                                     <div id="wpforms-714-field_9-description"
                                                         class="wpforms-field-description">(votre/vos service(s)
@@ -2266,103 +2226,28 @@
                                                     <legend class="wpforms-field-label">Origine de l'adhésion <span
                                                             class="wpforms-required-label" aria-hidden="true">*</span>
                                                     </legend>
-                                                    <div id="wpforms-714-field_13" class="list-unstyled">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="" name="Origine" value="Individuel"
-                                                                required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_1">Individuel</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_2" name="Origine"
-                                                                value="Société civile immobilière" required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_2">Société civile
-                                                                immobilière</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="" name="Origine" value="Société Anonyme"
-                                                                required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_3">Société Anonyme</label>
-                                                        </div>
-                                                        <!-- Ajoutez les autres options de la même manière -->
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="" name="Origine" value="GIE"
-                                                                required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_1">GIE</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_2" name="Origine"
-                                                                value="Société de fait" required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_2">Société de fait</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_3" name="Origine"
-                                                                value="SNC" required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_3">SNC</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_1" name="Origine"
-                                                                value="Entreprenant" required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_1">Entreprenant</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_2" name="Origine"
-                                                                value="Société par action simplifiée" required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_2">Société par action
-                                                                simplifiée</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_3" name="Origine"
-                                                                value="Syndicat" required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_3">Syndicat</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_1" name="Origine"
-                                                                value="EARL" required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_1">EARL</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_2" name="Origine"
-                                                                value="SARL" required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_2">SARL</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_3" name="Origine"
-                                                                value="Coopérative" required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_3">Coopérative</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio"
-                                                                id="wpforms-714-field_13_3" name="Origine"
-                                                                value="Association organisme" required>
-                                                            <label class="form-check-label"
-                                                                for="wpforms-714-field_13_3">Association
-                                                                organisme</label>
-                                                        </div>
+                                                    <style>
+                                                        .category-list {
+                                                            column-count: 3;
+                                                            /* Ajustez le nombre de colonnes en fonction de vos besoins */
+                                                            column-gap: 1rem;
+                                                            /* Espacement entre les colonnes */
+                                                        }
+                                                    </style>
+                                                    <div id="wpforms-714-field_13" class="category-list">
+                                                        @foreach ($categories as $categorie)
+                                                            <div style="margin: 3px;" class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    id="wpforms-714-field_13_{{ $categorie->id }}"
+                                                                    name="origine_id" value="{{ $categorie->id }}"
+                                                                    required>
+                                                                <label class="form-check-label"
+                                                                    for="wpforms-714-field_13_{{ $categorie->id }}">{{ $categorie->nom_categorie }}</label>
+                                                            </div>
+                                                        @endforeach
+
                                                     </div>
+
                                                 </fieldset>
                                             </div>
 
@@ -3237,14 +3122,102 @@
                 class="cn-text-container">Nous utilisons des cookies pour vous garantir la meilleure expérience sur
                 notre site web. Si vous continuez à utiliser ce site, nous supposerons que vous en êtes
                 satisfait.</span><span id="cn-notice-buttons" class="cn-buttons-container"><a href="#"
-                    id="cn-accept-cookie" data-cookie-set="accept" class="cn-set-cookie cn-button"
-                    aria-label="OK" style="background-color: #1e73be">OK</a><a href="#"
-                    id="cn-refuse-cookie" data-cookie-set="refuse" class="cn-set-cookie cn-button"
-                    aria-label="Non" style="background-color: #1e73be">Non</a></span><span id="cn-close-notice"
+                    id="cn-accept-cookie" data-cookie-set="accept" class="cn-set-cookie cn-button" aria-label="OK"
+                    style="background-color: #1e73be">OK</a><a href="#" id="cn-refuse-cookie"
+                    data-cookie-set="refuse" class="cn-set-cookie cn-button" aria-label="Non"
+                    style="background-color: #1e73be">Non</a></span><span id="cn-close-notice"
                 data-cookie-set="accept" class="cn-close-icon" title="Non"></span></div>
 
     </div>
     <!-- / Cookie Notice plugin -->
+
+
+    <script>
+        const validationRules = {
+            nom: ['required', 'string', 'max:255'],
+            prenoms: ['required', 'string', 'max:255'],
+            reason: ['required', 'string', 'max:255'],
+            adresse: ['required', 'string', 'max:255'],
+            bp: ['required', 'string', 'max:255'],
+            telephone: ['required', 'string', 'max:255'],
+            email: ['required', 'string', 'email', 'max:255'],
+            declaration: ['bail', 'string', 'max:255'],
+            engagement: ['required', 'string', 'max:255'],
+            engagsup: ['bail', 'string', 'max:255'],
+            date: ['required', 'date'],
+            createDate: ['required', 'date'],
+            numAssocies: ['required', 'string', 'max:255'],
+            regime: ['required', 'string', 'max:255'],
+            password: ['required', 'string', 'min:6', 'confirmed'],
+            user_type: ['string'],
+            origine_id: ['required'],
+            'services.*': ['exists:services,id'],
+        };
+
+        function validateForm() {
+            const form = document.getElementById('user-form');
+            const formData = new FormData(form);
+            const errors = {};
+
+            for (const [field, rules] of Object.entries(validationRules)) {
+                const value = formData.get(field) || '';
+                let isValid = true;
+
+                for (const rule of rules) {
+                    switch (rule) {
+                        case 'required':
+                            isValid = isValid && value.trim().length > 0;
+                            break;
+                        case 'string':
+                            isValid = isValid && typeof value === 'string';
+                            break;
+                        case 'max':
+                            const maxLength = parseInt(rules[rules.indexOf(rule) + 1]);
+                            isValid = isValid && value.length <= maxLength;
+                            break;
+                        case 'email':
+                            isValid = isValid && /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(value);
+                            break;
+                        case 'date':
+                            isValid = isValid && !isNaN(Date.parse(value));
+                            break;
+                        case 'min':
+                            const minLength = parseInt(rules[rules.indexOf(rule) + 1]);
+                            isValid = isValid && value.length >= minLength;
+                            break;
+                        case 'confirmed':
+                            const confirmationField = field.replace('password', 'password_confirmation');
+                            const confirmationValue = formData.get(confirmationField) || '';
+                            isValid = isValid && value === confirmationValue;
+                            break;
+                        default:
+                            // Ignorer les règles non prises en charge
+                    }
+
+                    if (!isValid) {
+                        errors[field] = `Le champ ${field} est invalide.`;
+                        break;
+                    }
+                }
+            }
+
+            if (Object.keys(errors).length > 0) {
+                alert(JSON.stringify(errors, null, 2));
+                return false;
+            }
+
+            return true;
+        }
+
+        document.getElementById('submit-button').addEventListener('click', (event) => {
+            event.preventDefault();
+
+            if (validateForm()) {
+                // Soumettre le formulaire
+                form.submit();
+            }
+        });
+    </script>
 
 
 

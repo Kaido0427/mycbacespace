@@ -13,7 +13,7 @@ class userCategorie extends Model
         'user_id', 'categorie_id'
     ];
 
-    protected $table = 'user_categorie';
+    protected $table = 'user_categories';
 
     public function user()
     {
