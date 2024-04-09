@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('categorie_id')->constrained();
             $table->string('doc_client')->nullable();
             $table->string('doc_traité')->nullable();
-            $table->enum('status', ['Pending', 'Done'])->default('Pending');
+            $table->enum('status', ['Attente', 'Soumis','Terminé'])->default('Attente');
             $table->timestamps();
         });
     }

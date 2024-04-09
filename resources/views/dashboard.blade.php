@@ -316,7 +316,7 @@
                    
                     <div class="modal fade" id="loaderModal" tabindex="-1" aria-labelledby="loaderModalLabel"
                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-body text-center">
                                     <div class="spinner-border" role="status">

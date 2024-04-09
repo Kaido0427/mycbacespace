@@ -264,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         console.log('Bouton "Enregistrer" cliqué');
 
+        
         $('#loadingModal').modal('show');
 
         setTimeout(() => {
@@ -446,6 +447,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('Valeur de tache_id :', formData.get('tache_id'));
 
         // Afficher le loader
+        $('#taskModal').modal('hide');
         $('#loaderModal').modal('show');
 
         // Soumettre le formulaire via AJAX sans délai
@@ -459,7 +461,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Formulaire soumis avec succès');
 
                 // Fermer les modaux
-                $('#taskModal').modal('hide');
                 $('#loaderModal').modal('hide');
 
                 // Mettre à jour la page ou effectuer d'autres actions si nécessaire

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('taches', function (Blueprint $table) {
             $table->id();
             $table->string('nom_tache');
+            $table->text('description');
             $table->foreignId('categorie_id')->constrained();
             $table->timestamps();
         });
