@@ -82,7 +82,7 @@ $(document).ready(function () {
             sidebar.toggleClass('active');
         }
     });
-    
+
 
     // Ajouter un écouteur d'événement sur chaque lien de la sidebar
     $('.sidebar-list-item a').click(function (event) {
@@ -354,8 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-//pour charger les info du client dans le modal depuis le dashboard adminn
-
+//pour charger les info du client dans le modal depuis le dashboard admin
 $(document).ready(function () {
     $('#fullscreenModal').on('show.bs.modal', function (event) {
         // Récupérer le bouton qui a déclenché le modal
@@ -376,12 +375,13 @@ $(document).ready(function () {
         var clientRegime = button.data('client-regime');
         var clientName = button.data('client-nom');
         var clientPrenoms = button.data('client-prenoms');
+        var procedures = button.data('procedures');
+        var taches = button.data('taches');
 
-
-        // Mettre à jour l'image du client
+        // Je met à jour l'image du client
         $('#img-client').attr('src', clientImage);
 
-        // Mettre à jour les informations du client
+        // Je met à jour les informations du client
         $('#datecreate-client').text(datecreateClient);
         $('#client-reason').text(clientReason);
         $('#client-declaration').html(clientDeclaration);
@@ -392,9 +392,96 @@ $(document).ready(function () {
         $('#origine-client').html(origineClient);
         $('#client-associes').html(clientAssocies);
         $('#client-regime').html(clientRegime);
-        $('#client-name').html(clientName + '   ' + clientPrenoms)
+        $('#client-name').html(clientName + '   ' + clientPrenoms);
+
+
+        if (typeof procedures === 'object' && typeof taches === 'object') {
+
+            var tableBody = $('#client-table tbody');
+            tableBody.empty();
+
+            // Vérifier que les deux tableaux ont la même longueur
+            if (procedures.length === taches.length) {
+                for (let i = 0; i < procedures.length; i++) {
+                    let procedure = procedures[i];
+                    let tache = taches[i];
+                    let row = $('<tr>');
+                    row.append($('<td>').text(tache.nom_tache));
+                    row.append($('<td>').html('<a style="text-decoration:none;color:black;" href="' + procedure.doc_client + '" target="_blank"> </a>'));
+                    row.append($('<td>').text(procedure.status));
+                    row.append($('<td>').html('<button type="button" class="btn btn-secondary btn-action" data-procedure-id="' + procedure.id + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-upload" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383"/> <path fill-rule="evenodd" d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708z"/> </svg></button>'));
+                    tableBody.append(row);
+                }
+            }
+        }
+
     });
 });
+
+//recupere la procedure lié a la tache a completé
+document.addEventListener('DOMContentLoaded', function () {
+    const openTaskModalButtons = document.querySelectorAll('.open-task-modal');
+
+    openTaskModalButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            const procedureId = this.getAttribute('data-procedure-id');
+            const procedureIdInput = document.querySelector('#taskForm input[name="tache_id"]');
+
+            procedureIdInput.value = procedureId;
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Sélectionner le bouton "Save changes"
+    const saveChangesButton = document.getElementById('save-changes-btn');
+
+    // Ajouter un écouteur d'événement sur le clic du bouton "Save changes"
+    saveChangesButton.addEventListener('click', function () {
+        // Récupérer le formulaire et les données du formulaire
+        const form = document.querySelector('#taskForm');
+        const formData = new FormData(form);
+
+
+        console.log('Valeur de tache_id :', formData.get('tache_id'));
+
+        // Afficher le loader
+        $('#loaderModal').modal('show');
+
+        // Soumettre le formulaire via AJAX sans délai
+        $.ajax({
+            url: form.action,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                console.log('Formulaire soumis avec succès');
+
+                // Fermer les modaux
+                $('#taskModal').modal('hide');
+                $('#loaderModal').modal('hide');
+
+                // Mettre à jour la page ou effectuer d'autres actions si nécessaire
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Erreur lors de la soumission du formulaire : ', textStatus, errorThrown);
+                console.error('Messages d\'erreur : ', jqXHR.responseJSON.errors);
+
+                // Fermer le modal de chargement
+                $('#loaderModal').modal('hide');
+            }
+        });
+    });
+});
+
+
+
+
+
+
+
+
 
 
 

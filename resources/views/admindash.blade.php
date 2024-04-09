@@ -166,7 +166,10 @@
                                         data-client-associes="{{ $client->numAssocies }}"
                                         data-client-regime="{{ $client->regime }}"
                                         data-client-nom="{{ $client->nom }}"
-                                        data-client-prenoms="{{ $client->prenoms }}">
+                                        data-client-prenoms="{{ $client->prenoms }}"
+                                        data-procedures="{{ json_encode($client->procedures) }}"
+                                        data-taches="{{ json_encode($client->taches) }}">
+
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                                             <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
@@ -175,6 +178,7 @@
                                         </svg>
                                     </button>
                                 </div>
+
 
                             </div>
                         @empty
@@ -282,18 +286,37 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>Tâche 1</td>
-                                                            <td></td>
-                                                            <td>En cours</td>
-                                                            <td><button type="button"
-                                                                    class="btn btn-primary">Action</button></td>
-                                                        </tr>
-
+                                                        <!--Contenu du tableau chargé via JS voir le fichier app.js-->
                                                     </tbody>
                                                 </table>
                                             </div>
-
+                                            <div class="modal fade" id="docModal" tabindex="-1"
+                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                                Soumission de document
+                                                            </h1>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form id="docForm" action="{{route('doc.store')}}" enctype="multipart/form-data">
+                                                                <input type="file" name="doc_traité"
+                                                                    accept=".pdf,.docx">
+                                                                <button type="submit">Soumettre</button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-primary">Save
+                                                                changes</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

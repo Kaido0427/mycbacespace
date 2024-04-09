@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\avatar;
+use App\Models\procedure;
 use App\Models\User;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class profilController extends Controller
 {
@@ -137,5 +139,51 @@ class profilController extends Controller
             // Retourner une réponse JSON d'erreur
             return response()->json(['success' => false, 'message' => 'Une erreur est survenue lors de la mise à jour de la photo de profil. Veuillez réessayer.']);
         }
+    }
+
+    public function tasks()
+    {
+        $procedures = Procedure::where('user_id', auth()->user()->id)->get();
+
+        return view('dashbord', compact('procedures
+        '));
+    }
+
+
+    public function docsUpload(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'doc_client' => 'required|file',
+            'tache_id' => 'required|exists:procedures,tache_id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $procedure = Procedure::where('tache_id', $request->tache_id)->first();
+
+
+        if (!$procedure) {
+            return response()->json(['error' => 'tache non trouvée'], 404);
+        }
+
+        if ($procedure->doc_client) {
+            // Supprimer le fichier existant
+            $existingDocPath = public_path('document_clients/' . $procedure->doc_client);
+            if (file_exists($existingDocPath)) {
+                unlink($existingDocPath);
+            }
+        }
+
+        $doc = $request->file('doc_client');
+        $docName = time() . '.' . $doc->getClientOriginalExtension();
+        $doc->move(public_path('document_clients'), $docName);
+
+        $procedure->doc_client = $docName;
+        $procedure->save();
+
+        // Renvoie la réponse à la requête AJAX
+        return response()->json(['message' => 'Téléchargement effectué avec succès']);
     }
 }

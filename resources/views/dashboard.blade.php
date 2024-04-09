@@ -26,6 +26,24 @@
                 @include('layouts.sidebar')
             </ul>
             <div class="account-info">
+                <div class="account-info-logout">
+                    <a style="color: red;text-decoration:none;" href="{{ route('auth.logout') }}"
+                        onclick="event.preventDefault();
+                                  document.getElementById('logout-form').submit();">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
+                            <path fill-rule="evenodd"
+                                d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+                        </svg>
+                        <span> {{ __('Déconnexion') }}</span>
+                    </a>
+
+                    <form id="logout-form" action="{{ route('auth.logout') }}" method="post" class="d-none">
+                        @csrf
+                    </form>
+                </div>
                 <div class="account-info-picture">
                     <img id="sidebar-pic" src="{{ asset('avatars/' . auth()->user()->avatar->image) }}" alt="Account">
                 </div>
@@ -39,6 +57,7 @@
                 @include('layouts.dashhead')
             </div>
             <div class="app-content" style="overflow-y: auto; height: calc(100vh - );">
+
                 <div id="profil">
                     <h3 style="color: #fff" class="text-center">MON PROFIL</h3>
                     <hr style="color: #fff;">
@@ -247,7 +266,70 @@
                 <div id="tasks">
                     <h3 style="color: #fff" class="text-center">MES TACHES</h3>
                     <hr style="color: #fff;">
+                    @foreach ($user->taches as $tache)
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="card-title">{{ $tache->nom_tache }}</h5>
+                                </div>
+                                
+                                <div class="card-body">
+                        
+                                </div>
+                                <div class="card-footer">
+                                    <button type="button" class="btn btn-primary open-task-modal"
+                                        data-bs-toggle="modal" data-bs-target="#taskModal"
+                                        data-procedure-id="{{ $tache->id }}">
+                                        Soummettre
+                                        
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Done tasks</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="taskForm" action="{{ route('task.update') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" name="tache_id" id="tache_id">
+                                        <input type="file" name="doc_client" class="form-control" id="docclient">
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button id="save-changes-btn"  type="button" class="btn btn-primary">Completer la tache</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="modal fade" id="loaderModal" tabindex="-1" aria-labelledby="loaderModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="modal-backdrop"></div>
+             
                 </div>
+
                 <div id="relances">
                     <h3 style="color: #000" class="text-center">MES NOTIFICATIONS</h3>
                     <hr style="color: #fff;">

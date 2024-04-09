@@ -37,7 +37,7 @@ class payController extends Controller
             // Enregistre les données de la transaction dans la base de données
             payment::create([
                 'montant' => $transactionDetails->amount,
-                'status' => $transactionDetails->status ?? 'SUCCESS',
+                'status' => $transactionDetails->status,
                 'transaction_id' => $transactionId ?? null,
                 'user_id' => auth()->user()->id,
             ]);
