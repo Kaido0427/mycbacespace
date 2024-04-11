@@ -36,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/subsuccess', [HomeController::class, 'mailIndex'])->name('mails.index');
     Route::get('/suberror', [HomeController::class, 'mailerror'])->name('mails.error');
     Route::post('check/password', [profilController::class, 'checkPassword'])->name('check.password');
-    Route::post('/uploadDoc', [profilController::class, 'docsUpload'])->name('doc.store');
+    Route::post('/uploadDoc', [profilController::class, 'treatUpload'])->name('doc.store');
     Route::post('/tacheUpdate', [profilController::class, 'docsUpload'])->name('task.update');
     Route::post('/taches', [profilController::class, 'tasks'])->name('task.index');
 });

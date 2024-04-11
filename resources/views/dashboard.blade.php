@@ -266,27 +266,69 @@
                 <div id="tasks">
                     <h3 style="color: #fff" class="text-center">MES TACHES</h3>
                     <hr style="color: #fff;">
-                    @foreach ($user->taches as $tache)
-                        <div class="col-md-4">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <h5 class="card-title">{{ $tache->nom_tache }}</h5>
-                                </div>
-                                
-                                <div class="card-body">
-                        
-                                </div>
-                                <div class="card-footer">
-                                    <button type="button" class="btn btn-primary open-task-modal"
-                                        data-bs-toggle="modal" data-bs-target="#taskModal"
-                                        data-procedure-id="{{ $tache->id }}">
-                                        Soummettre
-                                        
-                                    </button>
+
+
+
+                    <div class="row">
+                        @foreach ($user->taches as $tache)
+                            <div class="col ">
+                                <div class="card mb-4">
+                                    <div class="card-header  d-flex">
+
+                                        <h5 class="card-title">{{ $tache->nom_tache }}</h5>
+
+                                        <div class="ms-auto">
+                                            @if (!empty($tache->pivot->doc_client))
+                                                @if (!empty($tache->pivot->doc_traité))
+                                                    <a href="{{ asset('document_clients/' . $tache->pivot->doc_client) }}"
+                                                        class="btn btn-success" download>
+                                                        Télécharger le fichier traité
+                                                    </a>
+                                                @else
+                                                    <button type="button" class="btn btn-warning open-task-modal"
+                                                        data-bs-toggle="modal" data-bs-target="#taskModal"
+                                                        data-procedure-id="{{ $tache->pivot->id }}">
+                                                        Modifier le fichier
+                                                    </button>
+                                                @endif
+                                            @else
+                                                <button type="button" class="btn btn-primary open-task-modal"
+                                                    data-bs-toggle="modal" data-bs-target="#taskModal"
+                                                    data-procedure-id="{{ $tache->id }}">
+                                                    Soumettre
+                                                </button>
+                                            @endif
+                                        </div>
+
+                                    </div>
+
+                                    <div class="card-body">
+                                        {{ $tache->description }}
+
+                                        @if (!empty($tache->pivot->doc_client))
+                                            <div class="mt-3" style="width: 100%;">
+                                                @if (pathinfo($tache->pivot->doc_client, PATHINFO_EXTENSION) === 'pdf')
+                                                    <embed id="taskFiles"
+                                                        src="{{ asset('document_clients/' . $tache->pivot->doc_client) }}"
+                                                        type="application/pdf" width="100%" height="150px">
+                                                @else
+                                                    <a href="{{ asset('document_clients/' . $tache->pivot->doc_client) }}"
+                                                        target="_blank">
+                                                        <img style="object-fit: cover"
+                                                            src="{{ asset('dist/word-logo.webp') }}"
+                                                            alt="Word document" width="100%" height="150px">
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        @endif
+
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+
+
 
                     <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                         aria-hidden="true">
@@ -308,12 +350,13 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button id="save-changes-btn"  type="button" class="btn btn-primary">Completer la tache</button>
+                                    <button id="save-changes-btn" type="button" class="btn btn-primary">Completer la
+                                        tache</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                   
+
                     <div class="modal fade" id="loaderModal" tabindex="-1" aria-labelledby="loaderModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog">
@@ -327,7 +370,7 @@
                         </div>
                     </div>
                     <div id="modal-backdrop"></div>
-             
+
                 </div>
 
                 <div id="relances">

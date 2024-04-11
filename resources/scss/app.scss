@@ -2,6 +2,8 @@
 @import '../scss/variable';
 
 
+
+
 * {
     box-sizing: border-box;
 }
@@ -972,7 +974,7 @@ body,
 }
 
 .modal-transparent-blur .modal-dialog {
-    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(118, 196, 241, 0.5));
+    background: linear-gradient(rgba(255, 255, 255, 0.349), rgba(118, 196, 241, 0.5));
     /* Dégradé blanc transparent */
     backdrop-filter: blur(8px);
     border-radius: 0.3rem;

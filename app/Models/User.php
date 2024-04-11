@@ -82,8 +82,10 @@ class User extends Authenticatable
     // Dans le modèle User
     public function taches()
     {
-        return $this->belongsToMany(Tache::class, 'procedures', 'user_id', 'tache_id')->withPivot('doc_client', 'doc_traité', 'status');
+        return $this->belongsToMany(Tache::class, 'procedures', 'user_id', 'tache_id')
+            ->withPivot(['id', 'doc_client', 'doc_traité', 'status']);
     }
+
 
 
     public function procedures()

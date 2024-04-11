@@ -13,23 +13,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
+
 </head>
 
 <body>
-    @if ($message = Session::get('success'))
-        <div id="successModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body text-center">
-                        <p id="successMessage">{{ $message }}<< /p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-
-
-
     <div class="app-container">
         <div id="sidebar" class="sidebar">
             <div class="sidebar-header">
@@ -189,6 +176,46 @@
                     </div>
 
                     <!-- Modal -->
+                    <div class="modal fade" id="treatModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                        Soumettre le document traité</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="treatForm" action="{{ route('doc.store') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" name="tache_id" id="tache_id">
+                                        <input type="file" name="doc_traité" class="form-control" id="doctreat">
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button id="treat-btn" type="button" class="btn btn-primary">Completer la
+                                        tache</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="loadModal" tabindex="-1" aria-labelledby="loaderModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="modal-backdrop"></div>
 
                     <div class="modal fade modal-transparent-blur" id="fullscreenModal" tabindex="-1"
                         role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -279,44 +306,18 @@
                                                 <table id="client-table" class="table-responsive">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Tâche</th>
-                                                            <th scope="col">Document(docx,pdf)</th>
+                                                            <th scope="col">Taches/Documents à fournir</th>
+                                                        
                                                             <th scope="col">Status</th>
-                                                            <th scope="col">Action</th>
                                                         </tr>
                                                     </thead>
+
                                                     <tbody>
                                                         <!--Contenu du tableau chargé via JS voir le fichier app.js-->
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div class="modal fade" id="docModal" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                                Soumission de document
-                                                            </h1>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form id="docForm" action="{{route('doc.store')}}" enctype="multipart/form-data">
-                                                                <input type="file" name="doc_traité"
-                                                                    accept=".pdf,.docx">
-                                                                <button type="submit">Soumettre</button>
-                                                            </form>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                            <button type="button" class="btn btn-primary">Save
-                                                                changes</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

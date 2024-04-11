@@ -163,7 +163,6 @@ class profilController extends Controller
 
         $procedure = Procedure::where('tache_id', $request->tache_id)->first();
 
-
         if (!$procedure) {
             return response()->json(['error' => 'tache non trouvée'], 404);
         }
@@ -181,9 +180,50 @@ class profilController extends Controller
         $doc->move(public_path('document_clients'), $docName);
 
         $procedure->doc_client = $docName;
+        $procedure->status = "soumis";
         $procedure->save();
 
-        // Renvoie la réponse à la requête AJAX
+        // Créer l'URL du fichier téléchargé
+        $fileUrl = asset('document_clients/' . $docName);
+
+        // Renvoie la réponse à la requête AJAX avec l'URL du fichier
+        return response()->json(['message' => 'Téléchargement effectué avec succès', 'file_url' => $fileUrl]);
+    }
+
+    public function treatUpload(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'doc_traité' => 'required|file',
+            'tache_id' => 'required|exists:procedures,tache_id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $procedure = Procedure::where('tache_id', $request->tache_id)->first();
+
+
+        if ($procedure->doc_traité) {
+            // Supprimer le fichier existant
+            $existingDocPath = public_path('document_traités/' . $procedure->doc_traité);
+            if (file_exists($existingDocPath)) {
+                unlink($existingDocPath);
+            }
+        }
+
+        $doc = $request->file('doc_traité');
+        $docName = time() . '.' . $doc->getClientOriginalExtension();
+        $doc->move(public_path('document_traités'), $docName);
+
+        $procedure->doc_traité = $docName;
+        $procedure->status = "Terminé";
+        $procedure->save();
+
+        // Créer l'URL du fichier téléchargé
+        $fileUrl = asset('document_traités/' . $docName);
+
+        // Renvoie la réponse à la requête AJAX avec l'URL du fichier
         return response()->json(['message' => 'Téléchargement effectué avec succès']);
     }
 }
