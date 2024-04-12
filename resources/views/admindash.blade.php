@@ -89,7 +89,7 @@
                                         <td>{{ $procedure->categorie->nom_categorie }}</td>
                                         <td>
                                             <!-- Ajouter un bouton ou un lien pour l'action ici -->
-                                            <a href="#" class="btn btn-primary btn-sm">Relancer</a>
+                                            <a href="#" id="relance-button" class="btn btn-primary btn-sm">Relancer</a>
                                         </td>
                                     </tr>
                                 @endforeach

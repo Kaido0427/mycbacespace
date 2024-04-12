@@ -572,9 +572,29 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+//pour notifier 
 
+$(document).ready(function () {
+    function sendRelanceNotifications() {
+        $.ajax({
+            url: '{{ route("tasks.relance") }}',
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (response) {
+                console.log(response.message);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error(textStatus, errorThrown);
+            }
+        });
+    }
 
-
+    $('#relance-button').click(function () {
+        sendRelanceNotifications();
+    });
+});
 
 
 
