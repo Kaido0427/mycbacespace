@@ -39,4 +39,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/uploadDoc', [profilController::class, 'treatUpload'])->name('doc.store');
     Route::post('/tacheUpdate', [profilController::class, 'docsUpload'])->name('task.update');
     Route::post('/taches', [profilController::class, 'tasks'])->name('task.index');
+    Route::post('/tasks/relance', [HomeController::class, 'relance'])->name('tasks.relance');
 });

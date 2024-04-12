@@ -12,7 +12,7 @@ class tache extends Model
     protected $table = "taches";
 
     protected $fillable = [
-        'nom_tache','description', 'categorie_id'
+        'nom_tache', 'description', 'categorie_id'
     ];
 
     public function categorie()
@@ -23,4 +23,7 @@ class tache extends Model
     {
         return $this->hasMany(Procedure::class, 'tache_id');
     }
+
+
+   
 }

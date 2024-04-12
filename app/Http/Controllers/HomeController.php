@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\procedure;
+use App\Models\tache;
 use App\Models\User;
+use App\Notifications\TaskRelanceNotification;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,25 +25,33 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+
     public function index()
     {
         $client = null;
         $user = auth()->user();
-        // je  récupére le rôle de l'utilisateur connecté
+
+        // Je récupère mon rôle d'utilisateur connecté
         $role = $user->user_type;
-        // Je récupére la liste des clients
-        $clients = User::where('user_type', 'client')->get();        
 
+        // Je récupère la liste des clients
+        $clients = User::where('user_type', 'client')->get();
 
-        // j'affiche le tableau de bord en fonction du rôle de l'utilisateur
+        // Je récupère toutes les tâches et les procédures associées ayant doc_client égal à null
+        $tachesWithPendingClients = Tache::with(['procedures' => function ($query) {
+            // Je filtre les procédures pour récupérer uniquement celles où doc_client est null
+            $query->whereNull('doc_client');
+        }])
+            ->get();
+
+        // J'affiche le tableau de bord en fonction de mon rôle d'utilisateur
         if ($role === 'admin') {
-            return view('admindash', compact('clients', 'client', 'role', 'user'));
+            return view('admindash', compact('clients', 'client', 'role', 'user', 'tachesWithPendingClients'));
         } else {
             return view('dashboard', compact('user'));
         }
     }
-
-
 
 
     public function subscription()
@@ -57,5 +67,25 @@ class HomeController extends Controller
     public function mailerror()
     {
         return view('mails.error');
+    }
+
+
+    public function relance(Request $request)
+    {
+        $tacheIdsWithPendingClients = Tache::with(['procedures' => function ($query) {
+            $query->whereNull('doc_client');
+        }])->get()->pluck('id');
+
+        $tachesWithPendingClients = Tache::whereIn('id', $tacheIdsWithPendingClients)->get();
+
+        foreach ($tachesWithPendingClients as $tache) {
+            foreach ($tache->procedures as $procedure) {
+                if ($procedure->user) {
+                    $procedure->user->notify(new TaskRelanceNotification($tache));
+                }
+            }
+        }
+
+        return response()->json(['message' => 'Les notifications ont été envoyées avec succès']);
     }
 }

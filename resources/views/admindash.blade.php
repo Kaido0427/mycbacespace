@@ -64,11 +64,42 @@
             <div class="app-head">
                 @include('layouts.dashhead')
             </div>
-            <div class="app-content">
+            <div class="app-content" style="overflow-y: auto; height: calc(100vh - );">
                 <div id="relances">
                     <h3 class="text-center">RELANCES DES CLIENTS</h3>
-                    <hr style="color: #fff;">
+                   
+                    @foreach ($tachesWithPendingClients as $tache)
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" colspan="4">{{ $tache->nom_tache }}</th>
+                                </tr>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Prénoms</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($tache->procedures as $procedure)
+                                    <tr>
+                                        <td>{{ $procedure->user->nom }}</td>
+                                        <td>{{ $procedure->user->prenoms }}</td>
+                                        <td>{{ $procedure->categorie->nom_categorie }}</td>
+                                        <td>
+                                            <!-- Ajouter un bouton ou un lien pour l'action ici -->
+                                            <a href="#" class="btn btn-primary btn-sm">Relancer</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <hr style="border-top: 2px solid #ff0000;">
+                    @endforeach
                 </div>
+                
+
                 <div id="clients">
                     <h3 class="text-center">ADHERANTS</h3>
                     <hr>
@@ -307,7 +338,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Taches/Documents à fournir</th>
-                                                        
+
                                                             <th scope="col">Status</th>
                                                         </tr>
                                                     </thead>
