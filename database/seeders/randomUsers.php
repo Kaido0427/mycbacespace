@@ -13,6 +13,6 @@ class randomUsers extends Seeder
      */
     public function run(): void
     {
-        User::factory()->count(20)->create(['user_type' => 'client']);
+        User::factory()->count(15)->create(['user_type' => 'client']);
     }
 }

@@ -98,6 +98,8 @@ class User extends Authenticatable
         return $this->belongsToMany(Service::class, 'user_services', 'user_id', 'service_id');
     }
 
-    
-    
+    public function notifications()
+    {
+        return $this->hasMany(notification::class);
+    }
 }

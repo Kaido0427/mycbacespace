@@ -379,28 +379,32 @@
                     <section class="section-50">
                         <div class="container">
                             <div class="notification-ui_dd-content">
-                                @foreach (auth()->user()->unreadNotifications as $notification)
+                                @forelse (auth()->user()->notifications as $notification)
                                     <div class="notification-list unread">
                                         <div class="notification-list_content">
                                             <div class="notification-list_img">
                                                 <img src="{{ asset('dist/notiftaskpending.png') }}" alt="user">
                                             </div>
                                             <div class="notification-list_detail">
-                                                <p><b>Administrateur</b></p>
+                                         
                                                 <p class="text-muted">{{ $notification->data['message'] }}</p>
-                                                <p class="text-muted"><small>{{ $notification->created_at->diffForHumans() }}</small></p>
+                                                <p class="text-muted">
+                                                    <small>{{ $notification->created_at->diffForHumans() }}</small></p>
                                             </div>
                                         </div>
                                         <div class="notification-list_feature-img">
                                             <img src="{{ asset('dist/goto.png') }}" alt="Feature image">
                                         </div>
                                     </div>
-                                @endforeach
+                                @empty
+                                
+                                @endforelse
+                                
                             </div>
                         </div>
                     </section>
                 </div>
-                
+
                 <div id="settings">
                     <h3 style="color: #fff" class="text-center">PARAMETRES DE COMPTE</h3>
                     <hr style="color: #fff;">

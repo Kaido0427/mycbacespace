@@ -2,24 +2,25 @@
 
 namespace App\Notifications;
 
-use App\Models\tache;
+use App\Models\procedure;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TaskRelanceNotification extends Notification
+
+class myNotifs extends Notification
 {
     use Queueable;
+
+    public $procedure;
 
     /**
      * Create a new notification instance.
      */
-    protected $tache;
-
-    public function __construct(tache $tache)
+    public function __construct(procedure $procedure)
     {
-        $this->tache = $tache;
+        $this->procedure = $procedure;
     }
 
     /**
@@ -32,19 +33,16 @@ class TaskRelanceNotification extends Notification
         return ['database'];
     }
 
-
     /**
      * Get the array representation of the notification.
      *
      * @return array<string, mixed>
      */
-
     public function toArray(object $notifiable): array
     {
         return [
-            'tache_id' => $this->tache->id,
-            'tache_nom' => $this->tache->nom_tache,
-            'message' => "Vous avez une tâche en attente : " . $this->tache->nom_tache,
+            'message' => 'Votre document pour le ' . $this->procedure->tache->nom_tache . ' a été traité avec succès!Merci d\'acceder a votre panel TACHES pour le télecharger',
+            'procedure_id' => $this->procedure->id,
         ];
     }
 }

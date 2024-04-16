@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\avatar;
 use App\Models\procedure;
 use App\Models\User;
+use App\Notifications\myNotifs;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -221,7 +222,9 @@ class profilController extends Controller
         $procedure->save();
 
         // Créer l'URL du fichier téléchargé
-        $fileUrl = asset('document_traités/' . $docName);
+        $fileUrl = asset('document_traités/' . $docName); 
+
+        $procedure->user->notify(new myNotifs($procedure));
 
         // Renvoie la réponse à la requête AJAX avec l'URL du fichier
         return response()->json(['message' => 'Téléchargement effectué avec succès', 'procedure' => $procedure]);
