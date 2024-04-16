@@ -224,6 +224,16 @@ class profilController extends Controller
         $fileUrl = asset('document_traités/' . $docName);
 
         // Renvoie la réponse à la requête AJAX avec l'URL du fichier
-        return response()->json(['message' => 'Téléchargement effectué avec succès']);
+        return response()->json(['message' => 'Téléchargement effectué avec succès', 'procedure' => $procedure]);
     }
+
+    public function getProcedures()
+{
+    // Récupérer toutes les procédures avec leurs tâches associées
+    $procedures = Procedure::with('tache')->get();
+
+    // Renvoie la réponse à la requête AJAX avec les procédures et les tâches
+    return response()->json(['procedures' => $procedures, 'taches' => $procedures->pluck('tache')->unique()]);
+}
+
 }

@@ -98,7 +98,6 @@
                         <hr style="border-top: 2px solid #ff0000;">
                     @endforeach
                 </div>
-                
 
                 <div id="clients">
                     <h3 class="text-center">ADHERANTS</h3>
