@@ -272,7 +272,7 @@
                     <div class="row">
                         @foreach ($user->taches as $tache)
                             <div class="col ">
-                                <div class="card mb-4">
+                                <div class="card mb-4" id="task-{{ $tache->id }}">
                                     <div class="card-header  d-flex">
 
                                         <h5 class="card-title">{{ $tache->nom_tache }}</h5>

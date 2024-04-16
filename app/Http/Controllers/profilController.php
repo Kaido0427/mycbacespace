@@ -154,18 +154,26 @@ class profilController extends Controller
 
     public function docsUpload(Request $request)
     {
+        Log::info('Début de la fonction docsUpload');
+
         $validator = Validator::make($request->all(), [
             'doc_client' => 'required|file',
             'tache_id' => 'required|exists:procedures,tache_id',
         ]);
 
+        Log::info('Validation des données');
+
         if ($validator->fails()) {
+            Log::error('Erreur de validation', ['errors' => $validator->errors()]);
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
         $procedure = Procedure::where('tache_id', $request->tache_id)->first();
 
+        Log::info('Recherche de la procédure : ', ['procedure' => $procedure]);
+
         if (!$procedure) {
+            Log::error('Tâche non trouvée pour l\'ID : ' . $request->tache_id);
             return response()->json(['error' => 'tache non trouvée'], 404);
         }
 
@@ -177,6 +185,8 @@ class profilController extends Controller
             }
         }
 
+        Log::info('Téléchargement du fichier pour la tâche : ' . $request->tache_id);
+
         $doc = $request->file('doc_client');
         $docName = time() . '.' . $doc->getClientOriginalExtension();
         $doc->move(public_path('document_clients'), $docName);
@@ -185,10 +195,16 @@ class profilController extends Controller
         $procedure->status = "soumis";
         $procedure->save();
 
-        $tache = $procedure->tache();
+        Log::info('Mise à jour de la procédure pour la tâche : ', ['procedure' => $procedure]);
+
+        $tache = $procedure->tache;
+
+        Log::info('tache: ', ['tache' => $tache]);
 
         // Créer l'URL du fichier téléchargé
         $fileUrl = asset('document_clients/' . $docName);
+
+        Log::info('Création de l\'URL du fichier téléchargé pour la tâche : ' . $request->tache_id);
 
         return response()->json([
             'message' => 'Téléchargement effectué avec succès',
@@ -201,6 +217,8 @@ class profilController extends Controller
             ]
         ]);
     }
+
+
 
     public function treatUpload(Request $request)
     {

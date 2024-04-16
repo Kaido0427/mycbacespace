@@ -516,40 +516,32 @@ $(document).ready(function () {
 });
 
 
-//recupere la procedure lié a la tache a completé
+//recupere la procedure lié a la tache a completé et la soumisson du doc coté client
+
 document.addEventListener('DOMContentLoaded', function () {
     const openTaskModalButtons = document.querySelectorAll('.open-task-modal');
+    const saveChangesButton = document.getElementById('save-changes-btn');
+    const taskForm = document.getElementById('taskForm');
 
     openTaskModalButtons.forEach(function (button) {
         button.addEventListener('click', function () {
+            console.log('Bouton "Modifier le fichier" ou "Soumettre" cliqué');
             const procedureId = this.getAttribute('data-procedure-id');
-            const procedureIdInput = document.querySelector('#taskForm input[name="tache_id"]');
-
+            console.log('ID de la procédure :', procedureId);
+            const procedureIdInput = document.getElementById('taskForm').querySelector('input[name="tache_id"]');
             procedureIdInput.value = procedureId;
         });
     });
-});
 
-
-//effectuer une tache coté client
-document.addEventListener('DOMContentLoaded', function () {
-    // Sélectionner le bouton "Save changes"
-    const saveChangesButton = document.getElementById('save-changes-btn');
-
-    // Ajouter un écouteur d'événement sur le clic du bouton "Save changes"
     saveChangesButton.addEventListener('click', function () {
-        // Récupérer le formulaire et les données du formulaire
         const form = document.querySelector('#taskForm');
         const formData = new FormData(form);
 
-
         console.log('Valeur de tache_id :', formData.get('tache_id'));
 
-        // Afficher le loader
         $('#taskModal').modal('hide');
         $('#loaderModal').modal('show');
 
-        // Soumettre le formulaire via AJAX sans délai
         $.ajax({
             url: form.action,
             type: 'POST',
@@ -559,15 +551,92 @@ document.addEventListener('DOMContentLoaded', function () {
             success: function (response) {
                 console.log('Formulaire soumis avec succès');
 
-                const docs = response.file_url;
-                const fileView = document.getElementById('taskFiles');
+                // Génère le HTML pour les boutons de la tâche
+                const generateTaskButtons = function (tacheId, procedure) {
+                    let buttonsHtml = '';
 
-                fileView.src = docs;
+                    if (procedure) {
+                        if (procedure.doc_traité) {
+                            buttonsHtml = `
+                                    <a href="${procedure.doc_client}" class="btn btn-success" download>
+                                        Télécharger le fichier traité
+                                    </a>
+                                `;
+                        } else {
+                            buttonsHtml = `
+                                    <button type="button" class="btn btn-warning open-task-modal"
+                                        data-bs-toggle="modal" data-bs-target="#taskModal"
+                                        data-procedure-id="${procedure.id}">
+                                        Modifier le fichier
+                                    </button>
+                                `;
+                        }
+                    } else {
+                        buttonsHtml = `
+                                <button type="button" class="btn btn-primary open-task-modal"
+                                    data-bs-toggle="modal" data-bs-target="#taskModal"
+                                    data-procedure-id="${tacheId}">
+                                    Soumettre
+                                </button>
+                            `;
+                    }
 
-                // Fermer les modaux
-                $('#loaderModal').modal('hide');
+                    return buttonsHtml;
+                };
 
-                // Mettre à jour la page ou effectuer d'autres actions si nécessaire
+                // Génère le HTML pour les fichiers de la tâche
+                const generateTaskFiles = function (fileUrl) {
+                    let fileHtml = '';
+
+                    if (fileUrl) {
+                        const extension = fileUrl.split('.').pop();
+
+                        if (extension === 'pdf') {
+                            fileHtml = `
+                                    <div class="mt-3" style="width: 100%;">
+                                        <embed id="taskFiles" src="${fileUrl}" type="application/pdf" width="100%" height="150px">
+                                    </div>
+                                `;
+                        } else {
+                            fileHtml = `
+                                    <div class="mt-3" style="width: 100%;">
+                                        <a href="#" target="_blank">
+                                            <img style="object-fit: cover" src="/dist/word-logo.webp" alt="Word document" width="100%" height="150px">
+                                        </a>
+                                    </div>
+                                `;
+                        }
+                    }
+
+                    return fileHtml;
+                };
+
+                // Génère le nouveau contenu HTML pour la tâche
+                const updatedTaskHtml = `
+                        <div class="card-header d-flex">
+                            <h5 class="card-title">${response.tache.nom_tache}</h5>
+                            <div class="ms-auto">
+                                ${generateTaskButtons(response.tache.id, response.procedure)}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            ${response.tache.description}
+                            ${generateTaskFiles(response.file_url)}
+                        </div>
+                    `;
+
+                // Mets à jour le contenu de la tâche
+                const updateTaskContent = function (taskId, newContent) {
+                    const taskElement = document.getElementById(`task-${taskId}`);
+                    taskElement.innerHTML = newContent;
+                };
+
+                updateTaskContent(response.tache.id, updatedTaskHtml);
+
+                // Fermer le loader après 1500 ms
+                setTimeout(function () {
+                    $('#loaderModal').modal('hide');
+                }, 1500);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('Erreur lors de la soumission du formulaire : ', textStatus, errorThrown);
@@ -578,7 +647,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+
 });
+
+
 
 
 //pour notifier 
