@@ -19,7 +19,7 @@ class CheckPayement
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->user_type == "admin") {
+        if (Auth::user()->user_type === "admin") {
             // L'utilisateur est un administrateur, je lui donne l'accès
             return $next($request);
         } elseif (!Auth::user()->hasPaid()) {

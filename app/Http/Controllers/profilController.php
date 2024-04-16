@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\avatar;
+use App\Models\Notification;
 use App\Models\procedure;
 use App\Models\User;
 use App\Notifications\myNotifs;
@@ -179,16 +180,26 @@ class profilController extends Controller
         $doc = $request->file('doc_client');
         $docName = time() . '.' . $doc->getClientOriginalExtension();
         $doc->move(public_path('document_clients'), $docName);
-
+        $ext = $doc->getClientOriginalExtension();
         $procedure->doc_client = $docName;
         $procedure->status = "soumis";
         $procedure->save();
 
+        $tache = $procedure->tache();
+
         // Créer l'URL du fichier téléchargé
         $fileUrl = asset('document_clients/' . $docName);
 
-        // Renvoie la réponse à la requête AJAX avec l'URL du fichier
-        return response()->json(['message' => 'Téléchargement effectué avec succès', 'file_url' => $fileUrl]);
+        return response()->json([
+            'message' => 'Téléchargement effectué avec succès',
+            'file_url' => $fileUrl,
+            'procedure' => $procedure,
+            'tache' => [
+                'id' => $tache->id,
+                'nom_tache' => $tache->nom_tache,
+                'description' => $tache->description,
+            ]
+        ]);
     }
 
     public function treatUpload(Request $request)
@@ -222,21 +233,24 @@ class profilController extends Controller
         $procedure->save();
 
         // Créer l'URL du fichier téléchargé
-        $fileUrl = asset('document_traités/' . $docName); 
+        $fileUrl = asset('document_traités/' . $docName);
 
-        $procedure->user->notify(new myNotifs($procedure));
+        Notification::create([
+            'message' => 'Votre document pour' . $procedure->tache()->nom_tache . ' a ete traité avec succes!Merci de consulter le panel tache pour 
+            telecharger votre ',
+            'user_id' => $procedure->user_id,
+        ]);
 
         // Renvoie la réponse à la requête AJAX avec l'URL du fichier
         return response()->json(['message' => 'Téléchargement effectué avec succès', 'procedure' => $procedure]);
     }
 
     public function getProcedures()
-{
-    // Récupérer toutes les procédures avec leurs tâches associées
-    $procedures = Procedure::with('tache')->get();
+    {
+        // Récupérer toutes les procédures avec leurs tâches associées
+        $procedures = Procedure::with('tache')->get();
 
-    // Renvoie la réponse à la requête AJAX avec les procédures et les tâches
-    return response()->json(['procedures' => $procedures, 'taches' => $procedures->pluck('tache')->unique()]);
-}
-
+        // Renvoie la réponse à la requête AJAX avec les procédures et les tâches
+        return response()->json(['procedures' => $procedures, 'taches' => $procedures->pluck('tache')->unique()]);
+    }
 }
