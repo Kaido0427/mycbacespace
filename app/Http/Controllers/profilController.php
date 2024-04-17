@@ -259,16 +259,17 @@ class profilController extends Controller
             'user_id' => $procedure->user_id,
         ]);
 
+        $procedures = Procedure::with('tache')->where('user_id', $procedure->user_id)->get();
+
         // Renvoie la réponse à la requête AJAX avec l'URL du fichier
-        return response()->json(['message' => 'Téléchargement effectué avec succès', 'procedure' => $procedure]);
+        return response()->json([
+            'message' => 'Téléchargement effectué avec succès',
+            'procedure' => $procedure,
+            'procedures' => $procedures,
+            'taches' => $procedures->pluck('tache')->unique(),
+            'file_Url' => $fileUrl
+
+        ]);
     }
 
-    public function getProcedures()
-    {
-        // Récupérer toutes les procédures avec leurs tâches associées
-        $procedures = Procedure::with('tache')->get();
-
-        // Renvoie la réponse à la requête AJAX avec les procédures et les tâches
-        return response()->json(['procedures' => $procedures, 'taches' => $procedures->pluck('tache')->unique()]);
-    }
 }
