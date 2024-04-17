@@ -850,11 +850,11 @@ body,
 
 .card:hover {
     transform: scale(1.05);
-    transition: transform 1s ease-in-out;
+    transition: transform 0.5s ease-in-out;
 }
 
 .card:not(:hover) {
-    transition: transform 1s ease-in-out;
+    transition: transform 0.5s ease-in-out;
 }
 
 //arriere plan flouté pour le modal

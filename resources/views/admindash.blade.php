@@ -67,7 +67,7 @@
             <div class="app-content" style="overflow-y: auto; height: calc(100vh - );">
                 <div id="relances">
                     <h3 class="text-center">RELANCES DES CLIENTS</h3>
-                   
+
                     @foreach ($tachesWithPendingClients as $tache)
                         <table class="table table-bordered table-striped">
                             <thead>
@@ -89,7 +89,8 @@
                                         <td>{{ $procedure->categorie->nom_categorie }}</td>
                                         <td>
                                             <!-- Ajouter un bouton ou un lien pour l'action ici -->
-                                            <a href="#" id="relance-button" class="btn btn-primary btn-sm">Relancer</a>
+                                            <a href="#" id="relance-button"
+                                                class="btn btn-primary btn-sm">Relancer</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -227,8 +228,9 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button id="treat-btn" type="button" class="btn btn-primary">Completer la
-                                        tache</button>
+                                    <button id="treat-btn" type="button"
+                                        class="btn btn-primary open-treat-modal">Completer la tache</button>
+
                                 </div>
                             </div>
                         </div>
@@ -337,13 +339,12 @@
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Taches/Documents à fournir</th>
-
                                                             <th scope="col">Status</th>
+                                                            <th scope="col"></th>
                                                         </tr>
                                                     </thead>
-
                                                     <tbody>
-                                                        <!--Contenu du tableau chargé via JS voir le fichier app.js-->
+                                                        <!-- Le contenu du tableau sera généré dynamiquement par le script -->
                                                     </tbody>
                                                 </table>
                                             </div>

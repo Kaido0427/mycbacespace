@@ -266,9 +266,6 @@
                 <div id="tasks">
                     <h3 style="color: #fff" class="text-center">MES TACHES</h3>
                     <hr style="color: #fff;">
-
-
-
                     <div class="row">
                         @foreach ($user->taches as $tache)
                             <div class="col ">
@@ -327,9 +324,6 @@
                             </div>
                         @endforeach
                     </div>
-
-
-
                     <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog">
@@ -387,7 +381,7 @@
                                             </div>
                                             <div class="notification-list_detail">
                                          
-                                                <p class="text-muted">{{ $notification->data['message'] }}</p>
+                                                <p class="text-muted">{{ $notification->message }}</p>
                                                 <p class="text-muted">
                                                     <small>{{ $notification->created_at->diffForHumans() }}</small></p>
                                             </div>
