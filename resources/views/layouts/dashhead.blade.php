@@ -8,7 +8,7 @@
     </button>
 
 
-    <button class="mode-switch" title="Switch Theme">
+    <button style="border: none;" class="mode-switch" title="Switch Theme">
         <span class="icon">
             <svg class="moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                 stroke-width="2" width="24" height="24" viewBox="0 0 24 24">

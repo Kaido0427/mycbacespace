@@ -23,63 +23,63 @@ document.querySelector(".list").addEventListener("click", function () {
 });
 
 
-//pour changer le theme :
-$(document).ready(function() {
+//pour changer le theme de couleur :
+$(document).ready(function () {
     var $modeSwitch = $('.mode-switch');
     var $moonIcon = $modeSwitch.find('.sun');
     var $sunIcon = $modeSwitch.find('.moon');
-  
+
     // Fonction de changement de thème
     function toggleTheme() {
-      $('html').toggleClass('light');
-      $modeSwitch.toggleClass('active');
-  
-      // Enregistrer le thème dans le localStorage
-      if ($('html').hasClass('light')) {
-        localStorage.setItem('theme', 'light');
-      } else {
-        localStorage.setItem('theme', 'dark');
-      }
-  
-      // Afficher le soleil ou la lune en fonction du thème
-      if ($('html').hasClass('light')) {
-        $moonIcon.css('opacity', 0);
-        $sunIcon.css('opacity', 1);
-      } else {
-        $moonIcon.css('opacity', 1);
-        $sunIcon.css('opacity', 0);
-      }
+        $('html').toggleClass('light');
+        $modeSwitch.toggleClass('active');
+
+        // Enregistrer le thème dans le localStorage
+        if ($('html').hasClass('light')) {
+            localStorage.setItem('theme', 'light');
+        } else {
+            localStorage.setItem('theme', 'dark');
+        }
+
+        // Afficher le soleil ou la lune en fonction du thème
+        if ($('html').hasClass('light')) {
+            $moonIcon.css('opacity', 0);
+            $sunIcon.css('opacity', 1);
+        } else {
+            $moonIcon.css('opacity', 1);
+            $sunIcon.css('opacity', 0);
+        }
     }
-  
+
     // Ajouter un écouteur d'événement pour le clic sur le bouton de changement de thème
     $modeSwitch.on('click', toggleTheme);
-  
+
     // Vérifier si un thème est enregistré dans le localStorage et l'appliquer
     var savedTheme = localStorage.getItem('theme');
-  
+
     if (savedTheme === 'light') {
-      $('html').addClass('light');
-      $modeSwitch.addClass('active');
-      $moonIcon.css('opacity', 0);
-      $sunIcon.css('opacity', 1);
-    } else if (savedTheme === 'dark') {
-      $('html').removeClass('light');
-      $modeSwitch.removeClass('active');
-      $moonIcon.css('opacity', 1);
-      $sunIcon.css('opacity', 0);
-    }
-  
-    // Afficher l'icône appropriée une fois que le JavaScript est chargé
-    setTimeout(function() {
-      if ($('html').hasClass('light')) {
+        $('html').addClass('light');
+        $modeSwitch.addClass('active');
         $moonIcon.css('opacity', 0);
         $sunIcon.css('opacity', 1);
-      } else {
+    } else if (savedTheme === 'dark') {
+        $('html').removeClass('light');
+        $modeSwitch.removeClass('active');
         $moonIcon.css('opacity', 1);
         $sunIcon.css('opacity', 0);
-      }
+    }
+
+    // Afficher l'icône appropriée une fois que le JavaScript est chargé
+    setTimeout(function () {
+        if ($('html').hasClass('light')) {
+            $moonIcon.css('opacity', 0);
+            $sunIcon.css('opacity', 1);
+        } else {
+            $moonIcon.css('opacity', 1);
+            $sunIcon.css('opacity', 0);
+        }
     }, 0);
-  });
+});
 
 
 
@@ -174,7 +174,6 @@ $(document).ready(function () {
 });
 
 
-
 //afficher et cacher le mot de passe
 document.getElementById('currentPasswordToggle').addEventListener('click', function () {
     var input = document.getElementById('currentPassword');
@@ -188,7 +187,6 @@ document.getElementById('currentPasswordToggle').addEventListener('click', funct
         this.querySelector('svg').classList.add('bi-eye-fill');
     }
 });
-
 
 document.getElementById('newPasswordToggle').addEventListener('click', function () {
     var input = document.getElementById('newPassword');
@@ -676,30 +674,67 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
-//pour notifier 
+//les relances coté admin
 
 $(document).ready(function () {
-    function sendRelanceNotifications() {
-        $.ajax({
-            url: '{{ route("tasks.relance") }}',
-            type: 'POST',
+    $('#relances').on('click', '#relance-button', function (e) {
+        e.preventDefault();
+
+        console.log('Bouton Relancer cliqué');
+
+        var tacheId = $(this).data('tache-id');
+        var tacheTable = '#tache-table-' + tacheId;
+        var route = $(this).data('route');
+
+        $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (response) {
-                console.log(response.message);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error(textStatus, errorThrown);
             }
         });
-    }
 
-    $('#relance-button').click(function () {
-        sendRelanceNotifications();
+        $.ajax({
+            type: 'POST',
+            url: route,
+            data: {
+                'tache_id': tacheId,
+            },
+            beforeSend: function () {
+                console.log('Requête AJAX en cours d\'envoi');
+                // Afficher le loader
+                $('#chargeModal').modal('show');
+            },
+            success: function (response) {
+                console.log('Requête AJAX réussie');
+                console.log('Réponse :', response);
+
+                if (response.success) {
+                    console.log('Relance effectuée avec succès');
+
+                    // Cacher le loader après 1 seconde
+                    setTimeout(function () {
+                        console.log('Loader caché');
+                        $('#chargeModal').modal('hide');
+                    }, 1000);
+
+                    // Afficher un message de succès ou effectuer une action
+                } else {
+                    console.log('La relance a échoué');
+                }
+            },
+            error: function (error) {
+                console.log('Erreur lors de la requête AJAX');
+                console.log('Erreur :', error);
+                // Cacher le loader
+                $('#chargeModal').modal('hide');
+            }
+        });
     });
 });
+
+
+
+
+
 
 
 

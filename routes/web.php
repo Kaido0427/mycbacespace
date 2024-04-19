@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\adminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
@@ -40,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tacheUpdate', [profilController::class, 'docsUpload'])->name('task.update');
     Route::post('/taches', [profilController::class, 'tasks'])->name('task.index');
     Route::post('/tasks/relance', [HomeController::class, 'relance'])->name('tasks.relance');
+    Route::post('/send-notification', [adminController::class,'relanceTache'])->name('relance');
 
-    Route::get('/procedures',[profilController::class,'getProcedures']);
 
 });

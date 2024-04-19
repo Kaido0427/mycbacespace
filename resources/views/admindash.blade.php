@@ -11,6 +11,8 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss'])
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
 
 
@@ -66,19 +68,44 @@
             </div>
             <div class="app-content" style="overflow-y: auto; height: calc(100vh - );">
                 <div id="relances">
+
+                    <div class="modal fade" id="chargeModal" tabindex="-1" aria-labelledby="loaderModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <h3 class="text-center">RELANCES DES CLIENTS</h3>
 
                     @foreach ($tachesWithPendingClients as $tache)
-                        <table class="table table-bordered table-striped">
+                        @php
+                            $hasPendingProcedures = $tache->procedures->isNotEmpty();
+                        @endphp
+                        <table class="table table-bordered table-striped" id="tache-table-{{ $tache->id }}">
                             <thead>
                                 <tr>
-                                    <th class="text-center" colspan="4">{{ $tache->nom_tache }}</th>
+                                    <th class="text-center" colspan="4">
+                                        {{ $tache->nom_tache }}
+                                        @if ($hasPendingProcedures)
+                                            <button id="relance-button" type="button"
+                                                class="btn btn-primary btn-sm relance-button"
+                                                data-tache-id="{{ $tache->id }}"
+                                                data-route="{{ route('relance') }}">
+                                                Relancer
+                                            </button>
+                                        @endif
+                                    </th>
                                 </tr>
                                 <tr>
                                     <th>Nom</th>
                                     <th>Prénoms</th>
                                     <th>Type</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -87,17 +114,14 @@
                                         <td>{{ $procedure->user->nom }}</td>
                                         <td>{{ $procedure->user->prenoms }}</td>
                                         <td>{{ $procedure->categorie->nom_categorie }}</td>
-                                        <td>
-                                            <!-- Ajouter un bouton ou un lien pour l'action ici -->
-                                            <a href="#" id="relance-button"
-                                                class="btn btn-primary btn-sm">Relancer</a>
-                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                         <hr style="border-top: 2px solid #ff0000;">
                     @endforeach
+
+                    <div id="modal-backdrop"></div>
                 </div>
 
                 <div id="clients">
@@ -249,7 +273,8 @@
                     <div id="modal-backdrop"></div>
 
                     <div class="modal fade modal-transparent-blur" id="fullscreenModal" tabindex="-1"
-                        role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                        role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+                        data-bs-backdrop="static">
                         <div class="modal-dialog modal-fullscreen">
                             <div class="modal-content">
                                 <div class="modal-header">

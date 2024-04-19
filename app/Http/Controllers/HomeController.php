@@ -38,12 +38,12 @@ class HomeController extends Controller
         // Je récupère la liste des clients
         $clients = User::where('user_type', 'client')->get();
 
-        // Je récupère toutes les tâches et les procédures associées ayant doc_client égal à null
         $tachesWithPendingClients = Tache::with(['procedures' => function ($query) {
-            // Je filtre les procédures pour récupérer uniquement celles où doc_client est null
             $query->whereNull('doc_client');
         }])
+            ->has('procedures', '>', 0)
             ->get();
+
 
         // J'affiche le tableau de bord en fonction de mon rôle d'utilisateur
         if ($role === 'admin') {
@@ -68,7 +68,4 @@ class HomeController extends Controller
     {
         return view('mails.error');
     }
-
-
-  
 }
