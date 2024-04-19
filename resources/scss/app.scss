@@ -1027,3 +1027,8 @@ body,
     height: 1px;
     margin: 1rem 0;
 }
+
+/* Masquer les icônes par défaut */
+.mode-switch .icon svg {
+    opacity: 0;
+  }

@@ -221,7 +221,7 @@
                                     <form id="treatForm" action="{{ route('doc.store') }}" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
-                                        <input type="hidden" name="tache_id" id="tache_id">
+                                        <input type="hidden" name="tache_id" id="tache_id" value="">
                                         <input type="file" name="doc_traité" class="form-control" id="doctreat">
                                     </form>
                                 </div>
@@ -230,7 +230,6 @@
                                         data-bs-dismiss="modal">Close</button>
                                     <button id="treat-btn" type="button"
                                         class="btn btn-primary open-treat-modal">Completer la tache</button>
-
                                 </div>
                             </div>
                         </div>
@@ -250,7 +249,7 @@
                     <div id="modal-backdrop"></div>
 
                     <div class="modal fade modal-transparent-blur" id="fullscreenModal" tabindex="-1"
-                        role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
                         <div class="modal-dialog modal-fullscreen">
                             <div class="modal-content">
                                 <div class="modal-header">

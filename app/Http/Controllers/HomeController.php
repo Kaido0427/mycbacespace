@@ -70,22 +70,5 @@ class HomeController extends Controller
     }
 
 
-    public function relance(Request $request)
-    {
-        $tacheIdsWithPendingClients = Tache::with(['procedures' => function ($query) {
-            $query->whereNull('doc_client');
-        }])->get()->pluck('id');
-
-        $tachesWithPendingClients = Tache::whereIn('id', $tacheIdsWithPendingClients)->get();
-
-        foreach ($tachesWithPendingClients as $tache) {
-            foreach ($tache->procedures as $procedure) {
-                if ($procedure->user) {
-                    $procedure->user->notify(new TaskRelanceNotification($tache));
-                }
-            }
-        }
-
-        return response()->json(['message' => 'Les notifications ont été envoyées avec succès']);
-    }
+  
 }

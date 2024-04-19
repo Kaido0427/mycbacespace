@@ -22,11 +22,64 @@ document.querySelector(".list").addEventListener("click", function () {
     document.querySelector(".products-area-wrapper").classList.add("tableView");
 });
 
-var modeSwitch = document.querySelector('.mode-switch');
-modeSwitch.addEventListener('click', function () {
-    document.documentElement.classList.toggle('light');
-    modeSwitch.classList.toggle('active');
-});
+
+//pour changer le theme :
+$(document).ready(function() {
+    var $modeSwitch = $('.mode-switch');
+    var $moonIcon = $modeSwitch.find('.sun');
+    var $sunIcon = $modeSwitch.find('.moon');
+  
+    // Fonction de changement de thème
+    function toggleTheme() {
+      $('html').toggleClass('light');
+      $modeSwitch.toggleClass('active');
+  
+      // Enregistrer le thème dans le localStorage
+      if ($('html').hasClass('light')) {
+        localStorage.setItem('theme', 'light');
+      } else {
+        localStorage.setItem('theme', 'dark');
+      }
+  
+      // Afficher le soleil ou la lune en fonction du thème
+      if ($('html').hasClass('light')) {
+        $moonIcon.css('opacity', 0);
+        $sunIcon.css('opacity', 1);
+      } else {
+        $moonIcon.css('opacity', 1);
+        $sunIcon.css('opacity', 0);
+      }
+    }
+  
+    // Ajouter un écouteur d'événement pour le clic sur le bouton de changement de thème
+    $modeSwitch.on('click', toggleTheme);
+  
+    // Vérifier si un thème est enregistré dans le localStorage et l'appliquer
+    var savedTheme = localStorage.getItem('theme');
+  
+    if (savedTheme === 'light') {
+      $('html').addClass('light');
+      $modeSwitch.addClass('active');
+      $moonIcon.css('opacity', 0);
+      $sunIcon.css('opacity', 1);
+    } else if (savedTheme === 'dark') {
+      $('html').removeClass('light');
+      $modeSwitch.removeClass('active');
+      $moonIcon.css('opacity', 1);
+      $sunIcon.css('opacity', 0);
+    }
+  
+    // Afficher l'icône appropriée une fois que le JavaScript est chargé
+    setTimeout(function() {
+      if ($('html').hasClass('light')) {
+        $moonIcon.css('opacity', 0);
+        $sunIcon.css('opacity', 1);
+      } else {
+        $moonIcon.css('opacity', 1);
+        $sunIcon.css('opacity', 0);
+      }
+    }, 0);
+  });
 
 
 
@@ -335,9 +388,11 @@ $(document).ready(function () {
 
 
 //pour charger les info du client dans le modal depuis le dashboard admin
+
 $(document).ready(function () {
-    $('#fullscreenModal').on('show.bs.modal', function (event) {
-        // Récupérer le bouton qui a déclenché le modal
+    var procedures;
+    var taches;
+    function updateFullscreenModal(event) {
         var button = $(event.relatedTarget);
 
         // Récupérer les données du client à partir des attributs de données
@@ -358,10 +413,8 @@ $(document).ready(function () {
         var procedures = button.data('procedures');
         var taches = button.data('taches');
 
-        // Je met à jour l'image du client
+        // Mettre à jour l'image et les informations du client
         $('#img-client').attr('src', clientImage);
-
-        // Je met à jour les informations du client
         $('#datecreate-client').text(datecreateClient);
         $('#client-reason').text(clientReason);
         $('#client-declaration').html(clientDeclaration);
@@ -375,7 +428,6 @@ $(document).ready(function () {
         $('#client-name').html(clientName + '   ' + clientPrenoms);
 
         if (typeof procedures === 'object' && typeof taches === 'object') {
-
             var tableBody = $('#client-table tbody');
             tableBody.empty();
 
@@ -386,18 +438,24 @@ $(document).ready(function () {
                     var tache = taches[i];
 
                     var row = $('<tr>');
-                    row.append($('<td>').html('<a style="text-decoration:none;color:black;"  href="/document_clients/' + procedure.doc_client + '" target="_blank">' + tache.nom_tache + ' <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cloud-arrow-down-fill" viewBox="0 0 16 16"><path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 6.854-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5a.5.5 0 0 1 1 0v3.793l1.146-1.147a.5.5 0 0 1 .708.708z"/></svg></a>'));
+                    var tdDownload = $('<td>');
+                    var tdStatus = $('<td>').attr('id', 'status-' + tache.id);
+                    var tdButton = $('<td>').attr('id', 'button-' + tache.id);
 
-                    var tdStatus = $('<td>');
-                    var tdButton = $('<td>');
-
-                    var statusButton;
-                    if (procedure.status === 'soumis') {
-                        statusButton = $('<button type="button" class="btn btn-primary open-treat-modal" data-bs-toggle="modal" data-bs-target="#treatModal" data-tache-id="' + tache.id + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-upload-fill" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0m-.5 14.5V11h1v3.5a.5.5 0 0 1-1 0z"/> </svg></button>');
+                    // Ajouter la cellule pour le nom de la tâche (avec ou sans lien)
+                    if (procedure.doc_client) {
+                        var downloadLink = $('<a>').attr('href', '/document_clients/' + procedure.doc_client).attr('target', '_blank').text(tache.nom_tache);
+                        tdDownload.append(downloadLink);
+                    } else {
+                        tdDownload.text(tache.nom_tache);
                     }
+                    row.append(tdDownload);
 
+                    // Ajouter la cellule pour le statut
                     var statusText = $('<span>').text(' ' + procedure.status);
+                    tdStatus.append(statusText);
 
+                    tdStatus.removeClass('btn-danger btn-warning btn-success');
                     if (procedure.doc_client === null) {
                         tdStatus.addClass('btn btn-danger');
                     } else if (procedure.doc_traité) {
@@ -406,39 +464,33 @@ $(document).ready(function () {
                         tdStatus.addClass('btn btn-warning');
                     }
 
-                    tdStatus.append(statusText);
+                    row.append(tdStatus);
 
-                    if (statusButton) {
+                    // Ajouter la cellule pour le bouton "Traiter" (uniquement si le statut est "Soumis")
+                    if (procedure.status === 'Soumis') {
+                        var statusButton = $('<button>').attr('type', 'button').attr('data-bs-toggle', 'modal').attr('data-bs-target', '#treatModal').attr('data-tache-id', tache.id).addClass('btn btn-primary open-treat-modal').text('Traiter');
                         tdButton.append(statusButton);
                     }
 
-                    if (tdStatus.hasClass('btn btn-warning')) {
-                        var treatModalButton = $('<button type="button" class="btn btn-primary open-treat-modal ml-2" data-bs-toggle="modal" data-bs-target="#treatModal" data-tache-id="' + tache.id + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-upload-fill" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0m-.5 14.5V11h1v3.5a.5.5 0 0 1-1 0z"/> </svg></button>');
-                        tdButton.append(' ');
-                        tdButton.append(treatModalButton);
-                    }
-
-                    row.append(tdStatus);
                     row.append(tdButton);
                     tableBody.append(row);
                 }
             }
+
             // Écouter les clics sur les boutons "open-treat-modal"
             const openTaskModalButtons = document.getElementsByClassName('open-treat-modal');
-            console.log('Nombre de boutons :', openTaskModalButtons.length);
 
             for (let i = 0; i < openTaskModalButtons.length; i++) {
                 openTaskModalButtons[i].addEventListener('click', function () {
-                    console.log('Bouton cliqué');
                     const procedureId = this.getAttribute('data-tache-id');
-                    console.log('Valeur de procedureId :', procedureId);
                     const procedureIdInput = document.querySelector('#treatForm input[name="tache_id"]');
-
                     procedureIdInput.value = procedureId;
                 });
             }
         }
-    });
+    }
+
+    $('#fullscreenModal').on('show.bs.modal', updateFullscreenModal);
 
     // Sélectionner le bouton "Save changes"
     const saveChangesButton = document.getElementById('treat-btn');
@@ -448,8 +500,6 @@ $(document).ready(function () {
         // Récupérer le formulaire et les données du formulaire
         const form = document.querySelector('#treatForm');
         const formData = new FormData(form);
-
-        console.log('Valeur de tache_id :', formData.get('tache_id'));
 
         // Afficher le loader
         $('#treatModal').modal('hide');
@@ -464,52 +514,26 @@ $(document).ready(function () {
             contentType: false,
             success: function (response) {
                 console.log('Formulaire soumis avec succès');
+                console.log('Données de la réponse :', response);
 
-                // Fermer les modaux
-                $('#loadeModal').modal('hide');
+                // Fermer le loader après 1 seconde
+                setTimeout(function () {
+                    $('#loadModal').modal('hide');
+                }, 1000);
+                procedures = response.procedures;
+                taches = response.taches;
 
-                // Récupérer la procédure mise à jour
-                var updatedProcedure = response.procedure;
+                // Appeler la fonction updateFullscreenModal pour mettre à jour le tableau
+                $('#fullscreenModal').trigger('click');
+            }
 
-                // Mettre à jour la ligne correspondante dans le tableau
-                var tableBody = $('#client-table tbody');
-                var tableRow = tableBody.find('tr[data-tache-id="' + updatedProcedure.tache_id + '"]');
-
-                // Mettre à jour les cellules de la ligne
-                var tdStatus = tableRow.find('td:nth-child(2)');
-                var tdButton = tableRow.find('td:nth-child(3)');
-
-                // Mettre à jour le statut
-                tdStatus.removeClass('btn-danger btn-warning btn-success');
-                if (updatedProcedure.doc_client === null) {
-                    tdStatus.addClass('btn btn-danger');
-                } else if (updatedProcedure.doc_traité) {
-                    tdStatus.addClass('btn btn-success');
-                } else {
-                    tdStatus.addClass('btn btn-warning');
-                }
-                tdStatus.text(' ' + updatedProcedure.status);
-
-                // Mettre à jour le bouton
-                tdButton.empty();
-                if (updatedProcedure.status === 'Soumis') {
-                    var statusButton = $('<button type="button" class="btn btn-primary open-treat-modal" data-bs-toggle="modal" data-bs-target="#treatModal" data-tache-id="' + updatedProcedure.tache_id + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-upload-fill" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0m-.5 14.5V11h1v3.5a.5.5 0 0 1-1 0z"/> </svg></button>');
-                    tdButton.append(statusButton);
-                }
-
-                // Ajouter une nouvelle cellule pour le lien de téléchargement
-                var tdDownload = $('<td>');
-                var downloadLink = $('<a style="text-decoration:none;color:black;"  href="/document_clients/' + updatedProcedure.doc_client + '" target="_blank">' + updatedProcedure.tache.nom_tache + ' <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cloud-arrow-down-fill" viewBox="0 0 16 16"><path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 6.854-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5a.5.5 0 0 1 1 0v3.793l1.146-1.147a.5.5 0 0 1 .708.708z"/></svg></a>');
-                tdDownload.append(downloadLink);
-                tableRow.prepend(tdDownload);
-            },
-
+            ,
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('Erreur lors de la soumission du formulaire : ', textStatus, errorThrown);
                 console.error('Messages d\'erreur : ', jqXHR.responseJSON.errors);
 
                 // Fermer le modal de chargement
-                $('#loadeModal').modal('hide');
+                $('#loadModal').modal('hide');
             }
         });
     });
@@ -517,7 +541,6 @@ $(document).ready(function () {
 
 
 //recupere la procedure lié a la tache a completé et la soumisson du doc coté client
-
 document.addEventListener('DOMContentLoaded', function () {
     const openTaskModalButtons = document.querySelectorAll('.open-task-modal');
     const saveChangesButton = document.getElementById('save-changes-btn');

@@ -218,8 +218,6 @@ class profilController extends Controller
         ]);
     }
 
-
-
     public function treatUpload(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -228,48 +226,64 @@ class profilController extends Controller
         ]);
 
         if ($validator->fails()) {
+            Log::error("Échec de la validation : " . $validator->errors());
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $procedure = Procedure::where('tache_id', $request->tache_id)->first();
+        try {
+            $procedure = Procedure::where('tache_id', $request->tache_id)->first();
 
-
-        if ($procedure->doc_traité) {
-            // Supprimer le fichier existant
-            $existingDocPath = public_path('document_traités/' . $procedure->doc_traité);
-            if (file_exists($existingDocPath)) {
-                unlink($existingDocPath);
+            if (!$procedure) {
+                Log::error("La procédure n'existe pas pour l'ID de tâche : {$request->tache_id}");
+                return response()->json(['error' => 'La procédure n\'existe pas'], 404);
             }
+
+            $procedure->load('tache');
+
+            if ($procedure->doc_traité) {
+                // Supprimer le fichier existant
+                $existingDocPath = public_path('document_traités/' . $procedure->doc_traité);
+                if (file_exists($existingDocPath)) {
+                    unlink($existingDocPath);
+                }
+            }
+
+            $doc = $request->file('doc_traité');
+            $docName = time() . '.' . $doc->getClientOriginalExtension();
+            $doc->move(public_path('document_traités'), $docName);
+
+            $procedure->doc_traité = $docName;
+            $procedure->status = "Terminé";
+            $procedure->save();
+
+            // Créer l'URL du fichier téléchargé
+            $fileUrl = asset('document_traités/' . $docName);
+
+            Notification::create([
+                'message' => '' . $procedure->tache->nom_tache . ' a été traité avec succès! Merci de consulter le panel tâche pour télécharger votre document ',
+                'user_id' => $procedure->user_id,
+            ]);
+
+            // Récupérer l'utilisateur associé à la procédure sélectionnée
+            $user = $procedure->user;
+
+            // Récupérer toutes les procédures de cet utilisateur
+            $procedures = $user->procedures()->with('tache')->get();
+
+            // Récupérer toutes les tâches uniques associées à ces procédures
+            $taches = $procedures->pluck('tache')->unique();
+
+            // Renvoie la réponse à la requête AJAX avec les procédures, les tâches et l'URL du fichier
+            return response()->json([
+                'message' => 'Téléchargement effectué avec succès',
+                'procedure' => $procedure,
+                'tache' => $procedure->tache,
+                'procedures' => $procedures,
+                'taches' => $taches
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Erreur lors du traitement de la requête : " . $e->getMessage());
+            return response()->json(['error' => 'Erreur lors du traitement de la requête'], 500);
         }
-
-        $doc = $request->file('doc_traité');
-        $docName = time() . '.' . $doc->getClientOriginalExtension();
-        $doc->move(public_path('document_traités'), $docName);
-
-        $procedure->doc_traité = $docName;
-        $procedure->status = "Terminé";
-        $procedure->save();
-
-        // Créer l'URL du fichier téléchargé
-        $fileUrl = asset('document_traités/' . $docName);
-
-        Notification::create([
-            'message' => 'Votre document pour' . $procedure->tache()->nom_tache . ' a ete traité avec succes!Merci de consulter le panel tache pour 
-            telecharger votre ',
-            'user_id' => $procedure->user_id,
-        ]);
-
-        $procedures = Procedure::with('tache')->where('user_id', $procedure->user_id)->get();
-
-        // Renvoie la réponse à la requête AJAX avec l'URL du fichier
-        return response()->json([
-            'message' => 'Téléchargement effectué avec succès',
-            'procedure' => $procedure,
-            'procedures' => $procedures,
-            'taches' => $procedures->pluck('tache')->unique(),
-            'file_Url' => $fileUrl
-
-        ]);
     }
-
 }
