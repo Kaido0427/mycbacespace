@@ -9,6 +9,8 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css" />
+
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss'])
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -71,7 +73,7 @@
 
                     <div class="modal fade" id="chargeModal" tabindex="-1" aria-labelledby="loaderModalLabel"
                         aria-hidden="true">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-body text-center">
                                     <div class="spinner-border" role="status">
@@ -82,44 +84,63 @@
                         </div>
                     </div>
                     <h3 class="text-center">RELANCES DES CLIENTS</h3>
-
-                    @foreach ($tachesWithPendingClients as $tache)
-                        @php
-                            $hasPendingProcedures = $tache->procedures->isNotEmpty();
-                        @endphp
-                        <table class="table table-bordered table-striped" id="tache-table-{{ $tache->id }}">
+                    <div class="products-area-wrapper tableView">
+                        <input type="hidden" id="searchInput" placeholder="Rechercher par tâche">
+                        <table class="simple-table" id="" style="width: 100%;">
                             <thead>
                                 <tr>
-                                    <th class="text-center" colspan="4">
-                                        {{ $tache->nom_tache }}
-                                        @if ($hasPendingProcedures)
-                                            <button id="relance-button" type="button"
-                                                class="btn btn-primary btn-sm relance-button"
-                                                data-tache-id="{{ $tache->id }}"
-                                                data-route="{{ route('relance') }}">
-                                                Relancer
-                                            </button>
-                                        @endif
-                                    </th>
-                                </tr>
-                                <tr>
+                                    <th>Tâche</th>
+                                    <th>Catégorie</th>
                                     <th>Nom</th>
                                     <th>Prénoms</th>
-                                    <th>Type</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($tache->procedures as $procedure)
-                                    <tr>
-                                        <td>{{ $procedure->user->nom }}</td>
-                                        <td>{{ $procedure->user->prenoms }}</td>
-                                        <td>{{ $procedure->categorie->nom_categorie }}</td>
-                                    </tr>
+                                @php $index = 0; @endphp
+                                @foreach ($tachesWithPendingClients as $tache)
+                                    @php $proceduresByCategory = $tache->procedures->groupBy('categorie_id'); @endphp
+                                    @php $totalProcedures = $tache->procedures->count(); @endphp
+                                    @foreach ($proceduresByCategory as $categoryId => $procedures)
+                                        @foreach ($procedures as $index => $procedure)
+                                            <tr>
+                                                @if ($index === 0)
+                                                    <td rowspan="{{ $totalProcedures }}">{{ $tache->nom_tache }}</td>
+                                                    <td rowspan="{{ count($procedures) }}">
+                                                        {{ $procedure->categorie->nom_categorie }}</td>
+                                                @endif
+                                                <td>{{ $procedure->user->nom }}</td>
+                                                <td>{{ $procedure->user->prenoms }}</td>
+                                                @if ($index === 0)
+                                                    <td rowspan="{{ $totalProcedures }}">
+                                                        @if ($tache->procedures->isNotEmpty())
+                                                            <button id="relance-button" type="button"
+                                                                class="btn btn-primary btn-sm relance-button"
+                                                                data-tache-id="{{ $tache->id }}"
+                                                                data-tache-name="{{ $tache->nom_tache }}"
+                                                                data-route="{{ route('relance') }}">
+                                                                Relancer
+                                                            </button>
+                                                        @else
+                                                            &nbsp;
+                                                        @endif
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
+                                        @if (!$loop->last)
+                                            <tr class="spacer-row">
+                                                <td colspan="5"></td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>
-                        <hr style="border-top: 2px solid #ff0000;">
-                    @endforeach
+                    </div>
+
+
+
 
                     <div id="modal-backdrop"></div>
                 </div>
@@ -128,107 +149,74 @@
                     <h3 class="text-center">ADHERANTS</h3>
                     <hr>
                     <div class="products-area-wrapper tableView">
-                        <div class="products-header">
-                            <div class="product-cell image">
-                                Prénoms & Nom
-                                <button class="sort-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 512 512">
-                                        <path fill="currentColor"
-                                            d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="product-cell category">Type<button class="sort-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 512 512">
-                                        <path fill="currentColor"
-                                            d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" />
-                                    </svg>
-                                </button></div>
-                            <div class="product-cell status-cell">Date d'adhésion<button class="sort-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 512 512">
-                                        <path fill="currentColor"
-                                            d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" />
-                                    </svg>
-                                </button></div>
-
-                            <div class="product-cell stock">Détails<button class="sort-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        viewBox="0 0 512 512">
-                                        <path fill="currentColor"
-                                            d="M496.1 138.3L375.7 17.9c-7.9-7.9-20.6-7.9-28.5 0L226.9 138.3c-7.9 7.9-7.9 20.6 0 28.5 7.9 7.9 20.6 7.9 28.5 0l85.7-85.7v352.8c0 11.3 9.1 20.4 20.4 20.4 11.3 0 20.4-9.1 20.4-20.4V81.1l85.7 85.7c7.9 7.9 20.6 7.9 28.5 0 7.9-7.8 7.9-20.6 0-28.5zM287.1 347.2c-7.9-7.9-20.6-7.9-28.5 0l-85.7 85.7V80.1c0-11.3-9.1-20.4-20.4-20.4-11.3 0-20.4 9.1-20.4 20.4v352.8l-85.7-85.7c-7.9-7.9-20.6-7.9-28.5 0-7.9 7.9-7.9 20.6 0 28.5l120.4 120.4c7.9 7.9 20.6 7.9 28.5 0l120.4-120.4c7.8-7.9 7.8-20.7-.1-28.5z" />
-                                    </svg>
-                                </button></div>
-
-                        </div>
-                        @forelse ($clients as $client)
-                            <div class="products-row">
-                                <button class="cell-more-button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-more-vertical">
-                                        <circle cx="12" cy="12" r="1" />
-                                        <circle cx="12" cy="5" r="1" />
-                                        <circle cx="12" cy="19" r="1" />
-                                    </svg>
-                                </button>
-                                <div class="product-cell image">
-                                    <img style="object-fit: cover;"
-                                        src="{{ asset('avatars/' . $client->avatar->image) }}" alt="photo du client">
-                                    <span>{{ $client->prenoms }} {{ $client->nom }} </span>
-                                </div>
-                                <div class="product-cell category"><span class="cell-label">Category:</span>
-                                    {{ $client->procedures->unique('id')->pluck('categorie')->unique('id')->pluck('nom_categorie')->join(',') }}
-
-                                </div>
-                                <div class="product-cell status-cell">
-
-                                    <span
-                                        class="status">{{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}</span>
-                                </div>
-                                <div class="product-cell sales">
-                                    <button data-bs-toggle="modal" data-bs-target="#fullscreenModal"
-                                        class="btn btn-outline-primary" data-client-id="{{ $client->id }}"
-                                        data-client-image="{{ asset('avatars/' . $client->avatar->image) }}"
-                                        data-client-datecreate="{{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}"
-                                        data-client-reason="{{ $client->raison }}"
-                                        data-client-declaration="{{ $client->declaration }}"
-                                        data-client-service="<ul>{{ $client->services->unique('id')->map(function ($service) {
-                                                return '<li>' . e($service->nom_service) . '</li>';
-                                            })->join('') }}</ul>"
-                                        data-client-engagement="{{ $client->engagement }}"
-                                        data-engag-sup-client="{{ $client->engagsup }}"
-                                        data-entreprise-client-date="{{ \Carbon\Carbon::parse(auth()->user()->date)->isoFormat('D MMMM YYYY') }}"
-                                        data-origine-client="{{ $client->procedures->unique('id')->map(function ($procedure) {
-                                                return $procedure->categorie->nom_categorie;
-                                            })->unique()->join(',') }}"
-                                        data-client-associes="{{ $client->numAssocies }}"
-                                        data-client-regime="{{ $client->regime }}"
-                                        data-client-nom="{{ $client->nom }}"
-                                        data-client-prenoms="{{ $client->prenoms }}"
-                                        data-procedures="{{ json_encode($client->procedures) }}"
-                                        data-taches="{{ json_encode($client->taches) }}">
-
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
-                                            <path
-                                                d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
-                                        </svg>
-                                    </button>
-                                </div>
-
-
-                            </div>
-                        @empty
-                            <div class="text-center">
-                                INDISPONIBLE!
-                            </div>
-                        @endforelse
+                        <table id="clients-table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Prénoms & Nom</th>
+                                    <th>Type</th>
+                                    <th>Date d'adhésion</th>
+                                    <th>Détails</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($clients as $client)
+                                    <tr>
+                                        <td>
+                                            <div class="product-cell image">
+                                                <img style="object-fit: cover;"
+                                                    src="{{ asset('avatars/' . $client->avatar->image) }}"
+                                                    alt="photo du client">
+                                                <span>{{ $client->prenoms }} {{ $client->nom }}</span>
+                                            </div>
+                                        </td>
+                                        <td><span>
+                                                {{ $client->procedures->unique('id')->pluck('categorie')->unique('id')->pluck('nom_categorie')->join(',') }}
+                                            </span>
+                                        </td>
+                                        <td>{{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}
+                                        </td>
+                                        <td>
+                                            <div class="product-cell sales">
+                                                <button data-bs-toggle="modal" data-bs-target="#fullscreenModal"
+                                                    class="btn btn-outline-primary"
+                                                    data-client-id="{{ $client->id }}"
+                                                    data-client-image="{{ asset('avatars/' . $client->avatar->image) }}"
+                                                    data-client-datecreate="{{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}"
+                                                    data-client-reason="{{ $client->raison }}"
+                                                    data-client-declaration="{{ $client->declaration }}"
+                                                    data-client-service="<ul>{{ $client->services->unique('id')->map(function ($service) {return '<li>' . e($service->nom_service) . '</li>';})->join('') }}</ul>"
+                                                    data-client-engagement="{{ $client->engagement }}"
+                                                    data-engag-sup-client="{{ $client->engagsup }}"
+                                                    data-entreprise-client-date="{{ \Carbon\Carbon::parse(auth()->user()->date)->isoFormat('D MMMM YYYY') }}"
+                                                    data-origine-client="{{ $client->procedures->unique('id')->map(function ($procedure) {return $procedure->categorie->nom_categorie;})->unique()->join(',') }}"
+                                                    data-client-associes="{{ $client->numAssocies }}"
+                                                    data-client-regime="{{ $client->regime }}"
+                                                    data-client-nom="{{ $client->nom }}"
+                                                    data-client-prenoms="{{ $client->prenoms }}"
+                                                    data-procedures="{{ json_encode($client->procedures) }}"
+                                                    data-taches="{{ json_encode($client->taches) }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                        height="16" fill="currentColor" class="bi bi-eye-fill"
+                                                        viewBox="0 0 16 16">
+                                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                                                        <path
+                                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            INDISPONIBLE!
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
+
 
                     <!-- Modal -->
                     <div class="modal fade" id="treatModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -388,7 +376,7 @@
 
                 </div>
                 <div id="settings">
-                    <h3 style="color: #fff" class="text-center">PARAMETRES DE COMPTE</h3>
+                    <h3 class="text-center">PARAMETRES DE COMPTE</h3>
                     <hr style="color: #fff;">
                     <div class="container">
                         <div class="row justify-content-center">
@@ -617,6 +605,11 @@
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.min.js"></script>
+    <script>
+        let table = new DataTable('#clients-table');
+        let tableRelance = new DataTable('.relances-table');
+    </script>
 </body>
 
 </html>

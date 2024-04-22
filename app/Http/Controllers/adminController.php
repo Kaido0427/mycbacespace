@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use App\Models\tache;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -20,10 +21,23 @@ class adminController extends Controller
             }])->findOrFail($tacheId);
 
             foreach ($tacheWithPendingClients->procedures as $procedure) {
-                Notification::create([
-                    'message' => 'Vous n\'avez pas encore effectué la tâche concernant ' . $procedure->tache->nom_tache . '. Veuillez fournir le document demandé.',
-                    'user_id' => $procedure->user->id
-                ]);
+                // Vérifier si une notification existe déjà pour cet utilisateur et cette tâche
+                $existingNotification = Notification::where('user_id', $procedure->user->id)
+                    ->where('message', 'LIKE', '%' . $procedure->tache->nom_tache . '%')
+                    ->first();
+
+                if ($existingNotification) {
+                    // Mise à jour de la notification existante avec un nouveau message
+                    $existingNotification->update([
+                        'message' => 'Nous attendons toujours la soumission ou l\'accomplissement de '. $procedure->tache->nom_tache 
+                    ]);
+                } else {
+                    // Création d'une nouvelle notification
+                    Notification::create([
+                        'message' => 'Vous n\'avez pas encore effectué la tâche concernant ' . $procedure->tache->nom_tache . '. Veuillez fournir le document demandé.',
+                        'user_id' => $procedure->user->id
+                    ]);
+                }
             }
 
             return response()->json(['success' => true]);
@@ -36,6 +50,23 @@ class adminController extends Controller
         }
     }
 
+
+    public function searchClients(Request $request)
+    {
+        $searchQuery = $request->input('query');
+
+        $clients = User::where('user_type', 'client')
+            ->where(function ($query) use ($searchQuery) {
+                $query->where('prenoms', 'like', "%{$searchQuery}%")
+                    ->orWhere('nom', 'like', "%{$searchQuery}%")
+                    ->orWhereHas('procedures.categorie', function ($subquery) use ($searchQuery) {
+                        $subquery->where('nom_categorie', 'like', "%{$searchQuery}%");
+                    });
+            })
+            ->get();
+
+        return response()->json($clients);
+    }
 
 
 

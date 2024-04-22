@@ -55,6 +55,7 @@ body {
     background-color: var(--app-bg);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color: var(--app-content-main-color);
 }
 
 html,
@@ -1031,4 +1032,22 @@ body,
 /* Masquer les icônes par défaut */
 .mode-switch .icon svg {
     opacity: 0;
-  }
+}
+
+
+//relance_path
+
+.simple-table th,
+.simple-table td {
+    padding: 0.75rem;
+    border: 1px solid var(--app-content-secondary-color);
+    ;
+}
+
+.simple-table th {
+    background-color: var(--app-bg);
+}
+
+.simple-table tbody tr:nth-child(odd) {
+    background-color: var(--app-bg);
+}
