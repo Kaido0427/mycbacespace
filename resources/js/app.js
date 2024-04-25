@@ -739,29 +739,7 @@ $(document).ready(function () {
 
 let table = new DataTable('#clients-table')
 
-$(document).ready(function () {
-    $('#searchInput').on('input', function () {
-        var searchText = $(this).val().toLowerCase();
-        $('tbody tr').each(function () {
-            var tacheText = $(this).find('td:first-child').text().toLowerCase();
-            var words = searchText.split(' ').filter(function (word) {
-                return word.length > 0;
-            });
-            var matched = true;
-            for (var i = 0; i < words.length; i++) {
-                if (tacheText.indexOf(words[i]) !== 0) {
-                    matched = false;
-                    break;
-                }
-            }
-            if (matched) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    });
-});
+
 
 
 
