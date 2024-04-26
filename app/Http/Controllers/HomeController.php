@@ -50,6 +50,7 @@ class HomeController extends Controller
 
         $notifications = auth()->user()->notifications()->orderByDesc('created_at')->get();
 
+        
 
         // J'affiche le tableau de bord en fonction de mon rôle d'utilisateur
         if ($role === 'admin') {

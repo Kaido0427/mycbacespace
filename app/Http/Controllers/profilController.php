@@ -130,10 +130,24 @@ class profilController extends Controller
 
     public function tasks()
     {
-        $procedures = Procedure::where('user_id', auth()->user()->id)->get();
+        $procedures = Procedure::where('user_id', auth()->user()->id)
+            ->with('tache')
+            ->get()
+            ->map(function ($procedure) {
+                return [
+                    'id' => $procedure->id,
+                    'tache' => [
+                        'id' => $procedure->tache->id,
+                        'nom_tache' => $procedure->tache->nom_tache,
+                        'description' => $procedure->tache->description,
+                    ],
+                    'doc_client' => $procedure->doc_client,
+                    'doc_traité' => $procedure->doc_traité,
+                    'status' => $procedure->status,
+                ];
+            });
 
-        return view('dashbord', compact('procedures
-        '));
+        return response()->json($procedures);
     }
 
     public function docsUpload(Request $request)

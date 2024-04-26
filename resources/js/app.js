@@ -754,7 +754,36 @@ let table = new DataTable('#clients-table')
 
 
 
+//labarre de progression sur chez le client
 
+$(document).ready(function () {
+    updateProgressBar();
+});
+
+function updateProgressBar() {
+    $.ajax({
+        url: '/tasks',
+        type: 'GET',
+        dataType: 'json',
+        success: function (procedures) {
+            const totalProcedures = procedures.length;
+            const proceduresTerminees = procedures.filter(procedure => procedure.doc_traité !== null).length;
+            const progression = (proceduresTerminees / totalProcedures) * 100;
+
+            const progressBar = $('#progressbar');
+            if (totalProcedures === 0) {
+                progressBar.css('width', '0%');
+            } else {
+                const progressionStep = 100 / totalProcedures;
+                progressBar.css('width', `${progressionStep * proceduresTerminees}%`);
+            }
+            progressBar.attr('aria-valuenow', progression);
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+}
 
 
 

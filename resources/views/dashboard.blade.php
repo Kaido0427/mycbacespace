@@ -250,15 +250,16 @@
                                                         <strong>MA PROGRESSION</strong>
                                                     </div>
                                                     <div class="progress mb-3" style="height: 5px">
-                                                        <div class="progress-bar bg-primary" id="progressbar"
-                                                            role="progressbar" style="width: 80%" aria-valuenow="80"
-                                                            aria-valuemin="0" aria-valuemax="100"></div>
+                                                        <div class="progress-bar bg-primary progress-bar-animated"
+                                                            id="progressbar" role="progressbar" style="width: 0%"
+                                                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -756,6 +757,38 @@
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            updateProgressBar();
+        });
+
+        function updateProgressBar() {
+            $.ajax({
+                url: '/tasks',
+                type: 'GET',
+                dataType: 'json',
+                success: function(procedures) {
+                    const totalProcedures = procedures.length;
+                    const proceduresTerminees = procedures.filter(procedure => procedure.doc_traité !== null)
+                        .length;
+
+                    const progressBar = $('#progressbar');
+                    if (totalProcedures === 0) {
+                        progressBar.css('width', '0%');
+                        progressBar.attr('aria-valuenow', 0);
+                    } else {
+                        const progression = (proceduresTerminees / totalProcedures) * 100;
+                        progressBar.animate({ width: `${progression}%` }, 1500); 
+                        progressBar.attr('aria-valuenow', progression);
+                    }
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

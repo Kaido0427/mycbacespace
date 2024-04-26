@@ -44,4 +44,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/send-notification', [adminController::class, 'relanceTache'])->name('relance');
     Route::get('/search-clients', [adminController::class, 'searchClients']);
     Route::get('/mynotifs', [HomeController::class, 'mynotifs']);
+    Route::get('/tasks', [profilController::class, 'tasks']);
 });
