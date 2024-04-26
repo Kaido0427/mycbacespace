@@ -455,9 +455,6 @@
                                         <div id="loadingSpinner" class="spinner-border text-primary" role="status">
                                             <span class="visually-hidden">Chargement...</span>
                                         </div>
-
-                                        <!-- Message -->
-                                        <p id="loadingMessage" class="mt-2">Patientez un instant</p>
                                     </div>
                                 </div>
                             </div>

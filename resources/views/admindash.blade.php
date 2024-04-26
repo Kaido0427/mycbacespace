@@ -139,9 +139,6 @@
                         </table>
                     </div>
 
-
-
-
                     <div id="modal-backdrop"></div>
                 </div>
 
@@ -216,7 +213,6 @@
                             </tbody>
                         </table>
                     </div>
-
 
                     <!-- Modal -->
                     <div class="modal fade" id="treatModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -347,16 +343,17 @@
                                             </div>
 
                                             <div class="col-12 col-md-8 ">
-                                                <table id="client-table" class="table-responsive">
+
+                                                <table id="client-table">
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Taches/Documents à fournir</th>
-                                                            <th scope="col">Status</th>
-                                                            <th scope="col"></th>
+                                                            <th>Tâche</th>
+                                                            <th>Statut</th>
+                                                            <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <!-- Le contenu du tableau sera généré dynamiquement par le script -->
+                                                 
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -372,7 +369,6 @@
                             </div>
                         </div>
                     </div>
-
 
                 </div>
                 <div id="settings">
@@ -529,9 +525,6 @@
                                         <div id="loadingSpinner" class="spinner-border text-primary" role="status">
                                             <span class="visually-hidden">Chargement...</span>
                                         </div>
-
-                                        <!-- Message -->
-                                        <p id="loadingMessage" class="mt-2">Patientez un instant</p>
                                     </div>
                                 </div>
                             </div>

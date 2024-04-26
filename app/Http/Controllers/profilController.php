@@ -277,6 +277,7 @@ class profilController extends Controller
             return response()->json([
                 'message' => 'Téléchargement effectué avec succès',
                 'procedure' => $procedure,
+                'nouveau_statut' => $procedure->status,
                 'tache' => $procedure->tache,
                 'procedures' => $procedures,
                 'taches' => $taches
@@ -285,5 +286,9 @@ class profilController extends Controller
             Log::error("Erreur lors du traitement de la requête : " . $e->getMessage());
             return response()->json(['error' => 'Erreur lors du traitement de la requête'], 500);
         }
+    }
+
+    public function getProcedureAndTasks(){
+        
     }
 }

@@ -259,6 +259,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Mettre à jour le message en fonction du résultat
                 if (response.success) {
                     // Vider le champ input file
+
+                    // Fermer le modal de chargement après 0.5 secondes
+                    setTimeout(() => {
+                        $('#loadingModal').modal('hide');
+                    }, 500);
                     imageInput.value = '';
 
                     // Mettre à jour l'image de profil affichée
@@ -270,20 +275,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     sidebarPic.src = imageUrl;
                     profilPic.src = imageUrl;
 
-                    // Mettre à jour le message
-                    loadingMessage.innerText = 'Enregistré';
+           
                 } else {
 
                     // Afficher une notification ou traiter l'erreur selon vos besoins
                     console.error('Réponse AJAX avec succès mais avec une erreur :', response);
-                    // Mettre à jour le message
-                    loadingMessage.innerText = 'Une erreur est survenue';
+                  
                 }
 
-                // Fermer le modal de chargement après 0.5 secondes
-                setTimeout(() => {
-                    $('#loadingModal').modal('hide');
-                }, 1000);
+
             },
             error: (xhr, status, error) => {
                 imageInput.value = '';
@@ -393,6 +393,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     var procedures;
     var taches;
+
     function updateFullscreenModal(event) {
         var button = $(event.relatedTarget);
 
@@ -411,8 +412,8 @@ $(document).ready(function () {
         var clientRegime = button.data('client-regime');
         var clientName = button.data('client-nom');
         var clientPrenoms = button.data('client-prenoms');
-        var procedures = button.data('procedures');
-        var taches = button.data('taches');
+        procedures = button.data('procedures');
+        taches = button.data('taches');
 
         // Mettre à jour l'image et les informations du client
         $('#img-client').attr('src', clientImage);
@@ -432,7 +433,6 @@ $(document).ready(function () {
             var tableBody = $('#client-table tbody');
             tableBody.empty();
 
-            // Vérifier que les deux tableaux ont la même longueur
             if (procedures.length === taches.length) {
                 for (var i = 0; i < procedures.length; i++) {
                     var procedure = procedures[i];
@@ -453,8 +453,7 @@ $(document).ready(function () {
                     row.append(tdDownload);
 
                     // Ajouter la cellule pour le statut
-                    var statusText = $('<span>').text(' ' + procedure.status);
-                    tdStatus.append(statusText);
+                    tdStatus.text(' ' + procedure.status);
 
                     tdStatus.removeClass('btn-danger btn-warning btn-success');
                     if (procedure.doc_client === null) {
@@ -493,20 +492,15 @@ $(document).ready(function () {
 
     $('#fullscreenModal').on('show.bs.modal', updateFullscreenModal);
 
-    // Sélectionner le bouton "Save changes"
     const saveChangesButton = document.getElementById('treat-btn');
 
-    // Ajouter un écouteur d'événement sur le clic du bouton "Save changes"
     saveChangesButton.addEventListener('click', function () {
-        // Récupérer le formulaire et les données du formulaire
         const form = document.querySelector('#treatForm');
         const formData = new FormData(form);
 
-        // Afficher le loader
         $('#treatModal').modal('hide');
         $('#loadModal').modal('show');
 
-        // Soumettre le formulaire via AJAX sans délai
         $.ajax({
             url: form.action,
             type: 'POST',
@@ -514,26 +508,40 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (response) {
+
                 console.log('Formulaire soumis avec succès');
                 console.log('Données de la réponse :', response);
 
-                // Fermer le loader après 1 seconde
                 setTimeout(function () {
                     $('#loadModal').modal('hide');
                 }, 1000);
                 procedures = response.procedures;
                 taches = response.taches;
 
-                // Appeler la fonction updateFullscreenModal pour mettre à jour le tableau
-                $('#fullscreenModal').trigger('click');
-            }
+                // Parcourir les tâches et mettre à jour les cellules de statut correspondantes
+                for (var i = 0; i < procedures.length; i++) {
+                    var procedure = procedures[i];
+                    var tache = taches[i];
+                    var statusCell = $('#status-' + tache.id);
 
-            ,
+                    // Mettre à jour le contenu de la cellule de statut
+                    statusCell.text(' ' + procedure.status);
+
+                    // Mettre à jour la classe de la cellule de statut
+                    statusCell.removeClass('btn-danger btn-warning btn-success');
+                    if (procedure.doc_client === null) {
+                        statusCell.addClass('btn btn-danger');
+                    } else if (procedure.doc_traité) {
+                        statusCell.addClass('btn btn-success');
+                    } else {
+                        statusCell.addClass('btn btn-warning');
+                    }
+                }
+            },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('Erreur lors de la soumission du formulaire : ', textStatus, errorThrown);
                 console.error('Messages d\'erreur : ', jqXHR.responseJSON.errors);
 
-                // Fermer le modal de chargement
                 $('#loadModal').modal('hide');
             }
         });
