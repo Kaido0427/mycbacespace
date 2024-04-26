@@ -201,6 +201,12 @@ class profilController extends Controller
 
         Log::info('tache: ', ['tache' => $tache]);
 
+        Notification::create([
+            'message' => '' . $procedure->tache->nom_tache . ' a été soumis avec succès! Merci de patienter durant  le traitement de votre document ',
+            'user_id' => $procedure->user_id,
+            'status'=>$procedure->status
+        ]);
+
         // Créer l'URL du fichier téléchargé
         $fileUrl = asset('document_clients/' . $docName);
 
@@ -262,6 +268,7 @@ class profilController extends Controller
             Notification::create([
                 'message' => '' . $procedure->tache->nom_tache . ' a été traité avec succès! Merci de consulter le panel tâche pour télécharger votre document ',
                 'user_id' => $procedure->user_id,
+                'status'=>$procedure->status
             ]);
 
             // Récupérer l'utilisateur associé à la procédure sélectionnée
@@ -288,7 +295,5 @@ class profilController extends Controller
         }
     }
 
-    public function getProcedureAndTasks(){
-        
-    }
+ 
 }

@@ -41,8 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tacheUpdate', [profilController::class, 'docsUpload'])->name('task.update');
     Route::post('/taches', [profilController::class, 'tasks'])->name('task.index');
     Route::post('/tasks/relance', [HomeController::class, 'relance'])->name('tasks.relance');
-    Route::post('/send-notification', [adminController::class,'relanceTache'])->name('relance');
-    Route::get('/search-clients', [adminController::class,'searchClients']);
-
-
+    Route::post('/send-notification', [adminController::class, 'relanceTache'])->name('relance');
+    Route::get('/search-clients', [adminController::class, 'searchClients']);
+    Route::get('/mynotifs', [HomeController::class, 'mynotifs']);
 });

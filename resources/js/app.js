@@ -275,12 +275,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     sidebarPic.src = imageUrl;
                     profilPic.src = imageUrl;
 
-           
+
                 } else {
 
                     // Afficher une notification ou traiter l'erreur selon vos besoins
                     console.error('Réponse AJAX avec succès mais avec une erreur :', response);
-                  
+
                 }
 
 
@@ -508,26 +508,31 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (response) {
-
                 console.log('Formulaire soumis avec succès');
                 console.log('Données de la réponse :', response);
 
                 setTimeout(function () {
                     $('#loadModal').modal('hide');
                 }, 1000);
+
                 procedures = response.procedures;
                 taches = response.taches;
 
-                // Parcourir les tâches et mettre à jour les cellules de statut correspondantes
-                for (var i = 0; i < procedures.length; i++) {
-                    var procedure = procedures[i];
+                // Loop through the tasks and update the corresponding status cells
+                for (var i = 0; i < taches.length; i++) {
                     var tache = taches[i];
+                    var procedure = procedures.find(function (proc) {
+                        return proc.tache_id === tache.id;
+                    });
                     var statusCell = $('#status-' + tache.id);
 
-                    // Mettre à jour le contenu de la cellule de statut
+                    // Store the cell's content in a const variable
+                    const statusContent = statusCell.text().trim();
+
+                    // Update the content of the cell
                     statusCell.text(' ' + procedure.status);
 
-                    // Mettre à jour la classe de la cellule de statut
+                    // Update the class of the cell
                     statusCell.removeClass('btn-danger btn-warning btn-success');
                     if (procedure.doc_client === null) {
                         statusCell.addClass('btn btn-danger');
@@ -538,6 +543,7 @@ $(document).ready(function () {
                     }
                 }
             },
+
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('Erreur lors de la soumission du formulaire : ', textStatus, errorThrown);
                 console.error('Messages d\'erreur : ', jqXHR.responseJSON.errors);
@@ -743,9 +749,12 @@ $(document).ready(function () {
 });
 
 
-///La barre de recherche
-
+///Le tableau qui listes les clients
 let table = new DataTable('#clients-table')
+
+
+
+
 
 
 

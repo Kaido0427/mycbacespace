@@ -10,6 +10,7 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss', 'resources/scss/notif.scss'])
+    @vite(['ressources/js/notifs.js'])
 
 </head>
 
@@ -59,8 +60,8 @@
             <div class="app-content" style="overflow-y: auto; height: calc(100vh - );">
 
                 <div id="profil">
-                    <h3 style="color: #fff" class="text-center">MON PROFIL</h3>
-                    <hr style="color: #fff;">
+                    <h3 class="text-center">MON PROFIL</h3>
+                    <hr>
                     <!-- Modal -->
                     <div class="modal fade" id="adhDetails" tabindex="-1" role="dialog"
                         aria-labelledby="userInfoModalLabel" aria-hidden="true">
@@ -264,8 +265,8 @@
                     </div>
                 </div>
                 <div id="tasks">
-                    <h3 style="color: #fff" class="text-center">MES TACHES</h3>
-                    <hr style="color: #fff;">
+                    <h3 class="text-center">MES TACHES</h3>
+                    <hr>
                     <div class="row">
                         @foreach ($user->taches as $tache)
                             <div class="col ">
@@ -368,40 +369,45 @@
                 </div>
 
                 <div id="relances">
-                    <h3 style="color: #000" class="text-center">MES NOTIFICATIONS</h3>
-                    <hr style="color: #fff;">
+                    <h3 class="text-center">MES NOTIFICATIONS</h3>
+                    <hr>
                     <section class="section-50">
                         <div class="container">
                             <div class="notification-ui_dd-content">
-                                @forelse (auth()->user()->notifications as $notification)
+                                @forelse ($notifications as $notification)
                                     <div class="notification-list unread">
                                         <div class="notification-list_content">
                                             <div class="notification-list_img">
-                                                <img src="{{ asset('dist/notiftaskpending.png') }}" alt="user">
+                                                @if ($notification->status === 'Attente')
+                                                    <img src="{{ asset('dist/notiftaskcancel.png') }}"
+                                                        alt="user">
+                                                @elseif ($notification->status === 'Terminé')
+                                                    <img src="{{ asset('dist/notiftasksuccess.png') }}"
+                                                        alt="user">
+                                                @else
+                                                    <img src="{{ asset('dist/notiftaskpending.png') }}"
+                                                        alt="user">
+                                                @endif
                                             </div>
                                             <div class="notification-list_detail">
-                                         
                                                 <p class="text-muted">{{ $notification->message }}</p>
                                                 <p class="text-muted">
-                                                    <small>{{ $notification->created_at->diffForHumans() }}</small></p>
+                                                    <small>{{ $notification->created_at->diffForHumans() }}</small>
+                                                </p>
                                             </div>
-                                        </div>
-                                        <div class="notification-list_feature-img">
-                                            <img src="{{ asset('dist/goto.png') }}" alt="Feature image">
                                         </div>
                                     </div>
                                 @empty
-                                
+                                    <p>Aucune notification pour le moment.</p>
                                 @endforelse
-                                
                             </div>
                         </div>
                     </section>
                 </div>
 
                 <div id="settings">
-                    <h3 style="color: #fff" class="text-center">PARAMETRES DE COMPTE</h3>
-                    <hr style="color: #fff;">
+                    <h3 class="text-center">PARAMETRES DE COMPTE</h3>
+                    <hr>
                     <div class="container">
                         <div class="row justify-content-center">
 

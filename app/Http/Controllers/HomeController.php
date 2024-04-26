@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\procedure;
 use App\Models\tache;
 use App\Models\User;
 use App\Notifications\TaskRelanceNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use PHPUnit\Framework\MockObject\Stub\ReturnReference;
 
 class HomeController extends Controller
 {
@@ -44,12 +48,14 @@ class HomeController extends Controller
             ->has('procedures', '>', 0)
             ->get();
 
+        $notifications = auth()->user()->notifications()->orderByDesc('created_at')->get();
+
 
         // J'affiche le tableau de bord en fonction de mon rôle d'utilisateur
         if ($role === 'admin') {
             return view('admindash', compact('clients', 'client', 'role', 'user', 'tachesWithPendingClients'));
         } else {
-            return view('dashboard', compact('user'));
+            return view('dashboard', compact('user','notifications'));
         }
     }
 
@@ -68,4 +74,6 @@ class HomeController extends Controller
     {
         return view('mails.error');
     }
+
+
 }

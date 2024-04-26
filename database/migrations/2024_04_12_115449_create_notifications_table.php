@@ -16,6 +16,7 @@ return new class extends Migration
             $table->text('message');
             $table->foreignId('user_id')->constrained();
             $table->boolean('read')->default(false);
+            $table->string('status');
             $table->timestamps();
         });
     }
