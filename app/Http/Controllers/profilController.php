@@ -10,6 +10,7 @@ use App\Notifications\myNotifs;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -81,66 +82,50 @@ class profilController extends Controller
 
     public function storeOrUpdateImage(Request $request)
     {
-        try {
-            // Valider les données de la requête
-            $request->validate([
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif,bmp,svg,webp,ico|max:2048',
-            ]);
-        } catch (ValidationException $e) {
-            // En cas d'erreur de validation, enregistrer un log d'erreur
-            Log::error('Erreur de validation de la photo de profil pour l\'utilisateur: ' . Auth::id() . '. Message d\'erreur: ' . $e->getMessage());
+        $validatedData = $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,bmp,svg,webp,ico|max:2048',
+        ]);
 
-            // Retourner une réponse JSON d'erreur
-            return response()->json(['success' => false, 'message' => 'Le format de l\'image n\'est pas valide. Veuillez réessayer.']);
-        }
+        $user = Auth::user();
 
-        try {
-            // Récupérer l'utilisateur connecté
-            $user = Auth::user();
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $imagePath = public_path('avatars/' . $imageName);
 
-            // Vérifier si un fichier a été téléchargé
-            if ($request->hasFile('image')) {
-                // Traitement de l'image
-                $image = $request->file('image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('avatars'), $imageName);
+            // Déplacer la nouvelle image vers le dossier avatars
+            $image->move(public_path('avatars'), $imageName);
 
-                // Vérifier si l'utilisateur a déjà un avatar
-                if ($user->avatar) {
-                    // Mettre à jour l'avatar existant
-                    $avatar = $user->avatar;
-
-                    // Supprimer l'ancienne photo de profil du dossier avatars
-                    if (file_exists(public_path('avatars/' . $avatar->image))) {
-                        unlink(public_path('avatars/' . $avatar->image));
-                    }
-
-                    // Mettre à jour l'avatar avec la nouvelle photo
-                    $avatar->image = $imageName;
-                    $avatar->save();
-                } else {
-                    // Créer un nouvel avatar s'il n'existe pas encore
-                    $avatar = new Avatar();
-                    $avatar->user_id = $user->id;
-                    $avatar->image = $imageName;
-                    $avatar->save();
+            // Vérifier si l'utilisateur a déjà un avatar
+            if ($user->avatar) {
+                // Supprimer l'ancienne image si elle existe
+                $oldImagePath = public_path('avatars/' . $user->avatar->image);
+                if (File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
                 }
 
-                Log::info('Photo de profil mise à jour avec succès pour l\'utilisateur: ' . $user->id);
-
-                // Retourner une réponse JSON réussie
-                return response()->json(['success' => true, 'message' => 'Photo de profil mise à jour avec succès', 'imageName' => $imageName]);
+                // Mettre à jour l'avatar existant
+                $user->avatar->image = $imageName;
+                $user->avatar->save();
             } else {
-                // Retourner une réponse JSON d'erreur si aucun fichier n'a été téléchargé
-                return response()->json(['success' => false, 'message' => 'Aucune image n\'a été téléchargée.']);
+                // Créer un nouvel avatar
+                $user->avatar()->create([
+                    'image' => $imageName,
+                ]);
             }
-        } catch (\Exception $e) {
-            // En cas d'erreur, enregistrer un log d'erreur
-            Log::error('Erreur lors de la mise à jour de la photo de profil pour l\'utilisateur: ' . $user->id . '. Message d\'erreur: ' . $e->getMessage());
 
-            // Retourner une réponse JSON d'erreur
-            return response()->json(['success' => false, 'message' => 'Une erreur est survenue lors de la mise à jour de la photo de profil. Veuillez réessayer.']);
+            Log::info('Photo de profil mise à jour avec succès pour l\'utilisateur: ' . $user->id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Photo de profil mise à jour avec succès',
+                'imageName' => $imageName,
+            ]);
         }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Aucune image n\'a été téléchargée.',
+        ]);
     }
 
     public function tasks()
@@ -151,37 +136,24 @@ class profilController extends Controller
         '));
     }
 
-
     public function docsUpload(Request $request)
     {
         Log::info('Début de la fonction docsUpload');
 
-        $validator = Validator::make($request->all(), [
+        $validatedData = $request->validate([
             'doc_client' => 'required|file',
             'tache_id' => 'required|exists:procedures,tache_id',
         ]);
 
-        Log::info('Validation des données');
-
-        if ($validator->fails()) {
-            Log::error('Erreur de validation', ['errors' => $validator->errors()]);
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $procedure = Procedure::where('tache_id', $request->tache_id)->first();
+        $procedure = Procedure::where('tache_id', $request->tache_id)->firstOrFail();
 
         Log::info('Recherche de la procédure : ', ['procedure' => $procedure]);
-
-        if (!$procedure) {
-            Log::error('Tâche non trouvée pour l\'ID : ' . $request->tache_id);
-            return response()->json(['error' => 'tache non trouvée'], 404);
-        }
 
         if ($procedure->doc_client) {
             // Supprimer le fichier existant
             $existingDocPath = public_path('document_clients/' . $procedure->doc_client);
-            if (file_exists($existingDocPath)) {
-                unlink($existingDocPath);
+            if (File::exists($existingDocPath)) {
+                File::delete($existingDocPath);
             }
         }
 
@@ -190,7 +162,6 @@ class profilController extends Controller
         $doc = $request->file('doc_client');
         $docName = time() . '.' . $doc->getClientOriginalExtension();
         $doc->move(public_path('document_clients'), $docName);
-        $ext = $doc->getClientOriginalExtension();
         $procedure->doc_client = $docName;
         $procedure->status = "soumis";
         $procedure->save();
@@ -202,9 +173,9 @@ class profilController extends Controller
         Log::info('tache: ', ['tache' => $tache]);
 
         Notification::create([
-            'message' => '' . $procedure->tache->nom_tache . ' a été soumis avec succès! Merci de patienter durant  le traitement de votre document ',
+            'message' => $procedure->tache->nom_tache . ' a été soumis avec succès! Merci de patienter durant le traitement de votre document ',
             'user_id' => $procedure->user_id,
-            'status'=>$procedure->status
+            'status' => $procedure->status
         ]);
 
         // Créer l'URL du fichier téléchargé
@@ -226,74 +197,49 @@ class profilController extends Controller
 
     public function treatUpload(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validatedData = $request->validate([
             'doc_traité' => 'required|file',
             'tache_id' => 'required|exists:procedures,tache_id',
         ]);
 
-        if ($validator->fails()) {
-            Log::error("Échec de la validation : " . $validator->errors());
-            return response()->json(['errors' => $validator->errors()], 422);
+        $procedure = Procedure::where('tache_id', $request->tache_id)->with('tache', 'user')->firstOrFail();
+
+        if ($procedure->doc_traité) {
+            // Supprimer le fichier existant
+            $existingDocPath = public_path('document_traités/' . $procedure->doc_traité);
+            if (File::exists($existingDocPath)) {
+                File::delete($existingDocPath);
+            }
         }
 
-        try {
-            $procedure = Procedure::where('tache_id', $request->tache_id)->first();
+        $doc = $request->file('doc_traité');
+        $docName = time() . '.' . $doc->getClientOriginalExtension();
+        $doc->move(public_path('document_traités'), $docName);
 
-            if (!$procedure) {
-                Log::error("La procédure n'existe pas pour l'ID de tâche : {$request->tache_id}");
-                return response()->json(['error' => 'La procédure n\'existe pas'], 404);
-            }
+        $procedure->doc_traité = $docName;
+        $procedure->status = "Terminé";
+        $procedure->save();
 
-            $procedure->load('tache');
+        // Créer l'URL du fichier téléchargé
+        $fileUrl = asset('document_traités/' . $docName);
 
-            if ($procedure->doc_traité) {
-                // Supprimer le fichier existant
-                $existingDocPath = public_path('document_traités/' . $procedure->doc_traité);
-                if (file_exists($existingDocPath)) {
-                    unlink($existingDocPath);
-                }
-            }
+        Notification::create([
+            'message' => $procedure->tache->nom_tache . ' a été traité avec succès! Merci de consulter le panel tâche pour télécharger votre document ',
+            'user_id' => $procedure->user_id,
+            'status' => $procedure->status
+        ]);
 
-            $doc = $request->file('doc_traité');
-            $docName = time() . '.' . $doc->getClientOriginalExtension();
-            $doc->move(public_path('document_traités'), $docName);
+        $user = $procedure->user;
+        $procedures = $user->procedures()->with('tache')->get();
+        $taches = $procedures->pluck('tache')->unique();
 
-            $procedure->doc_traité = $docName;
-            $procedure->status = "Terminé";
-            $procedure->save();
-
-            // Créer l'URL du fichier téléchargé
-            $fileUrl = asset('document_traités/' . $docName);
-
-            Notification::create([
-                'message' => '' . $procedure->tache->nom_tache . ' a été traité avec succès! Merci de consulter le panel tâche pour télécharger votre document ',
-                'user_id' => $procedure->user_id,
-                'status'=>$procedure->status
-            ]);
-
-            // Récupérer l'utilisateur associé à la procédure sélectionnée
-            $user = $procedure->user;
-
-            // Récupérer toutes les procédures de cet utilisateur
-            $procedures = $user->procedures()->with('tache')->get();
-
-            // Récupérer toutes les tâches uniques associées à ces procédures
-            $taches = $procedures->pluck('tache')->unique();
-
-            // Renvoie la réponse à la requête AJAX avec les procédures, les tâches et l'URL du fichier
-            return response()->json([
-                'message' => 'Téléchargement effectué avec succès',
-                'procedure' => $procedure,
-                'nouveau_statut' => $procedure->status,
-                'tache' => $procedure->tache,
-                'procedures' => $procedures,
-                'taches' => $taches
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Erreur lors du traitement de la requête : " . $e->getMessage());
-            return response()->json(['error' => 'Erreur lors du traitement de la requête'], 500);
-        }
+        return response()->json([
+            'message' => 'Téléchargement effectué avec succès',
+            'procedure' => $procedure,
+            'nouveau_statut' => $procedure->status,
+            'tache' => $procedure->tache,
+            'procedures' => $procedures,
+            'taches' => $taches
+        ]);
     }
-
- 
 }
