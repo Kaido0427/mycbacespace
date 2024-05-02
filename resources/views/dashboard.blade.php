@@ -63,7 +63,7 @@
                     <h3 class="text-center">MON PROFIL</h3>
                     <hr>
                     <!-- Modal -->
-                    <div class="modal fade" id="adhDetails" tabindex="-1" role="dialog"
+                    <div class="modal fade modal-transparent-blur" id="adhDetails" tabindex="-1" role="dialog"
                         aria-labelledby="userInfoModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
