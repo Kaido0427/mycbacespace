@@ -20,6 +20,8 @@
     <meta property="og:image"
         content="https://cbace-cga.com/wp-content/plugins/wpforms-lite/assets/images/submit-spin.svg">
 
+
+
     <script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://cbace-cga.com/formulaire-dinscription/","url":"https://cbace-cga.com/formulaire-dinscription/","name":"Formulaire d'inscription - CBACE-CGA","isPartOf":{"@id":"https://cbace-cga.com/#website"},"primaryImageOfPage":{"@id":"https://cbace-cga.com/formulaire-dinscription/#primaryimage"},"image":{"@id":"https://cbace-cga.com/formulaire-dinscription/#primaryimage"},"thumbnailUrl":"https://cbace-cga.com/wp-content/plugins/wpforms-lite/assets/images/submit-spin.svg","datePublished":"2023-11-07T10:46:30+00:00","dateModified":"2023-12-15T14:09:34+00:00","breadcrumb":{"@id":"https://cbace-cga.com/formulaire-dinscription/#breadcrumb"},"inLanguage":"fr-FR","potentialAction":[{"@type":"ReadAction","target":["https://cbace-cga.com/formulaire-dinscription/"]}]},{"@type":"ImageObject","inLanguage":"fr-FR","@id":"https://cbace-cga.com/formulaire-dinscription/#primaryimage","url":"https://cbace-cga.com/wp-content/plugins/wpforms-lite/assets/images/submit-spin.svg","contentUrl":"https://cbace-cga.com/wp-content/plugins/wpforms-lite/assets/images/submit-spin.svg"},{"@type":"BreadcrumbList","@id":"https://cbace-cga.com/formulaire-dinscription/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://cbace-cga.com/"},{"@type":"ListItem","position":2,"name":"Formulaire d&#8217;inscription"}]},{"@type":"WebSite","@id":"https://cbace-cga.com/#website","url":"https://cbace-cga.com/","name":"CBACE-CGA","description":"","publisher":{"@id":"https://cbace-cga.com/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://cbace-cga.com/?s={search_term_string}"},"query-input":"required name=search_term_string"}],"inLanguage":"fr-FR"},{"@type":"Organization","@id":"https://cbace-cga.com/#organization","name":"CBACE-CGA","url":"https://cbace-cga.com/","logo":{"@type":"ImageObject","inLanguage":"fr-FR","@id":"https://cbace-cga.com/#/schema/logo/image/","url":"https://cbace-cga.com/wp-content/uploads/2023/10/logo-CBACE.png","contentUrl":"https://cbace-cga.com/wp-content/uploads/2023/10/logo-CBACE.png","width":4985,"height":2075,"caption":"CBACE-CGA"},"image":{"@id":"https://cbace-cga.com/#/schema/logo/image/"}}]}</script>
     <!-- / Yoast SEO plugin. -->
 
@@ -1981,6 +1983,23 @@
                                         border-left-width: 0px;
                                         border-bottom-width: 0px;
                                     }
+
+                                    .input-group-append {
+                                        display: flex;
+                                        align-items: center;
+                                    }
+
+                                    .input-group-text {
+                                        padding: 0.5rem 0.75rem;
+                                        margin-left: -1px;
+                                        border-left: 0;
+                                        border-top-right-radius: 0.25rem;
+                                        border-bottom-right-radius: 0.25rem;
+                                    }
+
+                                    .eye-icon {
+                                        cursor: pointer;
+                                    }
                                 </style>
                                 <h2 class="elementor-heading-title elementor-size-default">ACCEDEZ A VOTRE ESPACE
                                     COMPTE </h2>
@@ -2028,12 +2047,21 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="password">Mot de passe <span
-                                                            class="text-danger">*</span></label>
-                                                    <input style="color: #000;border-color:#000;" type="password"
-                                                        id="password" class="form-control" name="password" required
-                                                        autocomplete="current-password">
+                                                    <label for="password">Mot de passe <span class="text-danger">*</span></label>
+                                                    <div class="input-group" style="position: relative;">
+                                                        <input style="color: #000;border-color:#000;" type="password" id="password" class="form-control" name="password" required autocomplete="current-password">
+                                                        <div class="input-group-append" style="position: absolute; right: 0; top: 0; z-index: 1;margin-top:10px;">
+                                                            <span class="input-group-text eye-icon" id="eye-icon">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                                                    <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                                                </svg>
+                                                            </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                                
+
                                                 <br>
                                                 <div class="form-group">
                                                     <button type="submit" onclick="loginController();"
@@ -2259,6 +2287,10 @@
                                                             padding: 0;
                                                             width: 22px;
                                                             height: 22px
+                                                        }
+
+                                                        .input-group-text {
+                                                            cursor: pointer;
                                                         }
                                                     </style>
                                                     <div class="elementor-spacer">
@@ -2830,22 +2862,32 @@
 
         }
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#eye-icon").click(function() {
+                var input = $("#password");
+                if (input.attr("type") === "password") {
+                    input.attr("type", "text");
+                    $(this).find('svg').attr('class', 'bi bi-eye-slash-fill');
+                    $(this).find('svg').html(
+                        '<path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/><path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>'
+                        );
+                } else {
+                    input.attr("type", "password");
+                    $(this).find('svg').attr('class', 'bi bi-eye-fill');
+                    $(this).find('svg').html(
+                        '<path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>'
+                        );
+                }
+            });
+        });
+    </script>
 
-    <!-- Cookie Notice plugin v2.4.13 by Hu-manity.co https://hu-manity.co/ -->
-    <div id="cookie-notice" role="dialog" class="cookie-notice-hidden cookie-revoke-hidden cn-position-bottom"
-        aria-label="Cookie Notice" style="background-color: rgba(50,50,58,1);">
-        <div class="cookie-notice-container" style="color: #fff"><span id="cn-notice-text"
-                class="cn-text-container">Nous utilisons des cookies pour vous garantir la meilleure expérience sur
-                notre site web. Si vous continuez à utiliser ce site, nous supposerons que vous en êtes
-                satisfait.</span><span id="cn-notice-buttons" class="cn-buttons-container"><a href="#"
-                    id="cn-accept-cookie" data-cookie-set="accept" class="cn-set-cookie cn-button" aria-label="OK"
-                    style="background-color: #1e73be">OK</a><a href="#" id="cn-refuse-cookie"
-                    data-cookie-set="refuse" class="cn-set-cookie cn-button" aria-label="Non"
-                    style="background-color: #1e73be">Non</a></span><span id="cn-close-notice"
-                data-cookie-set="accept" class="cn-close-icon" title="Non"></span></div>
 
-    </div>
-    <!-- / Cookie Notice plugin -->
+
+
+
 
 
 

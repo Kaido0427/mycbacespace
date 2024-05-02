@@ -786,6 +786,8 @@ function updateProgressBar() {
 }
 
 
+//a la page de connexion pour le champs password
+
 
 
 
