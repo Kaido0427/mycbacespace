@@ -15,7 +15,8 @@ class Notification extends Model
         'user_id',
         'message',
         'read',
-        'status'
+        'status',
+        'last_updated_at'
     ];
 
     public function user()

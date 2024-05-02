@@ -6,6 +6,7 @@ use App\Models\Notification;
 use App\Models\tache;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class adminController extends Controller
@@ -17,7 +18,8 @@ class adminController extends Controller
         try {
             $tacheId = $request->input('tache_id');
             $tacheWithPendingClients = Tache::with(['procedures' => function ($query) {
-                $query->whereNull('doc_client');
+                $query->where('doc_client', '=', DB::raw("''"))
+                    ->orWhereNull('doc_client');
             }])->findOrFail($tacheId);
 
             foreach ($tacheWithPendingClients->procedures as $procedure) {

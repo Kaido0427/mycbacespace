@@ -405,7 +405,7 @@
 
                         </div>
                         <!-- Modal photo de profil -->
-                        <div class="modal fade" id="ModalPic" tabindex="-1" aria-labelledby="ModalLabel"
+                        <div class="modal fade modal-transparent-blur" id="ModalPic" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -434,7 +434,7 @@
 
                         </div>
                         <!-- Modal mot de passe -->
-                        <div class="modal fade" id="ModalPass" tabindex="-1" aria-labelledby="ModalLabel"
+                        <div class="modal fade modal-transparent-blur" id="ModalPass" tabindex="-1" aria-labelledby="ModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->boolean('read')->default(false);
             $table->string('status');
+            $table->timestamp('last_updated_at')->nullable()->default(null);
             $table->timestamps();
         });
     }

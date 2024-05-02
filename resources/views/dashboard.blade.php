@@ -10,7 +10,8 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss', 'resources/scss/notif.scss'])
-    @vite(['ressources/js/notifs.js'])
+
+
 
 </head>
 
@@ -376,7 +377,7 @@
                         <div class="container">
                             <div class="notification-ui_dd-content">
                                 @forelse ($notifications as $notification)
-                                    <div class="notification-list unread">
+                                    <div class="notification-list unread" id="notification-{{ $notification->id }}">
                                         <div class="notification-list_content">
                                             <div class="notification-list_img">
                                                 @if ($notification->status === 'Attente')
@@ -397,9 +398,29 @@
                                                 </p>
                                             </div>
                                         </div>
+                                        <div class="notification-list_feature-img">
+                                            <button type="button"
+                                                class="btn btn-sm btn-danger delete-notification-btn"
+                                                data-notification-id="{{ $notification->id }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 @empty
-                                    <p>Aucune notification pour le moment.</p>
+                                    <div class="no-notifications">
+                                        <h3>
+                                            <span class="letter-animation word">Aucune</span>&nbsp;
+                                            <span style="color: #29B6F6;"
+                                                class="letter-animation word">notification</span>&nbsp;
+                                            <span class="letter-animation word">pour</span>&nbsp;
+                                            <span class="letter-animation word">le</span>&nbsp;
+                                            <span class="letter-animation word">moment.</span>
+                                        </h3>
+                                    </div>
                                 @endforelse
                             </div>
                         </div>
@@ -467,8 +488,8 @@
                             </div>
                         </div>
                         <!-- Modal photo de profil -->
-                        <div class="modal fade" id="ModalPic" tabindex="-1" aria-labelledby="ModalLabel"
-                            aria-hidden="true">
+                        <div class="modal fade modal-transparent-blur" id="ModalPic" tabindex="-1"
+                            aria-labelledby="ModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -496,10 +517,9 @@
 
                         </div>
 
-
                         <!-- Modal mot de passe -->
-                        <div class="modal fade" id="ModalPass" tabindex="-1" aria-labelledby="ModalLabel"
-                            aria-hidden="true">
+                        <div class="modal fade modal-transparent-blur" id="ModalPass" tabindex="-1"
+                            aria-labelledby="ModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -582,8 +602,8 @@
                         </div>
 
                         <!-- Modal info -->
-                        <div class="modal fade" id="Modalinfo" tabindex="-1" aria-labelledby="ModalLabel"
-                            aria-hidden="true">
+                        <div class="modal fade modal-transparent-blur" id="Modalinfo" tabindex="-1"
+                            aria-labelledby="ModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -652,8 +672,8 @@
                         </div>
                         <!-- Modal adhesion -->
 
-                        <div class="modal fade" id="Modaladh" tabindex="-1" aria-labelledby="ModalLabel"
-                            aria-hidden="true">
+                        <div class="modal fade modal-transparent-blur" id="Modaladh" tabindex="-1"
+                            aria-labelledby="ModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -687,10 +707,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
                     </div>
                     <div id="modal-backdrop"></div>
                 </div>
@@ -779,7 +795,9 @@
                         progressBar.attr('aria-valuenow', 0);
                     } else {
                         const progression = (proceduresTerminees / totalProcedures) * 100;
-                        progressBar.animate({ width: `${progression}%` }, 1500); 
+                        progressBar.animate({
+                            width: `${progression}%`
+                        }, 1500);
                         progressBar.attr('aria-valuenow', progression);
                     }
                 },
@@ -788,6 +806,125 @@
                 }
             });
         }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Fonction pour vérifier s'il y a des notifications
+            function hasNotifications() {
+                return $('.notification-list').length > 0;
+            }
+
+            // Fonction pour afficher/masquer le message "Aucune notification"
+            function toggleNoNotificationsMessage() {
+                const noNotificationsMessage = $('.no-notifications');
+                const notificationList = $('.notification-list');
+
+                if (notificationList.children().length === 0) {
+                    noNotificationsMessage.show();
+                    animateWords();
+                } else {
+                    noNotificationsMessage.hide();
+                }
+            }
+
+
+            // Fonction pour animer les mots
+            function animateWords() {
+                const words = $('.word');
+                words.removeClass('letter-animation');
+
+                words.each(function(index) {
+                    const word = $(this);
+                    setTimeout(function() {
+                        word.addClass('letter-animation');
+                        animateLetters(word);
+                    }, index * 500);
+                });
+
+                setTimeout(function() {
+                    animateWords();
+                }, words.length * 500 + 500);
+            }
+
+            // Fonction pour animer les lettres
+            function animateLetters(word) {
+                const text = word.text().trim();
+                word.empty();
+
+                for (let i = 0; i < text.length; i++) {
+                    const letter = $('<span>').text(text[i]);
+                    word.append(letter);
+
+                    setTimeout(function() {
+                        letter.css('animation-delay', `${i * 0.1}s`);
+                    }, 10);
+                }
+            }
+
+            // Appeler la fonction pour afficher/masquer le message "Aucune notification"
+            toggleNoNotificationsMessage();
+
+            $('.delete-notification-btn').each(function() {
+                const button = $(this);
+                const notificationId = button.data('notification-id');
+
+                button.on('click', function(event) {
+                    event.preventDefault();
+
+                    const notificationElement = $('#notification-' + notificationId);
+                    console.log('Button clicked. Notification ID:', notificationId);
+
+                    // Remplacer l'icône trash par le spinner
+                    button.html(
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+                    );
+
+                    // Délai de 500ms pour simuler le traitement
+                    setTimeout(function() {
+                        $.ajax({
+                            url: '/notifications/' + notificationId,
+                            type: 'DELETE',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                console.log(
+                                    'Notification deleted successfully. Response:',
+                                    response
+                                );
+
+                                // Effet de fade right pour supprimer la notification
+                                notificationElement.addClass('fade-right');
+
+                                // Vérifier si des notifications sont encore présentes
+                                toggleNoNotificationsMessage();
+
+                                // Supprimer l'élément de notification après la fin de l'animation
+                                notificationElement.one('animationend',
+                                    function() {
+                                        notificationElement.remove();
+                                    });
+                            },
+
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error(
+                                    'Error deleting notification. Text status:',
+                                    textStatus, 'Error thrown:', errorThrown
+                                );
+                                console.error(jqXHR.responseJSON);
+                            },
+                            complete: function() {
+                                // Restaurer l'icône trash après la suppression
+                                button.html(
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/></svg>'
+                                );
+                            }
+                        });
+                    }, 500); // Délai de 500ms
+                });
+            });
+        });
     </script>
 </body>
 

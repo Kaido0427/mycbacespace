@@ -45,4 +45,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/search-clients', [adminController::class, 'searchClients']);
     Route::get('/mynotifs', [HomeController::class, 'mynotifs']);
     Route::get('/tasks', [profilController::class, 'tasks']);
+    Route::delete('/notifications/{notification}', [HomeController::class, 'destroyNotif'])->name('notifications.destroy');
 });
