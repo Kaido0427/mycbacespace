@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: my-mycbacespace-app
+    container_name: app
+    restart: unless-stopped
+    working_dir: /var/www/mycbacespace
+    volumes:
+      - mycbacespace_volume:/var/www/mycbacespace
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - mycbacespace
+
+  webserver:
+    image: nginx:latest
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - mycbacespace_volume:/var/www/mycbacespace
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - mycbacespace
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mycbacespace
+      MYSQL_USER: mycbacespace
+      MYSQL_PASSWORD: secret
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - mycbacespace
+
+networks:
+  mycbacespace:
+
+
+volumes:
+  dbdata:
+  mycbacespace_volume:
+    driver: local
+    driver_opts:
+      type: 'none'
+      device: './src'
+      o: 'bind'

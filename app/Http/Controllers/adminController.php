@@ -31,7 +31,8 @@ class adminController extends Controller
                 if ($existingNotification) {
                     // Mise à jour de la notification existante avec un nouveau message
                     $existingNotification->update([
-                        'message' => 'Nous attendons toujours la soumission ou l\'accomplissement de ' . $procedure->tache->nom_tache
+                        'message' => 'Nous attendons toujours la soumission ou l\'accomplissement de ' . $procedure->tache->nom_tache,
+                        'last_updated_at'=>now()
                     ]);
                 } else {
                     // Création d'une nouvelle notification

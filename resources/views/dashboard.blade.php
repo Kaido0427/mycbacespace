@@ -400,6 +400,7 @@
                                         </div>
                                         <div class="notification-list_feature-img">
                                             <button type="button"
+                                                onclick="return confirm('Etes-vous sûr de vouloir supprimer cette notification?');"
                                                 class="btn btn-sm btn-danger delete-notification-btn"
                                                 data-notification-id="{{ $notification->id }}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"

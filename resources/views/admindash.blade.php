@@ -141,7 +141,6 @@
 
                     <div id="modal-backdrop"></div>
                 </div>
-
                 <div id="clients">
                     <h3 class="text-center">ADHERANTS</h3>
                     <hr>
@@ -534,6 +533,9 @@
                         <div id="modal-backdrop"></div>
 
                     </div>
+                </div>
+                <div id="adminotifs">
+                    <h3 class="text-center">MES NOTICATIONS</h3>
                 </div>
 
             </div>

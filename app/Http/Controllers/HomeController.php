@@ -53,7 +53,10 @@ class HomeController extends Controller
             ->has('procedures', '>', 0)
             ->get();
 
-        $notifications = auth()->user()->notifications()->orderByDesc('created_at')->get();
+        $notifications = auth()->user()->notifications()
+            ->orderByRaw('COALESCE(last_updated_at, created_at) DESC')
+            ->get();
+
 
 
 
