@@ -26,13 +26,6 @@ jobs:
     - name: Build Vite app
       run: npm run build
 
-    - name: Test SSH connection
-      env:
-        HOST_USERNAME: ${{ secrets.HOST_USERNAME }}
-        HOST_PASSWORD: ${{ secrets.HOST_PASSWORD }}
-        HOST_PORT: ${{ secrets.HOST_PORT }}
-      run: |
-        ssh -o StrictHostKeyChecking=no -p 65002 u958181990@89.116.147.102 'echo "SSH connection successful"'
 
     - name: Deploy to production
       env:
