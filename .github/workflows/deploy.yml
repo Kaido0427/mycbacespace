@@ -1,21 +1,21 @@
-name: Deploy to Production
+name: node config
 
 on:
   push:
     branches:
-      - main 
+      - main # Remplacez par le nom de votre branche de production
 
 jobs:
   build:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4  
+    - uses: actions/checkout@v4  # Mettez à jour vers la dernière version disponible
     
     - name: Setup Node.js
-      uses: actions/setup-node@v2  
+      uses: actions/setup-node@v3  # Mettez à jour vers la version 3 de l'action
       with:
-        node-version: '20' 
+        node-version: '20' # Utiliser Node.js 20
         
     - name: Install dependencies
       run: npm ci
@@ -27,14 +27,14 @@ jobs:
       env:
         HOST_USERNAME: ${{ secrets.HOST_USERNAME }}
         HOST_PASSWORD: ${{ secrets.HOST_PASSWORD }}
-        HOST_PORT: ${{ secrets.HOST_PORT }}  
+        HOST_PORT: ${{ secrets.HOST_PORT }}  # Ajoutez le port ici
       run: |
         ssh -o StrictHostKeyChecking=no -p $HOST_PORT $HOST_USERNAME@${{ secrets.HOST_ADDRESS }} 'echo "SSH connection successful"'
 
-    - name: Deploy to production
+    - name: node config
       env:
         HOST_USERNAME: ${{ secrets.HOST_USERNAME }}
         HOST_PASSWORD: ${{ secrets.HOST_PASSWORD }}
-        HOST_PORT: ${{ secrets.HOST_PORT }}  
+        HOST_PORT: ${{ secrets.HOST_PORT }}  # Ajoutez le port ici
       run: |
         scp -P $HOST_PORT -r ./build/* $HOST_USERNAME@${{ secrets.HOST_ADDRESS }}:/home/u958181990/domains/cbace-cga.com/public_html/cga-app/build
