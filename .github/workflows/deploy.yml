@@ -28,9 +28,5 @@ jobs:
 
 
     - name: Deploy to production
-      env:
-        HOST_USERNAME: ${{ secrets.HOST_USERNAME }}
-        HOST_PASSWORD: ${{ secrets.HOST_PASSWORD }}
-        HOST_PORT: ${{ secrets.HOST_PORT }}
       run: |
-        scp -o StrictHostKeyChecking=no -p 65002 -r ./public/build/* u958181990@89.116.147.102:/home/u958181990/domains/cbace-cga.com/public_html/cga-app
+        scp -o StrictHostKeyChecking=no -P 65002 -r ./public/build/* u958181990@89.116.147.102:/home/u958181990/domains/cbace-cga.com/public_html/cga-app
