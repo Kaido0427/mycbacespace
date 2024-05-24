@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: my-laravel-app
+    container_name: app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - appdata:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - laravel
+
+  webserver:
+    image: nginx:latest
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - appdata:/var/www
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - laravel
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: secret
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - laravel
+
+networks:
+  laravel:
+
+volumes:
+  dbdata:
+  appdata:
+    driver: local
+    driver_opts:
+      type: 'none'
+      device: 'C:\laragon\www\mycbacespace'
+      o: 'bind'

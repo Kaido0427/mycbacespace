@@ -9,6 +9,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://app.cbace-cga.com/build/manifest.json">
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss', 'resources/scss/notif.scss'])
 
 
