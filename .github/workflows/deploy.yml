@@ -1,4 +1,4 @@
-name: Deploy to Production
+name: NODE CONFIG
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16' # Ajustez la version de Node.js selon vos besoins
+        node-version: '18' # Ajustez la version de Node.js selon vos besoins
         
     - name: Install dependencies
       run: npm ci
@@ -30,9 +30,9 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no $HOST_USERNAME@${{ secrets.HOST_ADDRESS }} 'echo "SSH connection successful"'
 
-    - name: Deploy to production
+    - name: NODE CONFIG
       env:
         HOST_USERNAME: ${{ secrets.HOST_USERNAME }}
         HOST_PASSWORD: ${{ secrets.HOST_PASSWORD }}
       run: |
-        scp -r ./public/build/* $HOST_USERNAME@${{ secrets.HOST_ADDRESS }}:/home/u958181990/domains/cbace-cga.com/public_html/cga-app
+        scp -r ./build/* $HOST_USERNAME@${{ secrets.HOST_ADDRESS }}:/home/u958181990/domains/cbace-cga.com/public_html/cga-app/build
