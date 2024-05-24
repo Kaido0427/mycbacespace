@@ -32,7 +32,7 @@ jobs:
         HOST_PASSWORD: ${{ secrets.HOST_PASSWORD }}
         HOST_PORT: ${{ secrets.HOST_PORT }}
       run: |
-        ssh -o StrictHostKeyChecking=no -p $HOST_PORT $HOST_USERNAME@${{ secrets.HOST_ADDRESS }} 'echo "SSH connection successful"'
+        ssh -o StrictHostKeyChecking=no -p 65002 u958181990@89.116.147.102 'echo "SSH connection successful"'
 
     - name: Deploy to production
       env:
@@ -40,4 +40,4 @@ jobs:
         HOST_PASSWORD: ${{ secrets.HOST_PASSWORD }}
         HOST_PORT: ${{ secrets.HOST_PORT }}
       run: |
-        scp -P $HOST_PORT -r ./public/build/* $HOST_USERNAME@${{ secrets.HOST_ADDRESS }}:/home/u958181990/domains/cbace-cga.com/public_html/cga-app
+        scp -P $HOST_PORT -r ./public/build/* u958181990@89.116.147.102:/home/u958181990/domains/cbace-cga.com/public_html/cga-app
