@@ -8,10 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v4  # Mettez à jour vers la dernière version disponible
-    
+    - uses: actions/checkout@v4 # Mettez à jour vers la dernière version disponible
+
     - name: Setup Node.js
       run: |
         sudo apt-get update
@@ -19,10 +19,10 @@ jobs:
         sudo apt-get install npm
         node --version
         npm --version
-      
+
     - name: Install dependencies
       run: npm ci
-      
+
     - name: Build Vite app
       run: npm run build
 
@@ -30,7 +30,7 @@ jobs:
       env:
         HOST_USERNAME: ${{ secrets.HOST_USERNAME }}
         HOST_PASSWORD: ${{ secrets.HOST_PASSWORD }}
-        HOST_PORT: ${{ secrets.HOST_PORT }}  # Ajoutez le port ici
+        HOST_PORT: ${{ secrets.HOST_PORT }}
       run: |
         ssh -o StrictHostKeyChecking=no -p $HOST_PORT $HOST_USERNAME@${{ secrets.HOST_ADDRESS }} 'echo "SSH connection successful"'
 
@@ -38,6 +38,6 @@ jobs:
       env:
         HOST_USERNAME: ${{ secrets.HOST_USERNAME }}
         HOST_PASSWORD: ${{ secrets.HOST_PASSWORD }}
-        HOST_PORT: ${{ secrets.HOST_PORT }}  # Ajoutez le port ici
+        HOST_PORT: ${{ secrets.HOST_PORT }}
       run: |
-        scp -P $HOST_PORT -r ./build/* $HOST_USERNAME@${{ secrets.HOST_ADDRESS }}:/home/u958181990/domains/cbace-cga.com/public_html/cga-app/build
+        scp -P $HOST_PORT -r ./public/build/* $HOST_USERNAME@${{ secrets.HOST_ADDRESS }}:/home/u958181990/domains/cbace-cga.com/public_html/cga-app
