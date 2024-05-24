@@ -28,7 +28,7 @@ jobs:
         HOST_USERNAME: ${{ secrets.HOST_USERNAME }}
         HOST_PASSWORD: ${{ secrets.HOST_PASSWORD }}
       run: |
-        ssh $HOST_USERNAME@${{ secrets.HOST_ADDRESS }} 'echo "SSH connection successful"'
+        ssh -o StrictHostKeyChecking=no $HOST_USERNAME@${{ secrets.HOST_ADDRESS }} 'echo "SSH connection successful"'
 
     - name: Deploy to production
       env:
