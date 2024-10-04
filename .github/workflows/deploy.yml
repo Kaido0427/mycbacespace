@@ -30,6 +30,6 @@ jobs:
         VPS_IP: ${{ secrets.VPS_IP }}
         VPS_USER: ${{ secrets.VPS_USER }}
         VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
-        REMOTE_PATH: '/home/ubuntu/' # Remplacez par le chemin de votre répertoire distant
+        REMOTE_PATH: '/home/ubuntu/cbacecga-app' # Remplacez par le chemin de votre répertoire distant
       run: |
         sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no -P 22 -r ./public/build/* $VPS_USER@$VPS_IP:$REMOTE_PATH
