@@ -15,8 +15,7 @@ jobs:
     - name: Setup Node.js
       run: |
         sudo apt-get update
-        sudo apt-get install nodejs
-        sudo apt-get install npm
+        sudo apt-get install nodejs npm sshpass
         node --version
         npm --version
 
@@ -26,7 +25,11 @@ jobs:
     - name: Build Vite app
       run: npm run build
 
-
     - name: Deploy to production
+      env:
+        VPS_IP: ${{ secrets.VPS_IP }}
+        VPS_USER: ${{ secrets.VPS_USER }}
+        VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+        REMOTE_PATH: '/home/ubuntu/' # Remplacez par le chemin de votre répertoire distant
       run: |
-        scp -o StrictHostKeyChecking=no -P 65002 -r ./public/build/* u958181990@89.116.147.102:/home/u958181990/domains/cbace-cga.com/public_html/cga-app
+        sshpass -p "$VPS_PASSWORD" scp -o StrictHostKeyChecking=no -P 22 -r ./public/build/* $VPS_USER@$SERVER_IP:$REMOTE_PATH
