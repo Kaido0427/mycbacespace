@@ -10,19 +10,19 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://app.cbace-cga.com/build/manifest.json">
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss', 'resources/scss/notif.scss'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss'])
 
-
+ 
 
 </head>
 
 <body>
-
+ 
     <div class="app-container">
         <div id="sidebar" class="sidebar">
             <div class="sidebar-header">
                 <div class="app-icon">
-                    <img height="80" width="170" src="{{ asset('dist/logo-CBACE.PNG') }}" alt="">
+                    <img height="80" width="170" src="{{ asset('dist/logo-CBACE.png') }}" alt="">
                 </div>
             </div>
             <ul class="sidebar-list">
@@ -57,9 +57,9 @@
         </div>
         <div class="main-container">
             <div class="app-head">
-                @include('layouts.dashhead')
+                @include('layouts.dashhead') 
             </div>
-            <div class="app-content" style="overflow-y: auto; height: calc(100vh - );">
+            <div class="app-content" style="overflow: auto; height: calc(100vh - var(--header-height, 0px)); width: calc(100vw - var(--header-width, 0px));">
 
                 <div id="profil">
                     <h3 class="text-center">MON PROFIL</h3>

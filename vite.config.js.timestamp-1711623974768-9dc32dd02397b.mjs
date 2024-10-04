@@ -1,6 +1,6 @@
 // vite.config.js
-import { defineConfig } from "file:///C:/laragon/www/mycbacespace/node_modules/vite/dist/node/index.js";
-import laravel from "file:///C:/laragon/www/mycbacespace/node_modules/laravel-vite-plugin/dist/index.js";
+import { defineConfig } from "https://app.cbage-cga.com/node_modules/vite/dist/node/index.js";
+import laravel from "https://app.cbage-cga.com/node_modules/laravel-vite-plugin/dist/index.js";
 var vite_config_default = defineConfig({
   plugins: [
     laravel({
@@ -18,6 +18,10 @@ var vite_config_default = defineConfig({
         additionalData: '@import "variables";'
       }
     }
+  },
+  build: {
+    base: '/',
+    manifest: 'public/build/manifest.json' 
   }
 });
 export {

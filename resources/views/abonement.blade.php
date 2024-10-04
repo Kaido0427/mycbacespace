@@ -9,7 +9,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/scss/app.scss'])
 </head>
 
 <body>
@@ -82,7 +82,7 @@
                     <div class="card-footer text-center">
                         <script src="https://cdn.kkiapay.me/k.js"></script>
                         <kkiapay-widget amount="10000" key="780b68d0e78e11eeb814b93528f60ad4" position="center"
-                            sandbox="true" data='' callback="http://127.0.0.1:8000/pay">
+                            sandbox="true" data='' callback="http://app.cbace-cga.com/pay">
                         </kkiapay-widget>
                     </div>
                 </div>

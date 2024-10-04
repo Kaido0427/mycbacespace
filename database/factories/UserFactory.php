@@ -50,10 +50,10 @@ class UserFactory extends Factory
 
         $user = User::create($validatedData);
 
-        $defaultImagePath = public_path('dist/user-default.png');
+        $defaultImagePath = base_path('dist/user-default.png');
         if (file_exists($defaultImagePath)) {
             $imageName = time() . '_user-default.png';
-            $destinationPath = public_path('avatars/' . $imageName);
+            $destinationPath = base_path('avatars/' . $imageName);
             if (copy($defaultImagePath, $destinationPath)) {
                 // je crée l'entrée dans la base de données pour l'avatar
                 avatar::create([

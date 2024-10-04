@@ -279,10 +279,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         $('#loadingModal').modal('hide');
                     }, 500);
-                    imageInput.value = '';
+                    imageInput.value = ''; 
 
                     // Mettre à jour l'image de profil affichée
-                    const imageUrl = '/avatars/' + response.imageName;
+                    const imageUrl = 'avatars/' + response.imageName;
                     const profilePic = document.getElementById('profile-pic');
                     const sidebarPic = document.getElementById('sidebar-pic');
                     const profilPic = document.getElementById('ppImg');

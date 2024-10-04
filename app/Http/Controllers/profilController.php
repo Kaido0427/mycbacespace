@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\avatar;
-use App\Models\Notification;
+use App\Models\notification;
 use App\Models\procedure;
 use App\Models\User;
 use App\Notifications\myNotifs;
@@ -85,21 +85,20 @@ class profilController extends Controller
         $validatedData = $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,bmp,svg,webp,ico|max:2048',
         ]);
-
         $user = Auth::user();
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $imagePath = public_path('avatars/' . $imageName);
+            $imagePath = base_path('avatars/' . $imageName); // Utiliser base_path au lieu de public_path
 
             // Déplacer la nouvelle image vers le dossier avatars
-            $image->move(public_path('avatars'), $imageName);
+            $image->move(base_path('avatars'), $imageName); // Utiliser base_path au lieu de public_path
 
             // Vérifier si l'utilisateur a déjà un avatar
             if ($user->avatar) {
                 // Supprimer l'ancienne image si elle existe
-                $oldImagePath = public_path('avatars/' . $user->avatar->image);
+                $oldImagePath = base_path('avatars/' . $user->avatar->image); // Utiliser base_path au lieu de public_path
                 if (File::exists($oldImagePath)) {
                     File::delete($oldImagePath);
                 }
@@ -154,60 +153,69 @@ class profilController extends Controller
     {
         Log::info('Début de la fonction docsUpload');
 
-        $validatedData = $request->validate([
-            'doc_client' => 'required|file',
-            'tache_id' => 'required|exists:procedures,tache_id',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'doc_client' => 'required|file',
+                'tache_id' => 'required|exists:procedures,tache_id',
+            ]);
 
-        $procedure = Procedure::where('tache_id', $request->tache_id)->firstOrFail();
+            Log::info('Validation des données réussie', ['validatedData' => $validatedData]);
 
-        Log::info('Recherche de la procédure : ', ['procedure' => $procedure]);
+            $procedure = Procedure::where('tache_id', $request->tache_id)->firstOrFail();
+            Log::info('Recherche de la procédure réussie', ['procedure' => $procedure]);
 
-        if ($procedure->doc_client) {
-            // Supprimer le fichier existant
-            $existingDocPath = public_path('document_clients/' . $procedure->doc_client);
-            if (File::exists($existingDocPath)) {
-                File::delete($existingDocPath);
+            if ($procedure->doc_client) {
+                $existingDocPath = base_path('document_clients/' . $procedure->doc_client);
+                if (File::exists($existingDocPath)) {
+                    File::delete($existingDocPath);
+                    Log::info('Fichier existant supprimé', ['existingDocPath' => $existingDocPath]);
+                } else {
+                    Log::warning('Le fichier existant n\'existe pas', ['existingDocPath' => $existingDocPath]);
+                }
             }
+
+            $doc = $request->file('doc_client');
+            $docName = time() . '.' . $doc->getClientOriginalExtension();
+            $doc->move(base_path('document_clients'), $docName);
+            Log::info('Téléchargement du fichier réussi', ['docName' => $docName]);
+
+            $procedure->doc_client = $docName;
+            $procedure->status = "soumis";
+            $procedure->save();
+            Log::info('Mise à jour de la procédure réussie', ['procedure' => $procedure]);
+
+            $tache = $procedure->tache;
+            Log::info('Récupération de la tâche réussie', ['tache' => $tache]);
+
+            notification::create([
+                'message' => $procedure->tache->nom_tache . ' a été soumis avec succès! Merci de patienter durant le traitement de votre document ',
+                'user_id' => $procedure->user_id,
+                'status' => $procedure->status
+            ]);
+            Log::info('Notification créée avec succès');
+
+            $fileUrl = asset('document_clients/' . $docName);
+            Log::info('Création de l\'URL du fichier téléchargé réussie', ['fileUrl' => $fileUrl]);
+
+            return response()->json([
+                'message' => 'Téléchargement effectué avec succès',
+                'file_url' => $fileUrl,
+                'procedure' => $procedure,
+                'tache' => [
+                    'id' => $tache->id,
+                    'nom_tache' => $tache->nom_tache,
+                    'description' => $tache->description,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Erreur dans la fonction docsUpload', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return response()->json([
+                'message' => 'Une erreur est survenue lors du téléchargement',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        Log::info('Téléchargement du fichier pour la tâche : ' . $request->tache_id);
-
-        $doc = $request->file('doc_client');
-        $docName = time() . '.' . $doc->getClientOriginalExtension();
-        $doc->move(public_path('document_clients'), $docName);
-        $procedure->doc_client = $docName;
-        $procedure->status = "soumis";
-        $procedure->save();
-
-        Log::info('Mise à jour de la procédure pour la tâche : ', ['procedure' => $procedure]);
-
-        $tache = $procedure->tache;
-
-        Log::info('tache: ', ['tache' => $tache]);
-
-        Notification::create([
-            'message' => $procedure->tache->nom_tache . ' a été soumis avec succès! Merci de patienter durant le traitement de votre document ',
-            'user_id' => $procedure->user_id,
-            'status' => $procedure->status
-        ]);
-
-        // Créer l'URL du fichier téléchargé
-        $fileUrl = asset('document_clients/' . $docName);
-
-        Log::info('Création de l\'URL du fichier téléchargé pour la tâche : ' . $request->tache_id);
-
-        return response()->json([
-            'message' => 'Téléchargement effectué avec succès',
-            'file_url' => $fileUrl,
-            'procedure' => $procedure,
-            'tache' => [
-                'id' => $tache->id,
-                'nom_tache' => $tache->nom_tache,
-                'description' => $tache->description,
-            ]
-        ]);
     }
+
 
     public function treatUpload(Request $request)
     {
@@ -220,15 +228,15 @@ class profilController extends Controller
 
         if ($procedure->doc_traité) {
             // Supprimer le fichier existant
-            $existingDocPath = public_path('document_traités/' . $procedure->doc_traité);
+            $existingDocPath = base_path('document_traités/' . $procedure->doc_traité);
             if (File::exists($existingDocPath)) {
                 File::delete($existingDocPath);
             }
         }
-
+ 
         $doc = $request->file('doc_traité');
         $docName = time() . '.' . $doc->getClientOriginalExtension();
-        $doc->move(public_path('document_traités'), $docName);
+        $doc->move(base_path('document_traités'), $docName);
 
         $procedure->doc_traité = $docName;
         $procedure->status = "Terminé";

@@ -40,7 +40,7 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        $redirectUrl = 'https://cbace-cga.com/?v=6af424daa409'; // Spécifiez l'URL vers laquelle vous souhaitez rediriger après la déconnexion
+        $redirectUrl = 'https://cbace-cga.com'; 
 
         $this->guard()->logout();
 

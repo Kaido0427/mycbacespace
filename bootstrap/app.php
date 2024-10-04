@@ -31,7 +31,7 @@ $app->singleton(
     App\Http\Kernel::class
 );
 
-$app->singleton(
+$app->singleton( 
     Illuminate\Contracts\Console\Kernel::class,
     App\Console\Kernel::class
 );
@@ -41,6 +41,20 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+/*
+|--------------------------------------------------------------------------
+| Bind Path to Public Folder
+|--------------------------------------------------------------------------
+|
+| Here we will bind the path to the public folder to the application
+| container so that it can be used by the asset function and other
+| parts of the application that need to know the public path.
+|
+*/
+
+$app->bind('path.public', function() {
+    return base_path('/../public');
+});
 /*
 |--------------------------------------------------------------------------
 | Return The Application

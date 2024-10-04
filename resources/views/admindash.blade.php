@@ -25,7 +25,7 @@
         <div id="sidebar" class="sidebar">
             <div class="sidebar-header">
                 <div class="app-icon">
-                    <img height="80" width="170" src="{{ asset('dist/logo-CBACE.PNG') }}" alt="">
+                    <img height="80" width="170" src="{{ asset('dist/logo-CBACE.png') }}" alt="">
                 </div>
             </div>
             <ul class="sidebar-list">
@@ -67,8 +67,9 @@
         <div class="main-container">
             <div class="app-head">
                 @include('layouts.dashhead')
-            </div>
-            <div class="app-content" style="overflow-y: auto; height: calc(100vh - );">
+            </div> 
+            <div class="app-content"
+                style="overflow: auto; height: calc(100vh - var(--header-height, 0px)); width: calc(100vw - var(--header-width, 0px));">
                 <div id="relances">
 
                     <div class="modal fade" id="chargeModal" tabindex="-1" aria-labelledby="loaderModalLabel"
@@ -151,14 +152,31 @@
                                     <th>Prénoms & Nom</th>
                                     <th>Type</th>
                                     <th>Date d'adhésion</th>
-                                    <th>Détails</th>
+
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($clients as $client)
                                     <tr>
                                         <td>
-                                            <div class="product-cell image">
+                                            <div class="product-cell image" data-bs-toggle="modal"
+                                                data-bs-target="#fullscreenModal" class="btn btn-outline-primary"
+                                                data-client-id="{{ $client->id }}"
+                                                data-client-image="{{ asset('avatars/' . $client->avatar->image) }}"
+                                                data-client-datecreate="{{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}"
+                                                data-client-reason="{{ $client->raison }}"
+                                                data-client-declaration="{{ $client->declaration }}"
+                                                data-client-service="<ul>{{ $client->services->unique('id')->map(function ($service) {return '<li>' . e($service->nom_service) . '</li>';})->join('') }}</ul>"
+                                                data-client-engagement="{{ $client->engagement }}"
+                                                data-engag-sup-client="{{ $client->engagsup }}"
+                                                data-entreprise-client-date="{{ \Carbon\Carbon::parse(auth()->user()->date)->isoFormat('D MMMM YYYY') }}"
+                                                data-origine-client="{{ $client->procedures->unique('id')->map(function ($procedure) {return $procedure->categorie->nom_categorie;})->unique()->join(',') }}"
+                                                data-client-associes="{{ $client->numAssocies }}"
+                                                data-client-regime="{{ $client->regime }}"
+                                                data-client-nom="{{ $client->nom }}"
+                                                data-client-prenoms="{{ $client->prenoms }}"
+                                                data-procedures="{{ json_encode($client->procedures) }}"
+                                                data-taches="{{ json_encode($client->taches) }}"> 
                                                 <img style="object-fit: cover;"
                                                     src="{{ asset('avatars/' . $client->avatar->image) }}"
                                                     alt="photo du client">
@@ -171,36 +189,7 @@
                                         </td>
                                         <td>{{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}
                                         </td>
-                                        <td>
-                                            <div class="product-cell sales">
-                                                <button data-bs-toggle="modal" data-bs-target="#fullscreenModal"
-                                                    class="btn btn-outline-primary"
-                                                    data-client-id="{{ $client->id }}"
-                                                    data-client-image="{{ asset('avatars/' . $client->avatar->image) }}"
-                                                    data-client-datecreate="{{ \Carbon\Carbon::parse(auth()->user()->dateCreate)->isoFormat('D MMMM YYYY') }}"
-                                                    data-client-reason="{{ $client->raison }}"
-                                                    data-client-declaration="{{ $client->declaration }}"
-                                                    data-client-service="<ul>{{ $client->services->unique('id')->map(function ($service) {return '<li>' . e($service->nom_service) . '</li>';})->join('') }}</ul>"
-                                                    data-client-engagement="{{ $client->engagement }}"
-                                                    data-engag-sup-client="{{ $client->engagsup }}"
-                                                    data-entreprise-client-date="{{ \Carbon\Carbon::parse(auth()->user()->date)->isoFormat('D MMMM YYYY') }}"
-                                                    data-origine-client="{{ $client->procedures->unique('id')->map(function ($procedure) {return $procedure->categorie->nom_categorie;})->unique()->join(',') }}"
-                                                    data-client-associes="{{ $client->numAssocies }}"
-                                                    data-client-regime="{{ $client->regime }}"
-                                                    data-client-nom="{{ $client->nom }}"
-                                                    data-client-prenoms="{{ $client->prenoms }}"
-                                                    data-procedures="{{ json_encode($client->procedures) }}"
-                                                    data-taches="{{ json_encode($client->taches) }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                        height="16" fill="currentColor" class="bi bi-eye-fill"
-                                                        viewBox="0 0 16 16">
-                                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
-                                                        <path
-                                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </td>
+
                                     </tr>
                                 @empty
                                     <tr>
@@ -404,8 +393,8 @@
 
                         </div>
                         <!-- Modal photo de profil -->
-                        <div class="modal fade modal-transparent-blur" id="ModalPic" tabindex="-1" aria-labelledby="ModalLabel"
-                            aria-hidden="true">
+                        <div class="modal fade modal-transparent-blur" id="ModalPic" tabindex="-1"
+                            aria-labelledby="ModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -433,8 +422,8 @@
 
                         </div>
                         <!-- Modal mot de passe -->
-                        <div class="modal fade modal-transparent-blur" id="ModalPass" tabindex="-1" aria-labelledby="ModalLabel"
-                            aria-hidden="true">
+                        <div class="modal fade modal-transparent-blur" id="ModalPass" tabindex="-1"
+                            aria-labelledby="ModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">

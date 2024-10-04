@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Notification;
+ 
+use App\Models\notification;
 use App\Models\tache;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class adminController extends Controller
-{
+{ 
 
     //======================================SECTION ADMINISTRATEUR===============================
     public function relanceTache(Request $request)
@@ -24,7 +24,7 @@ class adminController extends Controller
 
             foreach ($tacheWithPendingClients->procedures as $procedure) {
                 // Vérifier si une notification existe déjà pour cet utilisateur et cette tâche
-                $existingNotification = Notification::where('user_id', $procedure->user->id)
+                $existingNotification = notification::where('user_id', $procedure->user->id)
                     ->where('message', 'LIKE', '%' . $procedure->tache->nom_tache . '%')
                     ->first();
 

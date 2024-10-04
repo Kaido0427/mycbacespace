@@ -26,7 +26,7 @@ class payController extends Controller
             $sandbox
         );
         $transactionData = $request->all();
-        Log::info($request->all());
+        Log::info($request->all()); 
 
         $transactionId = $transactionData['transaction_id'];
 

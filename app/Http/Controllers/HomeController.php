@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notification;
+use App\Models\notification;
 use App\Models\procedure;
 use App\Models\tache;
 use App\Models\User;
@@ -56,9 +56,7 @@ class HomeController extends Controller
         $notifications = auth()->user()->notifications()
             ->orderByRaw('COALESCE(last_updated_at, created_at) DESC')
             ->get();
-
-
-
+ 
 
         // J'affiche le tableau de bord en fonction de mon rôle d'utilisateur
         if ($role === 'admin') {
@@ -84,8 +82,8 @@ class HomeController extends Controller
         return view('mails.error');
     }
 
-
-    public function destroyNotif(Notification $notification)
+ 
+    public function destroyNotif(notification $notification)
     {
         try {
             $notification->delete();
